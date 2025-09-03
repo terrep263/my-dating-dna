@@ -1,0 +1,4 @@
+Fix otu the clutter remove already having functions
+Then suppose as you are atuthenticated and generate the epdf of the data
+then go with ai part and make it use ful 
+then go to webhoooks and save the subscriber as paid and handle his User Schema also
