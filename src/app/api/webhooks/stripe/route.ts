@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
   switch (event.type) {
     case "checkout.session.completed":
       if (event.data.object.metadata) {
-        await handleSubscriptionActivated(event.data.object as any);
+        await handleAssessmentActivated(event.data.object as any);
       }
       break;
     case "invoice.payment_succeeded":
@@ -49,22 +49,16 @@ export async function POST(req: NextRequest) {
   return new NextResponse(JSON.stringify({ received: true }), { status: 200 });
 }
 
-async function handleSubscriptionActivated(data: any) {
-  console.log(data, "data");
+async function handleAssessmentActivated(data: any) {
+  if (data?.metadata?.plan === "grace") return;
+  // console.log(data.parent, "data");
+  const parent = data.parent;
   try {
     await connectToDatabase();
     const user = await User.findById(data?.metadata?.user);
     if (!user) return;
 
-    if (data.metadata?.plan === "grace") {
-      user.subscription.status = "active";
-      user.subscription.plan = "premium";
-      user.subscription.id = data.parent.subscription_details.subscription;
-      user.subscription.startDate = new Date();
-      user.subscription.endDate = new Date(
-        Date.now() + 30 * 24 * 60 * 60 * 1000
-      );
-    } else if (data.metadata?.plan === "single") {
+    if (data.metadata?.plan === "single") {
       user.type = "single";
       user.attempts += 1;
       user.validity = new Date(Date.now() + 24 * 60 * 60 * 1000);
@@ -73,7 +67,32 @@ async function handleSubscriptionActivated(data: any) {
       user.attempts += 2;
       user.validity = new Date(Date.now() + 24 * 60 * 60 * 1000);
     }
+    await user.save();
+  } catch (error) {
+    throw Error(
+      error instanceof Error ? error.message : "Unknown error occurred"
+    );
+  }
+}
 
+async function handleSubscriptionActivated(data: any) {
+  // console.log(data.parent, "data");
+  console.log(data, "data");
+  const parent = data.parent;
+  try {
+    await connectToDatabase();
+    const user = await User.findOne({ email: data?.customer_email }).select(
+      "-password"
+    );
+    if (!user) return;
+    console.log(user);
+
+    console.log("herer", data.metadata);
+    user.subscription.status = "active";
+    user.subscription.plan = "premium";
+    user.subscription.id = data.parent.subscription_details.subscription;
+    user.subscription.startDate = new Date();
+    user.subscription.endDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
     await user.save();
   } catch (error) {
     throw Error(

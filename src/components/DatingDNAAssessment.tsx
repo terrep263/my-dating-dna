@@ -1,6 +1,6 @@
 import { Button } from "@mui/material";
 import axios from "axios";
-import { useSession } from "next-auth/react";
+import { getSession, useSession } from "next-auth/react";
 import { useState, useEffect, useRef, RefObject } from "react";
 import { toast } from "sonner";
 
@@ -1495,11 +1495,12 @@ function validateCouplesBlueprint(result: CouplesResultDeterministic): void {
       `${coupleDynamicsWords} words`
     );
   }
-  if (coupleDynamicsSentences < 3 || coupleDynamicsSentences > 8) {
+  if (coupleDynamicsSentences <= 2 || coupleDynamicsSentences >= 8) {
+    console.log(coupleDynamicsSentences);
     throw new ValidationError(
-      `Couple Dynamics sentence count out of range: expected 3-8, got ${coupleDynamicsSentences}`,
+      `Couple Dynamics sentence count out of range: expected 2-8, got ${coupleDynamicsSentences}`,
       "coupleProfile.aiNarrative.coupleDynamics",
-      "6-8 sentences",
+      "2-8 sentences",
       `${coupleDynamicsSentences} sentences`
     );
   }
@@ -1788,8 +1789,8 @@ function SinglesResults({ result }: { result: SinglesResultDeterministic }) {
     }
 
     try {
-      // Get the HTML content
-      const htmlContent = elementRef.current.outerHTML;
+      // Get the HTML content - only get the inner content, not the entire element
+      const htmlContent = elementRef.current.innerHTML;
 
       // Add basic styling for PDF
       const styledHTML = `
@@ -2084,8 +2085,8 @@ function CouplesResults({ result }: { result: CouplesResultDeterministic }) {
     }
 
     try {
-      // Get the HTML content
-      const htmlContent = elementRef.current.outerHTML;
+      // Get the HTML content - only get the inner content, not the entire element
+      const htmlContent = elementRef.current.innerHTML;
 
       // Add basic styling for PDF
       const styledHTML = `
@@ -2959,7 +2960,7 @@ export default function DatingDNAAssessment({}: DatingDNAAssessmentProps) {
 
   async function handleSinglesComplete(result: SinglesResultDeterministic) {
     toast.info("Showing results...");
-    const user = session?.user as ExtendedUser;
+    const user = (await getSession())?.user as ExtendedUser;
     try {
       await axios.put("/api/assessment", {
         id: user?.id,
@@ -2973,7 +2974,7 @@ export default function DatingDNAAssessment({}: DatingDNAAssessmentProps) {
 
   async function handleCouplesComplete(result: CouplesResultDeterministic) {
     toast.info("Showing results...");
-    const user = session?.user as ExtendedUser;
+    const user = (await getSession())?.user as ExtendedUser;
     try {
       await axios.put("/api/assessment", {
         id: user?.id,
@@ -3376,7 +3377,7 @@ export default function DatingDNAAssessment({}: DatingDNAAssessmentProps) {
   if (mode === "couples") {
     return (
       <div className="min-h-screen bg-gradient-to-br from-violet-50 via-fuchsia-50 to-purple-50 p-4">
-        <div className="max-w-4xl mx-auto space-y-6">
+        <div className="max-w-4xl mx-auto space-y-6 mt-32">
           {/* Back Button */}
           <button
             onClick={() => setMode("home")}

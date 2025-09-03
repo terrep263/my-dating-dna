@@ -29,16 +29,17 @@ function AssessmentPageContent() {
   const [accessStatus, setAccessStatus] = useState<string>("");
   const [isChecking, setIsChecking] = useState(true);
 
-  const checkAccess = useCallback(async () => {
+  const checkAccess = async () => {
     console.log(session?.user);
-    if (!session?.user || !(session.user as ExtendedUser)?.id) return;
+
     try {
       const user = (await getSession())?.user as ExtendedUser;
+      if (status === "unauthenticated") return;
       console.log(user);
       const response = await fetch("/api/verify-access", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId: user.id, type }),
+        body: JSON.stringify({ userId: user?.id || "", type: type || "single" }),
       });
       const data = await response.json();
       if (!data.hasAccess) {
@@ -52,11 +53,11 @@ function AssessmentPageContent() {
     } finally {
       setIsChecking(false);
     }
-  }, [session, type]);
+  };
 
   useEffect(() => {
     checkAccess();
-  }, [status, checkAccess]);
+  }, []);
 
   if (status === "unauthenticated") {
     return (
@@ -132,8 +133,9 @@ function AssessmentPageContent() {
       </div>
     );
   }
-  
+
   if (status === "loading" || isChecking) {
+    console.log(status, isChecking);
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
         <Container maxWidth="sm" className="text-center">
@@ -226,7 +228,7 @@ function AssessmentPageContent() {
                     lineHeight: 1.7,
                   }}
                 >
-                  You need to purchase access to the{" "} assessment plan
+                  You need to purchase access to the assessment plan
                 </Typography>
                 <Button
                   variant="contained"

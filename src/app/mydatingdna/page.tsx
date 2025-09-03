@@ -193,7 +193,7 @@ What would you like to explore today? You can ask me about:
                   </button>
                   <button
                     onClick={() => router.push('/subscriptions')}
-                    className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-8 py-4 rounded-full text-lg font-semibold hover:from-blue-600 hover:to-purple-600 transform hover:-translate-y-1 transition-all duration-200 shadow-lg"
+                    className="bg-gradient-to-r cursor-pointer from-blue-500 to-purple-500 text-white px-8 py-4 rounded-full text-lg font-semibold hover:from-blue-600 hover:to-purple-600 transform hover:-translate-y-1 transition-all duration-200 shadow-lg"
                   >
                     Get Subscription
                   </button>

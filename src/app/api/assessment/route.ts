@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { sendEmail } from "@/lib/mail";
-import { headers } from "next/headers";
 import User from "@/lib/models/User";
 
 // Question mapping for better readability
@@ -112,7 +111,9 @@ export async function POST(request: NextRequest) {
         </div>
         
         <div style="text-align: center; margin-top: 30px;">
-          <a href="${process.env.NEXTAUTH_URL || "http://localhost:3005"}/snapshot" 
+          <a href="${
+            process.env.NEXTAUTH_URL || "http://localhost:3005"
+          }/snapshot" 
              style="background-color: #2c5530; color: white; padding: 15px 30px; text-decoration: none; border-radius: 25px; font-weight: 600; font-size: 16px; display: inline-block; box-shadow: 0 4px 6px rgba(44, 85, 48, 0.2);">
             🚀 Take the Full Assessment
           </a>
@@ -199,7 +200,9 @@ export async function PUT(req: NextRequest) {
         </div>
         
         <div style="text-align: center; margin-top: 30px;">
-          <a href="${process.env.NEXTAUTH_URL || "http://localhost:3005"}/subscriptions" 
+          <a href="${
+            process.env.NEXTAUTH_URL || "http://localhost:3005"
+          }/subscriptions" 
              style="background-color: #f59e0b; color: white; padding: 15px 30px; text-decoration: none; border-radius: 25px; font-weight: 600; font-size: 16px; display: inline-block; box-shadow: 0 4px 6px rgba(245, 158, 11, 0.2);">
             💎 Upgrade to Premium
           </a>
@@ -221,6 +224,7 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
     user.attempts -= 1;
+    user.type = null;
 
     await user.save();
 

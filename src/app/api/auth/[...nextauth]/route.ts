@@ -85,18 +85,14 @@ const authOptions = {
     },
     async session({ session, token }: { session: any; token: any }) {
       if (token && token.sub) {
-        session.user.id = token.sub;
-        if (token.subscription) {
-          session.user.subscription = {
-            plan: token.subscription.plan,
-            status: token.subscription.status,
-            startDate: new Date(token.subscription.startDate),
-            endDate: new Date(token.subscription.endDate),
+        const user = await User.findById(token.sub);
+        if (user) {
+          session.user = {
+            ...session.user,
+            id: user._id.toString(),
+            ...user.toObject(),
           };
         }
-        if (token.type) session.user.type = token.type;
-        if (token.attempts) session.user.attempts = token.attempts;
-        if (token.validity) session.user.validity = new Date(token.validity);
       }
       return session;
     },

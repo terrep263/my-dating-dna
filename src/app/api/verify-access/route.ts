@@ -43,24 +43,14 @@ export async function POST(req: NextRequest) {
 }
 
 const checkAccess = (user: UserDocument, type: string): boolean | undefined => {
-  if (type === "couple") {
-    return (
-      user.type === "couple" &&
-      (user.attempts || 0) > 0 &&
-      user.validity &&
-      user.validity > new Date()
-    );
-  } else if (type === "grace") {
+  if (type === "grace") {
     return (
       user.subscription.plan === "premium" &&
       user.subscription.status === "active"
     );
   } else {
     return (
-      user.type === "single" &&
-      (user.attempts || 0) > 0 &&
-      user.validity &&
-      user.validity > new Date()
+      (user.attempts || 0) > 0 && user.validity && user.validity > new Date()
     );
   }
 };

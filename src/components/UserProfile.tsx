@@ -23,7 +23,7 @@ export default function UserProfile() {
   if (!session?.user) {
     return null;
   }
-console.log(session.user)
+  console.log(session.user);
   const getPlanColor = (plan: string) => {
     switch (plan) {
       case "couple":
@@ -35,7 +35,8 @@ console.log(session.user)
     }
   };
 
-  const isSubscriptionActive = (session?.user as any)?.subscription?.status === "active";
+  const isSubscriptionActive =
+    (session?.user as any)?.subscription?.status === "active";
 
   return (
     <div className="relative">
@@ -118,7 +119,7 @@ console.log(session.user)
               </div>
             </div>
             {console.log(session.user)}
-            {(session?.user as any)?.subscription?.status === 'active' && (
+            {(session?.user as any)?.subscription?.status === "active" && (
               <p className="text-xs text-gray-500 mt-1">
                 Expires:{" "}
                 {new Date(

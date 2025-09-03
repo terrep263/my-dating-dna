@@ -29,17 +29,15 @@ export async function POST(request: NextRequest) {
     console.log(price);
     const user = await User.findOne({ email });
     if (!user) throw new Error("User not found");
+    const success_url =
+      plan === "grace"
+        ? `${process.env.NEXTAUTH_URL}/subscriptions`
+        : `${process.env.NEXTAUTH_URL}/assessment`;
 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
-      success_url:
-        process.env.NODE_ENV! === "development"
-          ? "http://localhost:3005/assessment"
-          : "https://dating-dna-prod.vercel.app/assessment",
-      cancel_url:
-        process.env.NODE_ENV! === "production"
-          ? "http://localhost:3005/subscriptions"
-          : "https://dating-dna-prod.vercel.app/subscriptions",
+      success_url,
+      cancel_url: `${process.env.NEXTAUTH_URL}/subscriptions`,
       line_items: [
         {
           price,
