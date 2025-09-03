@@ -395,7 +395,7 @@ export default function LeadMagnetSnapshot() {
                   </div>
                   <div className="text-sm opacity-90">
                     Scientific scoring • Complete results • PDF export • Grace
-                    7‑day coaching trial
+                     coaching AI
                   </div>
                   <div className="flex flex-wrap gap-3">
                     <button className="px-4 py-2 rounded-lg bg-white text-violet-700 font-semibold hover:bg-violet-50">

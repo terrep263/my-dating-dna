@@ -7,6 +7,7 @@ import {
   Container,
   Box,
 } from "@mui/material";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -35,49 +36,11 @@ export default function Navigation() {
             width="100%"
           >
             <Link href="/" style={{ textDecoration: "none" }}>
-              <Box display="flex" alignItems="center" gap={2}>
-                <Box
-                  sx={{
-                    width: 32,
-                    height: 32,
-                    borderRadius: 2,
-                    backgroundColor: "#2c5530",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    color: "white",
-                    fontWeight: 700,
-                    fontSize: "0.875rem",
-                  }}
-                >
-                  DNA
-                </Box>
-                <Typography
-                  variant="h6"
-                  sx={{ fontWeight: 600, color: "#2c5530" }}
-                >
-                  Dating DNA
-                </Typography>
-              </Box>
+             <Image src="/logo.png" alt="logo" width={100} height={100} />
             </Link>
 
             <Box display="flex" gap={2}>
-              <Button
-                component={Link}
-                href="/snapshot"
-                variant={
-                  pathname === "/snapshot" ? "contained" : "text"
-                }
-                sx={{
-                  borderRadius: 2,
-                  ...(pathname === "/snapshot" && {
-                    backgroundColor: "#2c5530",
-                    color: "white",
-                  }),
-                }}
-              >
-                Quick Snapshot
-              </Button>
+            
               <Button
                 component={Link}
                 href="/assessment"
@@ -92,7 +55,7 @@ export default function Navigation() {
                   }),
                 }}
               >
-                Full Assessment
+                 Assessment
               </Button>
             </Box>
           </Box>

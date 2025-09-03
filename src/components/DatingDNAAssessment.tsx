@@ -2768,9 +2768,10 @@ function LeadMagnet4Q({
     setAnswers(newAnswers);
     setStep(step + 1);
   }
-
+  const buttonRef = useRef<HTMLButtonElement>();
   function handleEmailSubmit() {
     onFinish(answers);
+    buttonRef.current.disabled = true;
   }
 
   if (isLastQ) {
@@ -2824,7 +2825,8 @@ function LeadMagnet4Q({
 
         <button
           onClick={handleEmailSubmit}
-          className="w-full px-6 py-4 bg-green-600 text-white rounded-2xl font-semibold text-lg hover:from-violet-700 hover:to-fuchsia-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+          ref={buttonRef}
+          className="w-full px-6 py-4 bg-green-600 cursor-pointer text-white rounded-2xl font-semibold text-lg hover:from-violet-700 hover:to-fuchsia-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
         >
           Send My Snapshot
         </button>
@@ -2833,7 +2835,7 @@ function LeadMagnet4Q({
   }
 
   return (
-    <div className="max-w-2xl mx-auto bg-white rounded-3xl shadow-2xl p-8 space-y-8">
+    <div className="max-w-2xl mx-auto bg-white rounded-3xl shadow-2xl mt-32 p-8 space-y-8">
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
@@ -2875,7 +2877,7 @@ function LeadMagnet4Q({
           <div className="space-y-4">
             <button
               onClick={() => handleAnswer("A")}
-              className="w-full p-6 text-left border-2 border-slate-200 rounded-2xl hover:border-violet-400 hover:bg-violet-50 transition-all duration-300 group"
+              className="cursor-pointer w-full p-6 text-left border-2 border-slate-200 rounded-2xl hover:border-violet-400 hover:bg-violet-50 transition-all duration-300 group"
             >
               <div className="flex items-center space-x-4">
                 <div className="w-8 h-8 bg-violet-100 text-violet-600 rounded-full flex items-center justify-center font-semibold group-hover:bg-violet-200 transition-colors duration-300">
@@ -2888,7 +2890,7 @@ function LeadMagnet4Q({
             </button>
             <button
               onClick={() => handleAnswer("B")}
-              className="w-full p-6 text-left border-2 border-slate-200 rounded-2xl hover:border-fuchsia-400 hover:bg-fuchsia-50 transition-all duration-300 group"
+              className="cursor-pointer w-full p-6 text-left border-2 border-slate-200 rounded-2xl hover:border-fuchsia-400 hover:bg-fuchsia-50 transition-all duration-300 group"
             >
               <div className="flex items-center space-x-4">
                 <div className="w-8 h-8 bg-fuchsia-100 text-fuchsia-600 rounded-full flex items-center justify-center font-semibold group-hover:bg-fuchsia-200 transition-colors duration-300">
@@ -2911,7 +2913,7 @@ function LeadMagnet4Q({
                 <button
                   key={val}
                   onClick={() => handleAnswer(val)}
-                  className="w-12 h-12 rounded-full border-2 border-slate-300 hover:border-violet-500 hover:bg-violet-50 flex items-center justify-center font-semibold text-lg transition-all duration-300 hover:scale-110 hover:shadow-lg"
+                  className="w-12 h-12 rounded-full  bg-violet-50 cursor-pointer hover:bg-violet-100 flex items-center justify-center font-semibold text-lg transition-all duration-300 hover:scale-110 hover:shadow-lg"
                 >
                   {val}
                 </button>
@@ -3020,11 +3022,11 @@ export default function DatingDNAAssessment({}: DatingDNAAssessmentProps) {
   if (mode === "home") {
     return (
       <div className="min-h-screen bg-gradient-to-br from-violet-50 via-fuchsia-50 to-purple-50 p-4">
-        <div className="max-w-4xl mx-auto space-y-8 pt-20">
+        <div className="max-w-4xl mx-auto space-y-8 pt-32">
           {/* Hero Section */}
           <div className="text-center space-y-6">
             <div className="space-y-4">
-              <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-violet-600 via-fuchsia-600 to-purple-600 bg-clip-text text-transparent">
+              <h1 className="text-5xl md:text-6xl h-max pb-4 font-bold bg-gradient-to-r from-violet-600 via-fuchsia-600 to-purple-600 bg-clip-text text-transparent">
                 Dating DNA
               </h1>
               <p className="text-xl md:text-2xl text-slate-700 max-w-3xl mx-auto leading-relaxed">
