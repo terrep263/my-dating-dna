@@ -14,6 +14,7 @@ import {
 import { Favorite } from "@mui/icons-material";
 import Link from "next/link";
 import NavAuth from "@/components/NavAuth";
+import Image from "next/image";
 
 const Header = () => {
   const theme = useTheme();
@@ -52,21 +53,12 @@ const Header = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6 }}
             >
-              <Typography
-                variant="h5"
-                component={Link}
+              <Link
                 href="/"
-                sx={{
-                  fontWeight: 700,
-                  color: "#2c5530",
-                  display: "flex",
-                  alignItems: "center",
-                gap: 1,
-                }}
+                style={{ textDecoration: "none" }}
               >
-                <Favorite sx={{ color: "#e76f51" }} />
-                MY Dating DNA™
-              </Typography>
+               <Image src="/logo.png" alt="logo" width={100} height={100} />
+              </Link>
             </motion.div>
 
             {!isMobile && (
