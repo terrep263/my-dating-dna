@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/affiliate/cron/lock-commissions",
+      "schedule": "0 2 * * *"
+    }
+  ]
+}

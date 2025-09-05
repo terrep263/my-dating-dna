@@ -13,6 +13,14 @@ const prices = {
   grace: "price_1S2PihQLEzLgmXwx8bGwsG6T",
 };
 
+/* 
+** 
+const prices ={
+  single: "price_1S3WouIdAJGXSpBgA5v8eLcY",
+  couple: "price_1S3WqiIdAJGXSpBg7ziQzzbA",
+  grace: "price_1S3WrjIdAJGXSpBgpITNcvZQ",
+}
+*/
 export async function POST(request: NextRequest) {
   try {
     await connectToDatabase();
@@ -26,14 +34,18 @@ export async function POST(request: NextRequest) {
       );
     }
     const price = prices[plan as keyof typeof prices];
-    console.log(price);
+
     const user = await User.findOne({ email });
     if (!user) throw new Error("User not found");
     const success_url =
       plan === "grace"
-        ? `${process.env.NEXTAUTH_URL}/subscriptions`
-        : `${process.env.NEXTAUTH_URL}/assessment`;
+        ? `${request.nextUrl.origin}/mydatingdna`
+        : `${request.nextUrl.origin}/assessment`;
 
+    // Get affiliate code from cookie
+    const affiliateCode = request.cookies.get("aff_code")?.value;
+    console.log(body, user);
+ 
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       success_url,
@@ -50,15 +62,15 @@ export async function POST(request: NextRequest) {
         plan,
         email,
         name,
+        ...(affiliateCode && { affiliate_code: affiliateCode }),
       },
+      customer_email: email,
     });
-    console.log(session);
     return NextResponse.json({
       session,
       success: true,
     });
   } catch (error: unknown) {
-    console.log(error);
     console.error("Checkout session creation error:", error);
     const errorMessage =
       error instanceof Error ? error.message : "Unknown error occurred";

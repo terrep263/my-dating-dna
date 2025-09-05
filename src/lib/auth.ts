@@ -1,50 +1,109 @@
-import jwt from "jsonwebtoken";
-import { NextRequest } from "next/server";
+import NextAuth from "next-auth/next";
+import CredentialsProvider from "next-auth/providers/credentials";
+import bcrypt from "bcryptjs";
+import { connectToDatabase } from "@/lib/db";
+import User from "@/lib/models/User";
 
-export interface AuthUser {
-  userId: string;
+interface UserData {
+  id: string;
   email: string;
-  role: string;
+  name: string;
+  subscription: {
+    plan: "free" | "singles" | "couples" | "premium";
+    status: "active" | "inactive" | "cancelled";
+    startDate: Date;
+    endDate: Date;
+  };
+  type?: "single" | "couple";
+  attempts?: number;
+  validity?: Date;
 }
 
-export function verifyToken(token: string): AuthUser | null {
-  try {
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET || "your-secret-key"
-    ) as AuthUser;
-    return decoded;
-  } catch {
-    return null;
-  }
-}
+export const authOptions = {
+  providers: [
+    CredentialsProvider({
+      name: "credentials",
+      credentials: {
+        email: { label: "Email", type: "email" },
+        password: { label: "Password", type: "password" },
+      },
+      async authorize(credentials): Promise<UserData | null> {
+        if (!credentials?.email || !credentials?.password) {
+          return null;
+        }
 
-export function getAuthUser(request: NextRequest): AuthUser | null {
-  const token = request.headers.get("authorization")?.replace("Bearer ", "");
+        try {
+          await connectToDatabase();
+          const user = await User.findOne({ email: credentials.email }).exec();
 
-  if (!token) {
-    return null;
-  }
+          if (!user || !user.password) {
+            return null;
+          }
 
-  return verifyToken(token);
-}
+          const isPasswordValid = await bcrypt.compare(
+            credentials.password,
+            user.password
+          );
 
-export function requireAuth(request: NextRequest): AuthUser {
-  const user = getAuthUser(request);
+          if (!isPasswordValid) {
+            return null;
+          }
 
-  if (!user) {
-    throw new Error("Authentication required");
-  }
+          return {
+            id: user._id.toString(),
+            email: user.email,
+            name: user.name,
+            subscription: {
+              plan: user.subscription.plan,
+              status: user.subscription.status,
+              startDate: user.subscription.startDate,
+              endDate: user.subscription.endDate,
+            },
+            type: user.type || undefined,
+            attempts: user.attempts || undefined,
+            validity: user.validity || undefined,
+          };
+        } catch (error) {
+          console.error("Auth error:", error);
+          return null;
+        }
+      },
+    }),
+  ],
+  session: {
+    strategy: "jwt" as const,
+  },
+  callbacks: {
+    async jwt({ token, user }: { token: any; user: any }) {
+      if (user) {
+        token.subscription = user.subscription;
+        token.type = user.type;
+        token.attempts = user.attempts;
+        token.validity = user.validity;
+      }
+      return token;
+    },
+    async session({ session, token }: { session: any; token: any }) {
 
-  return user;
-}
+      if (token && token.sub) {
+        await connectToDatabase()
+        const user = await User.findById(token.sub);
+        if (user) {
+          session.user = {
+            ...session.user,
+            id: user._id.toString(),
+            ...user.toObject(),
+          };
+        }
+      }
+      return session;
+    },
+  },
+  pages: {
+    signIn: "/auth",
+  },
+};
 
-export function requireRole(request: NextRequest, roles: string[]): AuthUser {
-  const user = requireAuth(request);
+const handler = NextAuth(authOptions);
 
-  if (!roles.includes(user.role)) {
-    throw new Error("Insufficient permissions");
-  }
-
-  return user;
-}
+export { handler as GET, handler as POST };

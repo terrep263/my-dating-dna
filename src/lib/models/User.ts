@@ -70,6 +70,10 @@ const userSchema = new mongoose.Schema(
       type: Date,
       default: Date.now() + 24 * 60 * 60 * 1000, // 30 days from now
     },
+    role:{
+      type: String,
+      default: "user",
+    }
   },
   {
     timestamps: true,
@@ -80,6 +84,6 @@ const userSchema = new mongoose.Schema(
 userSchema.index({ "subscription.status": 1 });
 userSchema.index({ "subscription.plan": 1 });
 
-const User = mongoose.models.User || mongoose.model<IUser>("User", userSchema);
+const User = (mongoose.models.User as mongoose.Model<IUser>) || mongoose.model<IUser>("User", userSchema);
 
 export default User;

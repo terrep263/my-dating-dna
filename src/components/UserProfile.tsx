@@ -9,11 +9,14 @@ import {
   Settings,
   LogOut,
   CreditCard,
+  Users,
+  LucideLayoutDashboard,
 } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { Dashboard } from "@mui/icons-material";
 
 export default function UserProfile() {
   const router = useRouter();
@@ -93,41 +96,41 @@ export default function UserProfile() {
           </div>
 
           {/* Subscription Status */}
-          <div className="px-4 py-3 border-b border-gray-100">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <Crown className="w-4 h-4 text-gray-500" />
-                <span className="text-sm text-gray-600">Subscription</span>
+          {isSubscriptionActive && (
+            <div className="px-4 py-3 border-b border-gray-100">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-2">
+                  <Crown className="w-4 h-4 text-gray-500" />
+                  <span className="text-sm text-gray-600">Subscription</span>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <span
+                    className={`px-2 py-1 rounded-full text-xs font-medium ${getPlanColor(
+                      (session?.user as any)?.subscription?.plan || "free"
+                    )} text-white`}
+                  >
+                    {(session?.user as any)?.subscription?.plan}
+                  </span>
+                  <span
+                    className={`px-2 py-1 rounded-full text-xs font-medium ${
+                      isSubscriptionActive
+                        ? "bg-green-100 text-green-800"
+                        : "bg-yellow-100 text-yellow-800"
+                    }`}
+                  >
+                    {isSubscriptionActive ? "Active" : "Inactive"}
+                  </span>
+                </div>
               </div>
-              <div className="flex items-center space-x-2">
-                <span
-                  className={`px-2 py-1 rounded-full text-xs font-medium ${getPlanColor(
-                    (session?.user as any)?.subscription?.plan || "free"
-                  )} text-white`}
-                >
-                  {(session?.user as any)?.subscription?.plan}
-                </span>
-                <span
-                  className={`px-2 py-1 rounded-full text-xs font-medium ${
-                    isSubscriptionActive
-                      ? "bg-green-100 text-green-800"
-                      : "bg-yellow-100 text-yellow-800"
-                  }`}
-                >
-                  {isSubscriptionActive ? "Active" : "Inactive"}
-                </span>
-              </div>
-            </div>
-            {console.log(session.user)}
-            {(session?.user as any)?.subscription?.status === "active" && (
-              <p className="text-xs text-gray-500 mt-1">
-                Expires:{" "}
-                {new Date(
-                  (session?.user as any)?.subscription?.endDate
-                ).toLocaleDateString()}
-              </p>
-            )}
-            {(session?.user as any)?.attempts && (
+              {(session?.user as any)?.subscription?.status === "active" && (
+                <p className="text-xs text-gray-500 mt-1">
+                  Expires:{" "}
+                  {new Date(
+                    (session?.user as any)?.subscription?.endDate
+                  ).toLocaleDateString()}
+                </p>
+              )}
+              {/* {(session?.user as any)?.attempts && (
               <div className="flex items-center justify-between mt-4">
                 <div className="flex items-center space-x-2">
                   <Crown className="w-4 h-4 text-gray-500" />
@@ -152,19 +155,32 @@ export default function UserProfile() {
                   </span>
                 </div>
               </div>
-            )}
-          </div>
+            )} */}
+            </div>
+          )}
 
           {/* Menu Items */}
           <div className="py-2">
-            <Link
-              href="/dashboard"
-              className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
-              onClick={() => setIsMenuOpen(false)}
-            >
-              <User className="w-4 h-4 mr-3" />
-              Dashboard
-            </Link>
+            {/* {(session?.user as any)?.role === "admin" && (
+              <Link
+                href="/admin/affiliates"
+                className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <LucideLayoutDashboard className="w-4 h-4 mr-3" />
+                Affiliate Dashboard
+              </Link>
+            )} */}
+            {/* {(session?.user as any)?.role === "user" && (
+              <Link
+                href="/affiliates"
+                className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                <Users className="w-4 h-4 mr-3" />
+                Referrals
+              </Link>
+            )} */}
 
             <Link
               href="/subscriptions"

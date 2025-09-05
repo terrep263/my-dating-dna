@@ -51,8 +51,6 @@ export async function POST(req: NextRequest) {
 
 async function handleAssessmentActivated(data: any) {
   if (data?.metadata?.plan === "grace") return;
-  // console.log(data.parent, "data");
-  const parent = data.parent;
   try {
     await connectToDatabase();
     const user = await User.findById(data?.metadata?.user);
@@ -76,17 +74,13 @@ async function handleAssessmentActivated(data: any) {
 }
 
 async function handleSubscriptionActivated(data: any) {
-  // console.log(data.parent, "data");
   console.log(data, "data");
-  const parent = data.parent;
   try {
     await connectToDatabase();
     const user = await User.findOne({ email: data?.customer_email }).select(
       "-password"
     );
     if (!user) return;
-    console.log(user);
-
     console.log("herer", data.metadata);
     user.subscription.status = "active";
     user.subscription.plan = "premium";

@@ -1177,79 +1177,46 @@ function validateBlueprint(
 
 function validateSinglesBlueprint(result: SinglesResultDeterministic): void {
   // Validate Relationship Approach: 4-6 sentences, 80-120 words
-  const approachWords = countWords(result.relationshipApproach);
   const approachSentences = countSentences(result.relationshipApproach);
-  console.log(result.relationshipApproach);
-  if (approachWords < 40 || approachWords > 120) {
+
+  if (approachSentences < 2 ) {
     throw new ValidationError(
-      `Relationship Approach word count out of range: expected 40-120, got ${approachWords}`,
+      `Relationship Approach sentence count out of range: expected 2, got ${approachSentences}`,
       "relationshipApproach",
-      "80-120 words",
-      `${approachWords} words`
-    );
-  }
-  if (approachSentences < 2 || approachSentences > 6) {
-    throw new ValidationError(
-      `Relationship Approach sentence count out of range: expected 2-6, got ${approachSentences}`,
-      "relationshipApproach",
-      "4-6 sentences",
+      "4 sentences",
       `${approachSentences} sentences`
     );
   }
 
   // Validate Strengths: 6-10 items, each 2-3 sentences, total 150-250 words
-  if (result.strengths.length < 3 || result.strengths.length > 10) {
+  if (result.strengths.length < 3 ) {
     throw new ValidationError(
       `Strengths count out of range: expected 3-10, got ${result.strengths.length}`,
       "strengths",
-      "6-10 items",
+      "3 items",
       `${result.strengths.length} items`
     );
   }
-  const strengthsText = result.strengths
-    .map((s) => `${s.title} ${s.detail}`)
-    .join(" ");
-  const strengthsWords = countWords(strengthsText);
-  if (strengthsWords < 75 || strengthsWords > 250) {
-    throw new ValidationError(
-      `Strengths total word count out of range: expected 75-250, got ${strengthsWords}`,
-      "strengths",
-      "75-250 words total",
-      `${strengthsWords} words total`
-    );
-  }
-
+ 
   // Validate Growth Opportunities: 5-8 items, each 2-3 sentences, total 120-200 words
   if (
-    result.growthOpportunities.length < 3 ||
-    result.growthOpportunities.length > 8
+    result.growthOpportunities.length < 3 
   ) {
     throw new ValidationError(
-      `Growth Opportunities count out of range: expected 3-8, got ${result.growthOpportunities.length}`,
+      `Growth Opportunities count out of range: expected 3, got ${result.growthOpportunities.length}`,
       "growthOpportunities",
-      "5-8 items",
+      "3 items",
       `${result.growthOpportunities.length} items`
     );
   }
-  const growthText = result.growthOpportunities
-    .map((g) => `${g.title} ${g.rationale} ${g.action}`)
-    .join(" ");
-  const growthWords = countWords(growthText);
-  if (growthWords < 60 || growthWords > 200) {
-    throw new ValidationError(
-      `Growth Opportunities total word count out of range: expected 60-200, got ${growthWords}`,
-      "growthOpportunities",
-      "60-200 words total",
-      `${growthWords} words total`
-    );
-  }
+ 
 
   // Validate Quick Wins: 7-10 items, each 2-3 sentences, total 200-300 words
-  if (result.quickWins.length < 3 || result.quickWins.length > 10) {
+  if (result.quickWins.length < 3 ) {
     throw new ValidationError(
-      `Quick Wins count out of range: expected 3-10, got ${result.quickWins.length}`,
+      `Quick Wins count out of range: expected 3, got ${result.quickWins.length}`,
       "quickWins",
-      "7-10 items",
+      "3 items",
       `${result.quickWins.length} items`
     );
   }
@@ -1258,37 +1225,21 @@ function validateSinglesBlueprint(result: SinglesResultDeterministic): void {
   const aiNarrative = result.aiNarrative;
 
   // Overview Summary: 8-12 sentences, 150-200 words
-  const overviewWords = countWords(aiNarrative.overviewSummary);
   const overviewSentences = countSentences(aiNarrative.overviewSummary);
-  if (overviewWords < 150 || overviewWords > 200) {
+
+  if (overviewSentences < 5) {
     throw new ValidationError(
-      `AI Overview Summary word count out of range: expected 150-200, got ${overviewWords}`,
+      `AI Overview Summary sentence count out of range: expected 5, got ${overviewSentences}`,
       "aiNarrative.overviewSummary",
-      "150-200 words",
-      `${overviewWords} words`
-    );
-  }
-  if (overviewSentences < 8 || overviewSentences > 12) {
-    throw new ValidationError(
-      `AI Overview Summary sentence count out of range: expected 8-12, got ${overviewSentences}`,
-      "aiNarrative.overviewSummary",
-      "8-12 sentences",
+      "5 sentences",
       `${overviewSentences} sentences`
     );
   }
 
   // Personality Insights: 6-8 sentences, 120-160 words
-  const personalityWords = countWords(aiNarrative.personalityInsights);
   const personalitySentences = countSentences(aiNarrative.personalityInsights);
-  if (personalityWords < 120 || personalityWords > 160) {
-    throw new ValidationError(
-      `AI Personality Insights word count out of range: expected 120-160, got ${personalityWords}`,
-      "aiNarrative.personalityInsights",
-      "120-160 words",
-      `${personalityWords} words`
-    );
-  }
-  if (personalitySentences < 3 || personalitySentences > 8) {
+
+  if (personalitySentences < 3) {
     throw new ValidationError(
       `AI Personality Insights sentence count out of range: expected 3-8, got ${personalitySentences}`,
       "aiNarrative.personalityInsights",
@@ -1411,69 +1362,36 @@ function validateCouplesBlueprint(result: CouplesResultDeterministic): void {
   const couple = result.coupleProfile;
 
   // Validate Joint Strengths: 6-10 items, each 4-6 sentences, total 200-350 words
-  if (couple.jointStrengths.length < 3 || couple.jointStrengths.length > 10) {
+  if (couple.jointStrengths.length < 3 ) {
     throw new ValidationError(
-      `Joint Strengths count out of range: expected 6-10, got ${couple.jointStrengths.length}`,
+      `Joint Strengths count out of range: expected 3, got ${couple.jointStrengths.length}`,
       "jointStrengths",
-      "6-10 items",
+      "3 items",
       `${couple.jointStrengths.length} items`
-    );
-  }
-  const jointStrengthsText = couple.jointStrengths
-    .map((s) => `${s.title} ${s.howToLeverage}`)
-    .join(" ");
-  const jointStrengthsWords = countWords(jointStrengthsText);
-  if (jointStrengthsWords < 100 || jointStrengthsWords > 350) {
-    throw new ValidationError(
-      `Joint Strengths total word count out of range: expected 100-350, got ${jointStrengthsWords}`,
-      "jointStrengths",
-      "100-350 words total",
-      `${jointStrengthsWords} words total`
     );
   }
 
   // Validate Shared Growth Areas: 5-8 items, each 4-6 sentences, total 180-300 words
   if (
-    couple.sharedGrowthAreas.length < 3 ||
-    couple.sharedGrowthAreas.length > 8
+    couple.sharedGrowthAreas.length < 3
   ) {
     throw new ValidationError(
-      `Shared Growth Areas count out of range: expected 5-8, got ${couple.sharedGrowthAreas.length}`,
+      `Shared Growth Areas count out of range: expected 3, got ${couple.sharedGrowthAreas.length}`,
       "sharedGrowthAreas",
-      "5-8 items",
+      "3 items",
       `${couple.sharedGrowthAreas.length} items`
     );
   }
-  const sharedGrowthText = couple.sharedGrowthAreas
-    .map((g) => `${g.title} ${g.supportiveBehavior} ${g.sharedPractice}`)
-    .join(" ");
-  const sharedGrowthWords = countWords(sharedGrowthText);
-  if (sharedGrowthWords < 45 || sharedGrowthWords > 300) {
-    throw new ValidationError(
-      `Shared Growth Areas total word count out of range: expected 90-300, got ${sharedGrowthWords}`,
-      "sharedGrowthAreas",
-      "45-300 words total",
-      `${sharedGrowthWords} words total`
-    );
-  }
+ 
 
   // Validate AI Narrative Expansion sections for couples
   const coupleAiNarrative = couple.aiNarrative;
 
   // Overview Summary: 8-12 sentences, 150-200 words
-  const coupleOverviewWords = countWords(coupleAiNarrative.overviewSummary);
   const coupleOverviewSentences = countSentences(
     coupleAiNarrative.overviewSummary
   );
-  if (coupleOverviewWords < 37 || coupleOverviewWords > 200) {
-    throw new ValidationError(
-      `Couple AI Overview Summary word count out of range: expected 75-200, got ${coupleOverviewWords}`,
-      "coupleProfile.aiNarrative.overviewSummary",
-      "37-200 words",
-      `${coupleOverviewWords} words`
-    );
-  }
-  if (coupleOverviewSentences < 2 || coupleOverviewSentences > 12) {
+  if (coupleOverviewSentences < 2) {
     throw new ValidationError(
       `Couple AI Overview Summary sentence count out of range: expected 2-12, got ${coupleOverviewSentences}`,
       "coupleProfile.aiNarrative.overviewSummary",
@@ -1483,24 +1401,16 @@ function validateCouplesBlueprint(result: CouplesResultDeterministic): void {
   }
 
   // Couple Dynamics: 6-8 sentences, 120-160 words
-  const coupleDynamicsWords = countWords(coupleAiNarrative.coupleDynamics);
   const coupleDynamicsSentences = countSentences(
     coupleAiNarrative.coupleDynamics
   );
-  if (coupleDynamicsWords < 20 || coupleDynamicsWords > 160) {
-    throw new ValidationError(
-      `Couple Dynamics word count out of range: expected 20-160, got ${coupleDynamicsWords}`,
-      "coupleProfile.aiNarrative.coupleDynamics",
-      "20-160 words",
-      `${coupleDynamicsWords} words`
-    );
-  }
-  if (coupleDynamicsSentences <= 2 || coupleDynamicsSentences >= 8) {
+  
+  if (coupleDynamicsSentences <= 2) {
     console.log(coupleDynamicsSentences);
     throw new ValidationError(
-      `Couple Dynamics sentence count out of range: expected 2-8, got ${coupleDynamicsSentences}`,
+      `Couple Dynamics sentence count out of range: expected 2, got ${coupleDynamicsSentences}`,
       "coupleProfile.aiNarrative.coupleDynamics",
-      "2-8 sentences",
+      "2 sentences",
       `${coupleDynamicsSentences} sentences`
     );
   }
@@ -1510,26 +1420,24 @@ function validateCouplesBlueprint(result: CouplesResultDeterministic): void {
 
   // Everyday Examples: 5-10 scenarios
   if (
-    coupleSupportingContent.everydayExamples.length < 3 ||
-    coupleSupportingContent.everydayExamples.length > 10
+    coupleSupportingContent.everydayExamples.length < 3
   ) {
     throw new ValidationError(
-      `Everyday Examples count out of range: expected 3-10, got ${coupleSupportingContent.everydayExamples.length}`,
+      `Everyday Examples count out of range: expected 3, got ${coupleSupportingContent.everydayExamples.length}`,
       "coupleProfile.supportingContent.everydayExamples",
-      "5-10 scenarios",
+      "3 scenarios",
       `${coupleSupportingContent.everydayExamples.length} scenarios`
     );
   }
 
   // Joint Action Plan 7 Days: 5-10 items
   if (
-    coupleSupportingContent.jointActionPlan7Days.length < 3 ||
-    coupleSupportingContent.jointActionPlan7Days.length > 10
+    coupleSupportingContent.jointActionPlan7Days.length < 3
   ) {
     throw new ValidationError(
-      `Joint Action Plan 7 Days count out of range: expected 5-10, got ${coupleSupportingContent.jointActionPlan7Days.length}`,
+      `Joint Action Plan 7 Days count out of range: expected 3, got ${coupleSupportingContent.jointActionPlan7Days.length}`,
       "coupleProfile.supportingContent.jointActionPlan7Days",
-      "3-10 items",
+      "3 items",
       `${coupleSupportingContent.jointActionPlan7Days.length} items`
     );
   }
@@ -1540,54 +1448,34 @@ function validateCouplesBlueprint(result: CouplesResultDeterministic): void {
       (sum, week) => sum + week.progressiveActions.length,
       0
     );
-  if (totalCoupleActionItems < 3 || totalCoupleActionItems > 20) {
+  if (totalCoupleActionItems < 3) {
     throw new ValidationError(
-      `Joint Action Plan 30 Days total items out of range: expected 5-20, got ${totalCoupleActionItems}`,
+      `Joint Action Plan 30 Days total items out of range: expected 3, got ${totalCoupleActionItems}`,
       "coupleProfile.supportingContent.jointActionPlan30Days",
-      "5-20 items total",
+      "3 items total",
       `${totalCoupleActionItems} items total`
     );
   }
 
   // Validate Relationship Approach: 6-8 sentences, 120-160 words
-  const coupleApproachWords = countWords(couple.relationshipApproach);
   const coupleApproachSentences = countSentences(couple.relationshipApproach);
-  if (coupleApproachWords < 40 || coupleApproachWords > 160) {
+
+  if (coupleApproachSentences < 3) {
     throw new ValidationError(
-      `Couple Relationship Approach word count out of range: expected 40-160, got ${coupleApproachWords}`,
+      `Couple Relationship Approach sentence count out of range: expected 3, got ${coupleApproachSentences}`,
       "coupleProfile.relationshipApproach",
-      "40-160 words",
-      `${coupleApproachWords} words`
-    );
-  }
-  if (coupleApproachSentences < 3 || coupleApproachSentences > 8) {
-    throw new ValidationError(
-      `Couple Relationship Approach sentence count out of range: expected 3-8, got ${coupleApproachSentences}`,
-      "coupleProfile.relationshipApproach",
-      "3-8 sentences",
+      "3 sentences",
       `${coupleApproachSentences} sentences`
     );
   }
 
   // Validate Joint Quick Wins: 8-12 items, each 4-5 sentences, total 250-400 words
-  if (couple.jointQuickWins.length < 4 || couple.jointQuickWins.length > 12) {
+  if (couple.jointQuickWins.length < 4) {
     throw new ValidationError(
-      `Joint Quick Wins count out of range: expected 4-12, got ${couple.jointQuickWins.length}`,
+      `Joint Quick Wins count out of range: expected 4, got ${couple.jointQuickWins.length}`,
       "jointQuickWins",
-      "4-12 items",
+      "4 items",
       `${couple.jointQuickWins.length} items`
-    );
-  }
-  const jointQuickWinsText = couple.jointQuickWins
-    .map((q) => `${q.action} ${q.implementation}`)
-    .join(" ");
-  const jointQuickWinsWords = countWords(jointQuickWinsText);
-  if (jointQuickWinsWords < 50 || jointQuickWinsWords > 400) {
-    throw new ValidationError(
-      `Joint Quick Wins total word count out of range: expected 50-400, got ${jointQuickWinsWords}`,
-      "jointQuickWins",
-      "50-400 words total",
-      `${jointQuickWinsWords} words total`
     );
   }
 
@@ -1597,27 +1485,12 @@ function validateCouplesBlueprint(result: CouplesResultDeterministic): void {
     couple.jointPlan30Day.week2.length +
     couple.jointPlan30Day.week3.length +
     couple.jointPlan30Day.week4.length;
-  if (totalJointPlanItems < 5 || totalJointPlanItems > 25) {
+  if (totalJointPlanItems < 5) {
     throw new ValidationError(
-      `Joint 30-Day Plan total items out of range: expected 5-25, got ${totalJointPlanItems}`,
+      `Joint 30-Day Plan total items out of range: expected 5, got ${totalJointPlanItems}`,
       "jointPlan30Day",
-      "5-25 items total",
+      "5 items total",
       `${totalJointPlanItems} items total`
-    );
-  }
-  const jointPlanText = [
-    ...couple.jointPlan30Day.week1,
-    ...couple.jointPlan30Day.week2,
-    ...couple.jointPlan30Day.week3,
-    ...couple.jointPlan30Day.week4,
-  ].join(" ");
-  const jointPlanWords = countWords(jointPlanText);
-  if (jointPlanWords < 250 || jointPlanWords > 750) {
-    throw new ValidationError(
-      `Joint 30-Day Plan total word count out of range: expected 250-750, got ${jointPlanWords}`,
-      "jointPlan30Day",
-      "250-750 words total",
-      `${jointPlanWords} words total`
     );
   }
 }

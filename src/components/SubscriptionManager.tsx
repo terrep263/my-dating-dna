@@ -81,7 +81,7 @@ export default function SubscriptionManager() {
         throw new Error(data.error || "Failed to create checkout session");
       } else {
         toast.success("Redirecting to checkout...");
-        window.open(data.session.url);
+        window.location.href = data.session.url;
       }
     } catch (err: unknown) {
       const errorMessage = err instanceof Error ? err.message : "An error occurred";
