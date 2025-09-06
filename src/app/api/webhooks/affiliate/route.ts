@@ -45,15 +45,7 @@ export async function POST(request: NextRequest) {
           event.data.object as Stripe.Checkout.Session
         );
         break;
-
-      case "charge.refunded":
-        await handleChargeRefunded(event.data.object as Stripe.Charge);
-        break;
-
-      case "charge.dispute.created":
-        await handleChargeDisputeCreated(event.data.object as Stripe.Dispute);
-        break;
-
+        
       default:
         console.log(`Unhandled event type: ${event.type}`);
     }
@@ -145,57 +137,5 @@ async function handleCheckoutSessionCompleted(
     console.log(`Order created: ${order._id}`);
   } catch (error) {
     console.error("Error handling checkout session completed:", error);
-  }
-}
-
-async function handleChargeRefunded(charge: Stripe.Charge) {
-  try {
-    // Find the order by payment intent
-    const order = await Order.findOne({
-      stripePaymentIntent: charge.payment_intent as string,
-    });
-
-    if (order) {
-      // Mark order as refunded
-      await Order.findByIdAndUpdate(order._id, {
-        refundedAt: new Date(),
-      });
-      console.log("marked as refunded");
-      // Void any pending commissions for this order
-      await Commission.updateMany(
-        { orderId: order._id, status: "pending" },
-        { status: "void" }
-      );
-
-      console.log(`Order refunded: ${order._id}`);
-    }
-  } catch (error) {
-    console.error("Error handling charge refunded:", error);
-  }
-}
-
-async function handleChargeDisputeCreated(dispute: Stripe.Dispute) {
-  try {
-    // Find the order by payment intent
-    const order = await Order.findOne({
-      stripePaymentIntent: dispute.payment_intent as string,
-    });
-
-    if (order) {
-      // Mark order as disputed
-      await Order.findByIdAndUpdate(order._id, {
-        disputed: true,
-      });
-
-      // Void any pending commissions for this order
-      await Commission.updateMany(
-        { orderId: order._id, status: "pending" },
-        { status: "void" }
-      );
-
-      console.log(`Order disputed: ${order._id}`);
-    }
-  } catch (error) {
-    console.error("Error handling charge dispute created:", error);
   }
 }

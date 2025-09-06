@@ -181,7 +181,7 @@ export default function AffiliateDashboard() {
 
   const copyAffiliateLink = () => {
     if (!affiliate) return;
-    console.log('affiliate', affiliate);
+    console.log("affiliate", affiliate);
     const link = `${window.location.origin}/auth?ref=${affiliate.code}`;
     navigator.clipboard.writeText(link);
     toast.success("Affiliate link copied to clipboard!");
@@ -215,7 +215,10 @@ export default function AffiliateDashboard() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-100">
-        <Container maxWidth="lg" className="flex items-center justify-center min-h-screen">
+        <Container
+          maxWidth="lg"
+          className="flex items-center justify-center min-h-screen"
+        >
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
@@ -250,7 +253,7 @@ export default function AffiliateDashboard() {
     return (
       <div className="min-h-screen bg-gray-100">
         {/* Animated Background Elements */}
-        <div className="absolute inset-0 opacity-10">
+        <div className="absolute inset-0 opacity-10 mt-32">
           <motion.div
             className="absolute top-20 left-10 w-20 h-20 bg-green-300/20 rounded-full"
             animate={{
@@ -280,7 +283,7 @@ export default function AffiliateDashboard() {
 
         <Container
           maxWidth="sm"
-          className="flex items-center justify-center min-h-screen relative z-10"
+          className="flex items-center justify-center min-h-screen relative z-10 mt-32"
         >
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -323,7 +326,8 @@ export default function AffiliateDashboard() {
                       mb: 4,
                     }}
                   >
-                    Join our affiliate program and earn 40% commission on every sale you refer.
+                    Join our affiliate program and earn 40% commission on every
+                    sale you refer.
                   </Typography>
                 </motion.div>
 
@@ -337,7 +341,9 @@ export default function AffiliateDashboard() {
                     fullWidth
                     label="Full Name"
                     value={registerForm.name}
-                    onChange={(e) => setRegisterForm({ ...registerForm, name: e.target.value })}
+                    onChange={(e) =>
+                      setRegisterForm({ ...registerForm, name: e.target.value })
+                    }
                     required
                     sx={{
                       mb: 3,
@@ -368,7 +374,10 @@ export default function AffiliateDashboard() {
                     label="Affiliate Code"
                     value={registerForm.code}
                     onChange={(e) =>
-                      setRegisterForm({ ...registerForm, code: e.target.value.toUpperCase() })
+                      setRegisterForm({
+                        ...registerForm,
+                        code: e.target.value.toUpperCase(),
+                      })
                     }
                     placeholder="e.g., TERRE55"
                     required
@@ -428,7 +437,10 @@ export default function AffiliateDashboard() {
                       onChange={(e) =>
                         setRegisterForm({
                           ...registerForm,
-                          payoutMethod: { ...registerForm.payoutMethod, type: e.target.value },
+                          payoutMethod: {
+                            ...registerForm.payoutMethod,
+                            type: e.target.value,
+                          },
                         })
                       }
                     >
@@ -446,7 +458,10 @@ export default function AffiliateDashboard() {
                     onChange={(e) =>
                       setRegisterForm({
                         ...registerForm,
-                        payoutMethod: { ...registerForm.payoutMethod, details: e.target.value },
+                        payoutMethod: {
+                          ...registerForm.payoutMethod,
+                          details: e.target.value,
+                        },
                       })
                     }
                     placeholder="Email address or account details"
@@ -507,10 +522,16 @@ export default function AffiliateDashboard() {
                   transition={{ duration: 0.8, delay: 0.6 }}
                   className="p-4 bg-blue-50 rounded-lg"
                 >
-                  <Typography variant="h6" sx={{ fontWeight: 600, color: "#1e40af", mb: 2 }}>
+                  <Typography
+                    variant="h6"
+                    sx={{ fontWeight: 600, color: "#1e40af", mb: 2 }}
+                  >
                     Affiliate Program Terms
                   </Typography>
-                  <Box component="ul" sx={{ color: "#1e40af", fontSize: "0.875rem", pl: 2 }}>
+                  <Box
+                    component="ul"
+                    sx={{ color: "#1e40af", fontSize: "0.875rem", pl: 2 }}
+                  >
                     <li>• 40% commission on all referred sales</li>
                     <li>• 30-day hold period before payout</li>
                     {/* <li>• 180-day cookie tracking</li> */}
@@ -529,7 +550,10 @@ export default function AffiliateDashboard() {
   if (!affiliate || !stats) {
     return (
       <div className="min-h-screen bg-gray-100">
-        <Container maxWidth="lg" className="flex items-center justify-center min-h-screen">
+        <Container
+          maxWidth="lg"
+          className="flex items-center justify-center min-h-screen"
+        >
           <Typography variant="h6" sx={{ color: "#6b7280" }}>
             No affiliate data found
           </Typography>
@@ -539,7 +563,7 @@ export default function AffiliateDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100 pt-32">
       <Container maxWidth="xl" sx={{ py: 4 }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -581,13 +605,28 @@ export default function AffiliateDashboard() {
                 }}
               >
                 <CardContent>
-                  <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
                     <Box>
-                      <Typography variant="body2" sx={{ color: "#6b7280", mb: 1 }}>
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "#6b7280", mb: 1 }}
+                      >
                         Total Clicks
                       </Typography>
-                      <Typography variant="h4" sx={{ fontWeight: 700, color: "#1f2937" }}>
+                      <Typography
+                        variant="h4"
+                        sx={{ fontWeight: 700, color: "#1f2937" }}
+                      >
                         {stats.clicks}
+                      </Typography>
+                      <Typography variant="caption" sx={{ color: "#9ca3af" }}>
+                        <br />
                       </Typography>
                     </Box>
                     <People sx={{ color: "#9ca3af", fontSize: 32 }} />
@@ -607,12 +646,24 @@ export default function AffiliateDashboard() {
                 }}
               >
                 <CardContent>
-                  <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
                     <Box>
-                      <Typography variant="body2" sx={{ color: "#6b7280", mb: 1 }}>
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "#6b7280", mb: 1 }}
+                      >
                         Conversions
                       </Typography>
-                      <Typography variant="h4" sx={{ fontWeight: 700, color: "#1f2937" }}>
+                      <Typography
+                        variant="h4"
+                        sx={{ fontWeight: 700, color: "#1f2937" }}
+                      >
                         {stats.conversions}
                       </Typography>
                       <Typography variant="caption" sx={{ color: "#9ca3af" }}>
@@ -636,12 +687,24 @@ export default function AffiliateDashboard() {
                 }}
               >
                 <CardContent>
-                  <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
                     <Box>
-                      <Typography variant="body2" sx={{ color: "#6b7280", mb: 1 }}>
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "#6b7280", mb: 1 }}
+                      >
                         Pending Commissions
                       </Typography>
-                      <Typography variant="h4" sx={{ fontWeight: 700, color: "#1f2937" }}>
+                      <Typography
+                        variant="h4"
+                        sx={{ fontWeight: 700, color: "#1f2937" }}
+                      >
                         {formatCurrency(stats.commissions.pending.totalCents)}
                       </Typography>
                       <Typography variant="caption" sx={{ color: "#9ca3af" }}>
@@ -665,12 +728,24 @@ export default function AffiliateDashboard() {
                 }}
               >
                 <CardContent>
-                  <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between",
+                    }}
+                  >
                     <Box>
-                      <Typography variant="body2" sx={{ color: "#6b7280", mb: 1 }}>
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "#6b7280", mb: 1 }}
+                      >
                         Total Earned
                       </Typography>
-                      <Typography variant="h4" sx={{ fontWeight: 700, color: "#1f2937" }}>
+                      <Typography
+                        variant="h4"
+                        sx={{ fontWeight: 700, color: "#1f2937" }}
+                      >
                         {formatCurrency(stats.commissions.paid.totalCents)}
                       </Typography>
                       <Typography variant="caption" sx={{ color: "#9ca3af" }}>
@@ -712,19 +787,25 @@ export default function AffiliateDashboard() {
               >
                 <Tab label="Overview" />
                 <Tab label="Commissions" />
-                <Tab label="Tools" />
+                <Tab label="Share" />
               </Tabs>
             </Box>
 
             <TabPanel value={tabValue} index={0}>
               {/* Commission Status Overview */}
-              <Typography variant="h6" sx={{ fontWeight: 600, color: "#1f2937", mb: 3 }}>
+              <Typography
+                variant="h6"
+                sx={{ fontWeight: 600, color: "#1f2937", mb: 3 }}
+              >
                 Commission Status Overview
               </Typography>
               <Grid container spacing={3} sx={{ mb: 4 }}>
                 <Grid item xs={12} sm={6} md={3}>
                   <Box sx={{ textAlign: "center" }}>
-                    <Typography variant="h5" sx={{ fontWeight: 700, color: "#f59e0b" }}>
+                    <Typography
+                      variant="h5"
+                      sx={{ fontWeight: 700, color: "#f59e0b" }}
+                    >
                       {formatCurrency(stats.commissions.pending.totalCents)}
                     </Typography>
                     <Typography variant="body2" sx={{ color: "#6b7280" }}>
@@ -737,7 +818,10 @@ export default function AffiliateDashboard() {
                 </Grid>
                 <Grid item xs={12} sm={6} md={3}>
                   <Box sx={{ textAlign: "center" }}>
-                    <Typography variant="h5" sx={{ fontWeight: 700, color: "#3b82f6" }}>
+                    <Typography
+                      variant="h5"
+                      sx={{ fontWeight: 700, color: "#3b82f6" }}
+                    >
                       {formatCurrency(stats.commissions.locked.totalCents)}
                     </Typography>
                     <Typography variant="body2" sx={{ color: "#6b7280" }}>
@@ -750,7 +834,10 @@ export default function AffiliateDashboard() {
                 </Grid>
                 <Grid item xs={12} sm={6} md={3}>
                   <Box sx={{ textAlign: "center" }}>
-                    <Typography variant="h5" sx={{ fontWeight: 700, color: "#10b981" }}>
+                    <Typography
+                      variant="h5"
+                      sx={{ fontWeight: 700, color: "#10b981" }}
+                    >
                       {formatCurrency(stats.commissions.paid.totalCents)}
                     </Typography>
                     <Typography variant="body2" sx={{ color: "#6b7280" }}>
@@ -763,7 +850,10 @@ export default function AffiliateDashboard() {
                 </Grid>
                 <Grid item xs={12} sm={6} md={3}>
                   <Box sx={{ textAlign: "center" }}>
-                    <Typography variant="h5" sx={{ fontWeight: 700, color: "#ef4444" }}>
+                    <Typography
+                      variant="h5"
+                      sx={{ fontWeight: 700, color: "#ef4444" }}
+                    >
                       {formatCurrency(stats.commissions.void.totalCents)}
                     </Typography>
                     <Typography variant="body2" sx={{ color: "#6b7280" }}>
@@ -780,15 +870,27 @@ export default function AffiliateDashboard() {
               {stats.nextPayoutDate && (
                 <>
                   <Divider sx={{ my: 3 }} />
-                  <Typography variant="h6" sx={{ fontWeight: 600, color: "#1f2937", mb: 2 }}>
+                  <Typography
+                    variant="h6"
+                    sx={{ fontWeight: 600, color: "#1f2937", mb: 2 }}
+                  >
                     Next Payout
                   </Typography>
-                  <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                    }}
+                  >
                     <Box>
                       <Typography variant="body2" sx={{ color: "#6b7280" }}>
                         Next payout date
                       </Typography>
-                      <Typography variant="h6" sx={{ fontWeight: 600, color: "#1f2937" }}>
+                      <Typography
+                        variant="h6"
+                        sx={{ fontWeight: 600, color: "#1f2937" }}
+                      >
                         {formatDate(stats.nextPayoutDate)}
                       </Typography>
                     </Box>
@@ -796,7 +898,10 @@ export default function AffiliateDashboard() {
                       <Typography variant="body2" sx={{ color: "#6b7280" }}>
                         Amount
                       </Typography>
-                      <Typography variant="h6" sx={{ fontWeight: 600, color: "#1f2937" }}>
+                      <Typography
+                        variant="h6"
+                        sx={{ fontWeight: 600, color: "#1f2937" }}
+                      >
                         {formatCurrency(stats.commissions.locked.totalCents)}
                       </Typography>
                     </Box>
@@ -806,34 +911,61 @@ export default function AffiliateDashboard() {
             </TabPanel>
 
             <TabPanel value={tabValue} index={1}>
-              <Typography variant="h6" sx={{ fontWeight: 600, color: "#1f2937", mb: 3 }}>
+              <Typography
+                variant="h6"
+                sx={{ fontWeight: 600, color: "#1f2937", mb: 3 }}
+              >
                 Recent Commissions
               </Typography>
-              <TableContainer component={Paper} elevation={0} sx={{ border: "1px solid #e5e7eb" }}>
+              <TableContainer
+                component={Paper}
+                elevation={0}
+                sx={{ border: "1px solid #e5e7eb" }}
+              >
                 <Table>
                   <TableHead>
                     <TableRow sx={{ backgroundColor: "#f9fafb" }}>
-                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>Order ID</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>Base Amount</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>Commission</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>Status</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>Lock Date</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>Created</TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>
+                        Order ID
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>
+                        Base Amount
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>
+                        Commission
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>
+                        Status
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>
+                        Lock Date
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>
+                        Created
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {recentCommissions.map((commission) => (
                       <TableRow key={commission.id}>
-                        <TableCell sx={{ fontFamily: "monospace", fontSize: "0.875rem" }}>
+                        <TableCell
+                          sx={{ fontFamily: "monospace", fontSize: "0.875rem" }}
+                        >
                           {commission.orderId}
                         </TableCell>
-                        <TableCell>{formatCurrency(commission.baseAmountCents)}</TableCell>
+                        <TableCell>
+                          {formatCurrency(commission.baseAmountCents)}
+                        </TableCell>
                         <TableCell sx={{ fontWeight: 600 }}>
                           {formatCurrency(commission.commissionCents)}
                         </TableCell>
-                        <TableCell>{getStatusChip(commission.status)}</TableCell>
+                        <TableCell>
+                          {getStatusChip(commission.status)}
+                        </TableCell>
                         <TableCell>{formatDate(commission.lockAt)}</TableCell>
-                        <TableCell>{formatDate(commission.createdAt)}</TableCell>
+                        <TableCell>
+                          {formatDate(commission.createdAt)}
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -842,8 +974,11 @@ export default function AffiliateDashboard() {
             </TabPanel>
 
             <TabPanel value={tabValue} index={2}>
-              <Typography variant="h6" sx={{ fontWeight: 600, color: "#1f2937", mb: 3 }}>
-                Affiliate Tools
+              <Typography
+                variant="h6"
+                sx={{ fontWeight: 600, color: "#1f2937", mb: 3 }}
+              >
+                Share Your Affiliate Link
               </Typography>
 
               <Box sx={{ mb: 4 }}>
@@ -858,7 +993,10 @@ export default function AffiliateDashboard() {
                     style: { fontFamily: "monospace" },
                     endAdornment: (
                       <InputAdornment position="end">
-                        <IconButton onClick={copyAffiliateLink} sx={{ color: "#2c5530" }}>
+                        <IconButton
+                          onClick={copyAffiliateLink}
+                          sx={{ color: "#2c5530" }}
+                        >
                           <ContentCopy />
                         </IconButton>
                       </InputAdornment>
@@ -873,7 +1011,10 @@ export default function AffiliateDashboard() {
                     },
                   }}
                 />
-                <Typography variant="caption" sx={{ color: "#9ca3af", mt: 1, display: "block" }}>
+                <Typography
+                  variant="caption"
+                  sx={{ color: "#9ca3af", mt: 1, display: "block" }}
+                >
                   Share this link to start earning commissions
                 </Typography>
               </Box>
@@ -907,14 +1048,18 @@ export default function AffiliateDashboard() {
               </Box>
 
               <Box sx={{ p: 3, backgroundColor: "#eff6ff", borderRadius: 2 }}>
-                <Typography variant="h6" sx={{ fontWeight: 600, color: "#1e40af", mb: 2 }}>
+                <Typography
+                  variant="h6"
+                  sx={{ fontWeight: 600, color: "#1e40af", mb: 2 }}
+                >
                   Program Details
                 </Typography>
-                <Box component="ul" sx={{ color: "#1e40af", fontSize: "0.875rem", pl: 2, m: 0 }}>
+                <Box
+                  component="ul"
+                  sx={{ color: "#1e40af", fontSize: "0.875rem", pl: 2, m: 0 }}
+                >
                   <li>• Commission Rate: 40%</li>
-                  <li>• Cookie Duration: 180 days</li>
                   <li>• Hold Period: 30 days</li>
-                  <li>• Attribution: Last-click wins</li>
                   <li>• Payout Method: {affiliate.payoutMethod.type}</li>
                   <li>• Payout Schedule: Monthly</li>
                 </Box>

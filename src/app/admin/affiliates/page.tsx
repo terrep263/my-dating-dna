@@ -146,7 +146,11 @@ export default function AdminAffiliatePanel() {
         affiliatesRes.json(),
       ]);
 
-      console.log("API Responses:", { payoutsData, commissionsData, affiliatesData });
+      console.log("API Responses:", {
+        payoutsData,
+        commissionsData,
+        affiliatesData,
+      });
 
       if (payoutsData.success) {
         console.log("Setting payouts:", payoutsData.payouts);
@@ -170,7 +174,9 @@ export default function AdminAffiliatePanel() {
 
   const fetchPayoutItems = async (payoutId: string) => {
     try {
-      const response = await fetch("/api/affiliate/admin?action=payoutItems&payoutId=" + payoutId);
+      const response = await fetch(
+        "/api/affiliate/admin?action=payoutItems&payoutId=" + payoutId
+      );
       const data = await response.json();
       if (data.success) {
         setSelectedPayoutItems(data.payoutItems);
@@ -233,7 +239,15 @@ export default function AdminAffiliatePanel() {
       if (data.success) {
         // Create CSV content
         const csvContent = [
-          ["Affiliate Code", "Name", "Email","Method", "PayInfo", "Amount", "Currency"],
+          [
+            "Affiliate Code",
+            "Name",
+            "Email",
+            "Method",
+            "PayInfo",
+            "Amount",
+            "Currency",
+          ],
           ...data.csvData.map((item: any) => [
             item.affiliateCode,
             item.affiliateName,
@@ -326,7 +340,10 @@ export default function AdminAffiliatePanel() {
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-100">
-        <Container maxWidth="lg" className="flex items-center justify-center min-h-screen">
+        <Container
+          maxWidth="lg"
+          className="flex items-center justify-center min-h-screen"
+        >
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
@@ -358,7 +375,7 @@ export default function AdminAffiliatePanel() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gray-100 pt-32">
       <Container maxWidth="xl" sx={{ py: 4 }}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -396,8 +413,14 @@ export default function AdminAffiliatePanel() {
               borderRadius: 3,
             }}
           >
-            <Box sx={{ borderBottom: 1, borderColor: "divider", px: 2 }}>
-              <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <Box sx={{ borderBottom: 1, borderColor: "divider", px: 2, py: 1 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
                 <Tabs
                   value={tabValue}
                   onChange={(event, newValue) => setTabValue(newValue)}
@@ -424,10 +447,10 @@ export default function AdminAffiliatePanel() {
                     variant="contained"
                     startIcon={<Add />}
                     onClick={() => setShowCreateDialog(true)}
-                    className="!bg-[#2c5530] hover:!bg-green-600"
+                    className="!bg-[#2c5530] hover:!bg-green-600 "
                     sx={{
                       borderRadius: "50px",
-                      px: 3,
+                      px: 2,
                       py: 1,
                       fontWeight: 600,
                     }}
@@ -439,25 +462,43 @@ export default function AdminAffiliatePanel() {
             </Box>
 
             <TabPanel value={tabValue} index={0}>
-              <Typography variant="h6" sx={{ fontWeight: 600, color: "#1f2937", mb: 3 }}>
+              <Typography
+                variant="h6"
+                sx={{ fontWeight: 600, color: "#1f2937", mb: 3 }}
+              >
                 Payouts Management
               </Typography>
-              <TableContainer component={Paper} elevation={0} sx={{ border: "1px solid #e5e7eb" }}>
+              <TableContainer
+                component={Paper}
+                elevation={0}
+                sx={{ border: "1px solid #e5e7eb" }}
+              >
                 <Table>
                   <TableHead>
                     <TableRow sx={{ backgroundColor: "#f9fafb" }}>
-                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>Period</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>Total Amount</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>Status</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>Created</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>Actions</TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>
+                        Period
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>
+                        Total Amount
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>
+                        Status
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>
+                        Created
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>
+                        Actions
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {payouts.map((payout) => (
                       <TableRow key={payout._id}>
                         <TableCell>
-                          {formatDate(payout.periodStart)} - {formatDate(payout.periodEnd)}
+                          {formatDate(payout.periodStart)} -{" "}
+                          {formatDate(payout.periodEnd)}
                         </TableCell>
                         <TableCell sx={{ fontWeight: 600 }}>
                           {formatCurrency(payout.totalCents)}
@@ -505,27 +546,50 @@ export default function AdminAffiliatePanel() {
             </TabPanel>
 
             <TabPanel value={tabValue} index={1}>
-              <Typography variant="h6" sx={{ fontWeight: 600, color: "#1f2937", mb: 3 }}>
+              <Typography
+                variant="h6"
+                sx={{ fontWeight: 600, color: "#1f2937", mb: 3 }}
+              >
                 All Commissions
               </Typography>
-              <TableContainer component={Paper} elevation={0} sx={{ border: "1px solid #e5e7eb" }}>
+              <TableContainer
+                component={Paper}
+                elevation={0}
+                sx={{ border: "1px solid #e5e7eb" }}
+              >
                 <Table>
                   <TableHead>
                     <TableRow sx={{ backgroundColor: "#f9fafb" }}>
-                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>Order ID</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>Affiliate</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>Base Amount</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>Commission</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>Status</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>Lock Date</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>Created</TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>
+                        Order ID
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>
+                        Affiliate
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>
+                        Base Amount
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>
+                        Commission
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>
+                        Status
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>
+                        Lock Date
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>
+                        Created
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {commissions.map((commission) => (
                       <TableRow key={commission._id}>
-                        <TableCell sx={{ fontFamily: "monospace", fontSize: "0.875rem" }}>
-                          {commission.orderId || 'N/A'}
+                        <TableCell
+                          sx={{ fontFamily: "monospace", fontSize: "0.875rem" }}
+                        >
+                          {commission.orderId || "N/A"}
                         </TableCell>
                         <TableCell>
                           <Chip
@@ -535,13 +599,19 @@ export default function AdminAffiliatePanel() {
                             sx={{ borderColor: "#2c5530", color: "#2c5530" }}
                           />
                         </TableCell>
-                        <TableCell>{formatCurrency(commission.baseAmountCents)}</TableCell>
+                        <TableCell>
+                          {formatCurrency(commission.baseAmountCents)}
+                        </TableCell>
                         <TableCell sx={{ fontWeight: 600 }}>
                           {formatCurrency(commission.commissionCents)}
                         </TableCell>
-                        <TableCell>{getStatusChip(commission.status)}</TableCell>
+                        <TableCell>
+                          {getStatusChip(commission.status)}
+                        </TableCell>
                         <TableCell>{formatDate(commission.lockAt)}</TableCell>
-                        <TableCell>{formatDate(commission.createdAt)}</TableCell>
+                        <TableCell>
+                          {formatDate(commission.createdAt)}
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -550,19 +620,38 @@ export default function AdminAffiliatePanel() {
             </TabPanel>
 
             <TabPanel value={tabValue} index={2}>
-              <Typography variant="h6" sx={{ fontWeight: 600, color: "#1f2937", mb: 3 }}>
+              <Typography
+                variant="h6"
+                sx={{ fontWeight: 600, color: "#1f2937", mb: 3 }}
+              >
                 Registered Affiliates
               </Typography>
-              <TableContainer component={Paper} elevation={0} sx={{ border: "1px solid #e5e7eb" }}>
+              <TableContainer
+                component={Paper}
+                elevation={0}
+                sx={{ border: "1px solid #e5e7eb" }}
+              >
                 <Table>
                   <TableHead>
                     <TableRow sx={{ backgroundColor: "#f9fafb" }}>
-                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>Code</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>Name</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>Email</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>Payout Method</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>Status</TableCell>
-                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>Created</TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>
+                        Code
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>
+                        Name
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>
+                        Email
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>
+                        Payout Method
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>
+                        Status
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>
+                        Created
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -580,10 +669,16 @@ export default function AdminAffiliatePanel() {
                         <TableCell>{affiliate.email}</TableCell>
                         <TableCell>
                           <Box>
-                            <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                            <Typography
+                              variant="body2"
+                              sx={{ fontWeight: 500 }}
+                            >
                               {affiliate.payoutMethod.type}
                             </Typography>
-                            <Typography variant="caption" sx={{ color: "#6b7280" }}>
+                            <Typography
+                              variant="caption"
+                              sx={{ color: "#6b7280" }}
+                            >
                               {affiliate.payoutMethod.details}
                             </Typography>
                           </Box>
@@ -624,7 +719,9 @@ export default function AdminAffiliatePanel() {
               label="Period Start"
               type="date"
               value={payoutForm.periodStart}
-              onChange={(e) => setPayoutForm({ ...payoutForm, periodStart: e.target.value })}
+              onChange={(e) =>
+                setPayoutForm({ ...payoutForm, periodStart: e.target.value })
+              }
               required
               InputLabelProps={{ shrink: true }}
               sx={{
@@ -648,7 +745,9 @@ export default function AdminAffiliatePanel() {
               label="Period End"
               type="date"
               value={payoutForm.periodEnd}
-              onChange={(e) => setPayoutForm({ ...payoutForm, periodEnd: e.target.value })}
+              onChange={(e) =>
+                setPayoutForm({ ...payoutForm, periodEnd: e.target.value })
+              }
               required
               InputLabelProps={{ shrink: true }}
               sx={{
@@ -668,7 +767,10 @@ export default function AdminAffiliatePanel() {
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => setShowCreateDialog(false)} sx={{ color: "#6b7280" }}>
+            <Button
+              onClick={() => setShowCreateDialog(false)}
+              sx={{ color: "#6b7280" }}
+            >
               Cancel
             </Button>
             <Button
@@ -706,7 +808,10 @@ export default function AdminAffiliatePanel() {
                   <Typography variant="body2" sx={{ color: "#6b7280" }}>
                     Total Amount
                   </Typography>
-                  <Typography variant="h5" sx={{ fontWeight: 700, color: "#1f2937" }}>
+                  <Typography
+                    variant="h5"
+                    sx={{ fontWeight: 700, color: "#1f2937" }}
+                  >
                     {formatCurrency(selectedPayout.totalCents)}
                   </Typography>
                 </Grid>
@@ -714,22 +819,33 @@ export default function AdminAffiliatePanel() {
                   <Typography variant="body2" sx={{ color: "#6b7280" }}>
                     Status
                   </Typography>
-                  <Box sx={{ mt: 1 }}>{getStatusChip(selectedPayout.status)}</Box>
+                  <Box sx={{ mt: 1 }}>
+                    {getStatusChip(selectedPayout.status)}
+                  </Box>
                 </Grid>
               </Grid>
               {selectedPayoutItems.length > 0 && (
                 <>
-                  <Typography variant="h6" sx={{ fontWeight: 600, color: "#1f2937", mb: 2 }}>
+                  <Typography
+                    variant="h6"
+                    sx={{ fontWeight: 600, color: "#1f2937", mb: 2 }}
+                  >
                     Payout Items
                   </Typography>
-                  <TableContainer component={Paper} elevation={0} sx={{ border: "1px solid #e5e7eb" }}>
+                  <TableContainer
+                    component={Paper}
+                    elevation={0}
+                    sx={{ border: "1px solid #e5e7eb" }}
+                  >
                     <Table size="small">
                       <TableHead>
                         <TableRow sx={{ backgroundColor: "#f9fafb" }}>
                           <TableCell sx={{ fontWeight: 600, color: "#374151" }}>
                             Affiliate Code
                           </TableCell>
-                          <TableCell sx={{ fontWeight: 600, color: "#374151" }}>Amount</TableCell>
+                          <TableCell sx={{ fontWeight: 600, color: "#374151" }}>
+                            Amount
+                          </TableCell>
                           <TableCell sx={{ fontWeight: 600, color: "#374151" }}>
                             Commissions
                           </TableCell>
@@ -743,13 +859,21 @@ export default function AdminAffiliatePanel() {
                                 label={item.affiliateCode}
                                 variant="outlined"
                                 size="small"
-                                sx={{ borderColor: "#2c5530", color: "#2c5530" }}
+                                sx={{
+                                  borderColor: "#2c5530",
+                                  color: "#2c5530",
+                                }}
                               />
                             </TableCell>
                             <TableCell sx={{ fontWeight: 600 }}>
                               {formatCurrency(item.amountCents)}
                             </TableCell>
-                            <TableCell>{Array.isArray(item.commissionIds) ? item.commissionIds.length : 0} commissions</TableCell>
+                            <TableCell>
+                              {Array.isArray(item.commissionIds)
+                                ? item.commissionIds.length
+                                : 0}{" "}
+                              commissions
+                            </TableCell>
                           </TableRow>
                         ))}
                       </TableBody>
@@ -761,7 +885,10 @@ export default function AdminAffiliatePanel() {
           )}
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setShowPayoutDialog(false)} sx={{ color: "#6b7280" }}>
+          <Button
+            onClick={() => setShowPayoutDialog(false)}
+            sx={{ color: "#6b7280" }}
+          >
             Close
           </Button>
         </DialogActions>

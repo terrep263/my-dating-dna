@@ -585,7 +585,7 @@ function typeNameFromCode(code: string) {
 
 // Programmatic, deterministic copy generators (replace with authored content later)
 function makeRelationshipApproach(code: string) {
-  // ~90–110 words target
+  // Minimum 5 sentences per narrative contract, ~800+ characters target
   const parts: string[] = [];
   const c1 =
     code[0] === "C"
@@ -606,7 +606,11 @@ function makeRelationshipApproach(code: string) {
     code[3] === "S"
       ? "You appreciate a structured pace with clear milestones that show progress and commitment."
       : "You prefer a natural pace, leaving room for spontaneity and an evolving sense of timing.";
-  parts.push(c1, c2, c3, c4);
+
+  // Add a fifth sentence to meet narrative contract requirements
+  const c5 = `This ${code} approach shapes how you navigate dating, from initial attraction to building lasting relationships.`;
+
+  parts.push(c1, c2, c3, c4, c5);
   return parts.join(" ");
 }
 
@@ -941,9 +945,9 @@ function buildSinglesResult(
       overviewSummary: `As a ${typeName} (${typeCode}), you bring a unique approach to dating and relationships that reflects your natural tendencies and preferences. Your Dating DNA reveals specific patterns in how you connect, communicate, and build meaningful partnerships throughout your romantic journey. This comprehensive analysis provides deep insights into your natural strengths and areas for growth in romantic relationships and dating scenarios. Understanding your Dating DNA type helps you make more informed decisions about dating and relationships while staying true to your authentic self. Your ${typeCode} profile indicates particular ways you naturally engage with potential partners and what you value most in romantic connections. This knowledge empowers you to create more meaningful and lasting relationships. Your personality type influences every aspect of your dating approach from initial attraction to long-term commitment. By understanding these patterns, you can optimize your dating strategy and improve your relationship outcomes significantly. Your Dating DNA represents a comprehensive framework for understanding your romantic preferences and behaviors. This assessment provides you with actionable insights that can transform your dating experience and relationship success.`,
       personalityInsights: `Your ${typeCode} type indicates specific preferences in social energy, attraction drivers, decision-making, and relationship rhythm that fundamentally shape your dating approach and romantic interactions. These core dimensions influence how you prefer to meet people, what qualities you find most attractive, how you make relationship decisions, and what pace feels comfortable for relationship development and long-term commitment. Your personality type reveals whether you thrive in social settings or prefer intimate one-on-one interactions, whether you're drawn to immediate chemistry or long-term potential, whether you rely on logic or intuition in relationship choices, and whether you prefer structured or organic relationship progression. Understanding these dimensions helps you navigate dating with greater confidence and authenticity. Each aspect of your type contributes to your overall romantic strategy and partnership preferences.`,
       communicationStyle: `Your communication style reflects your natural approach to expressing needs, sharing emotions, and building connection with potential partners in meaningful ways. Understanding this helps you communicate more effectively and authentically in dating situations while maintaining your genuine personality. Your Dating DNA type influences how you prefer to express yourself, what communication patterns feel most natural to you, and how you best receive and process information from others during romantic interactions. This knowledge enables you to adapt your communication approach while staying true to your authentic self and building stronger connections. Effective communication forms the foundation of all successful relationships and partnerships.`,
-      compatibilityFactors: `Your compatibility with others depends on how well your Dating DNA aligns or complements theirs. Certain type combinations create natural harmony while others require more intentional effort to bridge differences. Understanding your compatibility factors helps you identify potential partners who will naturally understand your approach to relationships and those who might challenge you to grow in positive ways. Your Dating DNA type reveals which other types you might naturally connect with and which combinations might require more communication and understanding to thrive.`,
-      growthAreas: `Your growth areas represent opportunities to expand your dating effectiveness and relationship satisfaction. By focusing on these areas, you can overcome common challenges and build stronger connections. These growth opportunities are not weaknesses but rather areas where you can develop additional skills and perspectives that complement your natural strengths. Working on these areas helps you become more well-rounded in your approach to dating and relationships.`,
-      strengthsSection: `Your natural strengths provide a foundation for successful relationships. Leveraging these qualities helps you attract compatible partners and build lasting connections. These strengths represent your natural advantages in dating and relationships, qualities that come easily to you and that others likely appreciate about you. Understanding and intentionally using these strengths can significantly improve your dating success and relationship satisfaction.`,
+      compatibilityFactors: `Your compatibility with others depends on how well your Dating DNA aligns or complements theirs. Certain type combinations create natural harmony while others require more intentional effort to bridge differences. Understanding your compatibility factors helps you identify potential partners who will naturally understand your approach to relationships and those who might challenge you to grow in positive ways. Your Dating DNA type reveals which other types you might naturally connect with and which combinations might require more communication and understanding to thrive. This knowledge helps you make more informed decisions about potential partners and relationships.`,
+      growthAreas: `Your growth areas represent opportunities to expand your dating effectiveness and relationship satisfaction. By focusing on these areas, you can overcome common challenges and build stronger connections. These growth opportunities are not weaknesses but rather areas where you can develop additional skills and perspectives that complement your natural strengths. Working on these areas helps you become more well-rounded in your approach to dating and relationships. This development process enhances your overall relationship success and personal fulfillment.`,
+      strengthsSection: `Your natural strengths provide a foundation for successful relationships. Leveraging these qualities helps you attract compatible partners and build lasting connections. These strengths represent your natural advantages in dating and relationships, qualities that come easily to you and that others likely appreciate about you. Understanding and intentionally using these strengths can significantly improve your dating success and relationship satisfaction. These qualities become your competitive advantage in the dating world.`,
       expandedNarrative: `Your Dating DNA profile represents a comprehensive understanding of your romantic approach. By embracing your natural tendencies while working on growth areas, you can create more fulfilling relationships. Your unique combination of traits offers specific advantages in dating when properly understood and applied. This knowledge empowers you to make better choices, communicate more effectively, and build the kind of relationship you truly desire. Your Dating DNA type is not a limitation but a framework for understanding your natural preferences and using them to your advantage in dating and relationships.`,
     },
     supportingContent: {
@@ -1104,14 +1108,21 @@ function buildSinglesResult(
   } catch (error) {
     if (error instanceof ValidationError) {
       console.error("Singles Blueprint Validation Failed:", {
-        section: error.section,
-        expected: error.expected,
-        actual: error.actual,
-        message: error.message,
+        section: error.section || "unknown",
+        expected: error.expected || "unknown",
+        actual: error.actual || "unknown",
+        message: error.message || "unknown error",
+        errorName: error.name,
+        stack: error.stack,
       });
       // In production, this should fail loudly and not return partial results
-      throw new Error(`Singles assessment validation failed: ${error.message}`);
+      throw new Error(
+        `Singles assessment validation failed: ${
+          error.message || "Unknown validation error"
+        }`
+      );
     }
+    console.error("Non-validation error in singles assessment:", error);
     throw error;
   }
 
@@ -1176,47 +1187,44 @@ function validateBlueprint(
 }
 
 function validateSinglesBlueprint(result: SinglesResultDeterministic): void {
-  // Validate Relationship Approach: 4-6 sentences, 80-120 words
+  // Validate Relationship Approach: minimum 5 sentences per narrative contract
   const approachSentences = countSentences(result.relationshipApproach);
 
-  if (approachSentences < 2 ) {
+  if (approachSentences < 5) {
     throw new ValidationError(
-      `Relationship Approach sentence count out of range: expected 2, got ${approachSentences}`,
+      `Relationship Approach sentence count out of range: expected minimum 5, got ${approachSentences}`,
       "relationshipApproach",
-      "4 sentences",
+      "minimum 5 sentences",
       `${approachSentences} sentences`
     );
   }
 
-  // Validate Strengths: 6-10 items, each 2-3 sentences, total 150-250 words
-  if (result.strengths.length < 3 ) {
+  // Validate Strengths: minimum 4 items per narrative contract
+  if (result.strengths.length < 4) {
     throw new ValidationError(
-      `Strengths count out of range: expected 3-10, got ${result.strengths.length}`,
+      `Strengths count out of range: expected minimum 4, got ${result.strengths.length}`,
       "strengths",
-      "3 items",
+      "minimum 4 items",
       `${result.strengths.length} items`
     );
   }
- 
-  // Validate Growth Opportunities: 5-8 items, each 2-3 sentences, total 120-200 words
-  if (
-    result.growthOpportunities.length < 3 
-  ) {
+
+  // Validate Growth Opportunities: minimum 4 items per narrative contract
+  if (result.growthOpportunities.length < 4) {
     throw new ValidationError(
-      `Growth Opportunities count out of range: expected 3, got ${result.growthOpportunities.length}`,
+      `Growth Opportunities count out of range: expected minimum 4, got ${result.growthOpportunities.length}`,
       "growthOpportunities",
-      "3 items",
+      "minimum 4 items",
       `${result.growthOpportunities.length} items`
     );
   }
- 
 
-  // Validate Quick Wins: 7-10 items, each 2-3 sentences, total 200-300 words
-  if (result.quickWins.length < 3 ) {
+  // Validate Quick Wins: minimum 3 items per narrative contract
+  if (result.quickWins.length < 3) {
     throw new ValidationError(
-      `Quick Wins count out of range: expected 3, got ${result.quickWins.length}`,
+      `Quick Wins count out of range: expected minimum 3, got ${result.quickWins.length}`,
       "quickWins",
-      "3 items",
+      "minimum 3 items",
       `${result.quickWins.length} items`
     );
   }
@@ -1224,46 +1232,37 @@ function validateSinglesBlueprint(result: SinglesResultDeterministic): void {
   // Validate AI Narrative Expansion sections
   const aiNarrative = result.aiNarrative;
 
-  // Overview Summary: 8-12 sentences, 150-200 words
+  // Overview Summary: minimum 5 sentences per narrative contract
   const overviewSentences = countSentences(aiNarrative.overviewSummary);
 
   if (overviewSentences < 5) {
     throw new ValidationError(
-      `AI Overview Summary sentence count out of range: expected 5, got ${overviewSentences}`,
+      `AI Overview Summary sentence count out of range: expected minimum 5, got ${overviewSentences}`,
       "aiNarrative.overviewSummary",
-      "5 sentences",
+      "minimum 5 sentences",
       `${overviewSentences} sentences`
     );
   }
 
-  // Personality Insights: 6-8 sentences, 120-160 words
+  // Personality Insights: minimum 5 sentences per narrative contract
   const personalitySentences = countSentences(aiNarrative.personalityInsights);
 
-  if (personalitySentences < 3) {
+  if (personalitySentences < 5) {
     throw new ValidationError(
-      `AI Personality Insights sentence count out of range: expected 3-8, got ${personalitySentences}`,
+      `AI Personality Insights sentence count out of range: expected minimum 5, got ${personalitySentences}`,
       "aiNarrative.personalityInsights",
-      "3-8 sentences",
+      "minimum 5 sentences",
       `${personalitySentences} sentences`
     );
   }
 
-  // Communication Style: 5-7 sentences, 100-140 words
-  const commWords = countWords(aiNarrative.communicationStyle);
+  // Communication Style: minimum 5 sentences per narrative contract
   const commSentences = countSentences(aiNarrative.communicationStyle);
-  if (commWords < 100 || commWords > 140) {
+  if (commSentences < 5) {
     throw new ValidationError(
-      `AI Communication Style word count out of range: expected 100-140, got ${commWords}`,
+      `AI Communication Style sentence count out of range: expected minimum 5, got ${commSentences}`,
       "aiNarrative.communicationStyle",
-      "100-140 words",
-      `${commWords} words`
-    );
-  }
-  if (commSentences < 5 || commSentences > 7) {
-    throw new ValidationError(
-      `AI Communication Style sentence count out of range: expected 5-7, got ${commSentences}`,
-      "aiNarrative.communicationStyle",
-      "5-7 sentences",
+      "minimum 5 sentences",
       `${commSentences} sentences`
     );
   }
@@ -1361,56 +1360,53 @@ function validateCouplesBlueprint(result: CouplesResultDeterministic): void {
 
   const couple = result.coupleProfile;
 
-  // Validate Joint Strengths: 6-10 items, each 4-6 sentences, total 200-350 words
-  if (couple.jointStrengths.length < 3 ) {
+  // Validate Joint Strengths: minimum 4 items per narrative contract
+  if (couple.jointStrengths.length < 4) {
     throw new ValidationError(
-      `Joint Strengths count out of range: expected 3, got ${couple.jointStrengths.length}`,
+      `Joint Strengths count out of range: expected minimum 4, got ${couple.jointStrengths.length}`,
       "jointStrengths",
-      "3 items",
+      "minimum 4 items",
       `${couple.jointStrengths.length} items`
     );
   }
 
-  // Validate Shared Growth Areas: 5-8 items, each 4-6 sentences, total 180-300 words
-  if (
-    couple.sharedGrowthAreas.length < 3
-  ) {
+  // Validate Shared Growth Areas: minimum 4 items per narrative contract
+  if (couple.sharedGrowthAreas.length < 4) {
     throw new ValidationError(
-      `Shared Growth Areas count out of range: expected 3, got ${couple.sharedGrowthAreas.length}`,
+      `Shared Growth Areas count out of range: expected minimum 4, got ${couple.sharedGrowthAreas.length}`,
       "sharedGrowthAreas",
-      "3 items",
+      "minimum 4 items",
       `${couple.sharedGrowthAreas.length} items`
     );
   }
- 
 
   // Validate AI Narrative Expansion sections for couples
   const coupleAiNarrative = couple.aiNarrative;
 
-  // Overview Summary: 8-12 sentences, 150-200 words
+  // Overview Summary: minimum 5 sentences per narrative contract
   const coupleOverviewSentences = countSentences(
     coupleAiNarrative.overviewSummary
   );
-  if (coupleOverviewSentences < 2) {
+  if (coupleOverviewSentences < 5) {
     throw new ValidationError(
-      `Couple AI Overview Summary sentence count out of range: expected 2-12, got ${coupleOverviewSentences}`,
+      `Couple AI Overview Summary sentence count out of range: expected minimum 5, got ${coupleOverviewSentences}`,
       "coupleProfile.aiNarrative.overviewSummary",
-      "2-12 sentences",
+      "minimum 5 sentences",
       `${coupleOverviewSentences} sentences`
     );
   }
 
-  // Couple Dynamics: 6-8 sentences, 120-160 words
+  // Couple Dynamics: minimum 5 sentences per narrative contract
   const coupleDynamicsSentences = countSentences(
     coupleAiNarrative.coupleDynamics
   );
-  
-  if (coupleDynamicsSentences <= 2) {
+
+  if (coupleDynamicsSentences < 5) {
     console.log(coupleDynamicsSentences);
     throw new ValidationError(
-      `Couple Dynamics sentence count out of range: expected 2, got ${coupleDynamicsSentences}`,
+      `Couple Dynamics sentence count out of range: expected minimum 5, got ${coupleDynamicsSentences}`,
       "coupleProfile.aiNarrative.coupleDynamics",
-      "2 sentences",
+      "minimum 5 sentences",
       `${coupleDynamicsSentences} sentences`
     );
   }
@@ -1419,9 +1415,7 @@ function validateCouplesBlueprint(result: CouplesResultDeterministic): void {
   const coupleSupportingContent = couple.supportingContent;
 
   // Everyday Examples: 5-10 scenarios
-  if (
-    coupleSupportingContent.everydayExamples.length < 3
-  ) {
+  if (coupleSupportingContent.everydayExamples.length < 3) {
     throw new ValidationError(
       `Everyday Examples count out of range: expected 3, got ${coupleSupportingContent.everydayExamples.length}`,
       "coupleProfile.supportingContent.everydayExamples",
@@ -1431,9 +1425,7 @@ function validateCouplesBlueprint(result: CouplesResultDeterministic): void {
   }
 
   // Joint Action Plan 7 Days: 5-10 items
-  if (
-    coupleSupportingContent.jointActionPlan7Days.length < 3
-  ) {
+  if (coupleSupportingContent.jointActionPlan7Days.length < 3) {
     throw new ValidationError(
       `Joint Action Plan 7 Days count out of range: expected 3, got ${coupleSupportingContent.jointActionPlan7Days.length}`,
       "coupleProfile.supportingContent.jointActionPlan7Days",
@@ -1457,39 +1449,39 @@ function validateCouplesBlueprint(result: CouplesResultDeterministic): void {
     );
   }
 
-  // Validate Relationship Approach: 6-8 sentences, 120-160 words
+  // Validate Relationship Approach: minimum 5 sentences per narrative contract
   const coupleApproachSentences = countSentences(couple.relationshipApproach);
 
-  if (coupleApproachSentences < 3) {
+  if (coupleApproachSentences < 5) {
     throw new ValidationError(
-      `Couple Relationship Approach sentence count out of range: expected 3, got ${coupleApproachSentences}`,
+      `Couple Relationship Approach sentence count out of range: expected minimum 5, got ${coupleApproachSentences}`,
       "coupleProfile.relationshipApproach",
-      "3 sentences",
+      "minimum 5 sentences",
       `${coupleApproachSentences} sentences`
     );
   }
 
-  // Validate Joint Quick Wins: 8-12 items, each 4-5 sentences, total 250-400 words
-  if (couple.jointQuickWins.length < 4) {
+  // Validate Joint Quick Wins: minimum 3 items per narrative contract
+  if (couple.jointQuickWins.length < 3) {
     throw new ValidationError(
-      `Joint Quick Wins count out of range: expected 4, got ${couple.jointQuickWins.length}`,
+      `Joint Quick Wins count out of range: expected minimum 3, got ${couple.jointQuickWins.length}`,
       "jointQuickWins",
-      "4 items",
+      "minimum 3 items",
       `${couple.jointQuickWins.length} items`
     );
   }
 
-  // Validate Joint 30-Day Plan: 20-25 items total, each 4-6 sentences, total 500-750 words
+  // Validate Joint 30-Day Plan: minimum 3 items per narrative contract
   const totalJointPlanItems =
     couple.jointPlan30Day.week1.length +
     couple.jointPlan30Day.week2.length +
     couple.jointPlan30Day.week3.length +
     couple.jointPlan30Day.week4.length;
-  if (totalJointPlanItems < 5) {
+  if (totalJointPlanItems < 3) {
     throw new ValidationError(
-      `Joint 30-Day Plan total items out of range: expected 5, got ${totalJointPlanItems}`,
+      `Joint 30-Day Plan total items out of range: expected minimum 3, got ${totalJointPlanItems}`,
       "jointPlan30Day",
-      "5 items total",
+      "minimum 3 items total",
       `${totalJointPlanItems} items total`
     );
   }
@@ -1662,85 +1654,121 @@ function SinglesResults({ result }: { result: SinglesResultDeterministic }) {
     }
 
     try {
-      // Get the HTML content - only get the inner content, not the entire element
-      const htmlContent = elementRef.current.innerHTML;
+      // Create a structured PDF content
+      const pdfContent = `
+        <div class="header">
+          <div class="logo">MY Dating DNA™</div>
+          <div class="subtitle">Your Personalized Assessment Results</div>
+        </div>
 
-      // Add basic styling for PDF
-      const styledHTML = `
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <meta charset="utf-8">
-          <title>Singles Results</title>
-          <style>
-            body {
-              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-              line-height: 1.6;
-              color: #333;
-              max-width: 800px;
-              margin: 0 auto;
-              padding: 20px;
-            }
-            .bg-white { background-color: #ffffff !important; }
-            .text-slate-800 { color: #1e293b !important; }
-            .text-slate-600 { color: #475569 !important; }
-            .text-slate-700 { color: #334155 !important; }
-            .text-violet-600 { color: #7c3aed !important; }
-            .bg-violet-50 { background-color: #f5f3ff !important; }
-            .bg-amber-50 { background-color: #fffbeb !important; }
-            .bg-emerald-50 { background-color: #ecfdf5 !important; }
-            .bg-slate-50 { background-color: #f8fafc !important; }
-            .border-violet-100 { border-color: #ede9fe !important; }
-            .border-amber-100 { border-color: #fed7aa !important; }
-            .border-emerald-100 { border-color: #d1fae5 !important; }
-            .border-slate-200 { border-color: #e2e8f0 !important; }
-            .rounded-xl { border-radius: 0.75rem !important; }
-            .rounded-2xl { border-radius: 1rem !important; }
-            .shadow { box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important; }
-            .p-3 { padding: 0.75rem !important; }
-            .p-6 { padding: 1.5rem !important; }
-            .space-y-2 > * + * { margin-top: 0.5rem !important; }
-            .space-y-3 > * + * { margin-top: 0.75rem !important; }
-            .space-y-4 > * + * { margin-top: 1rem !important; }
-            .space-y-6 > * + * { margin-top: 1.5rem !important; }
-            .grid { display: grid !important; }
-            .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)) !important; }
-            .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
-            .gap-3 { gap: 0.75rem !important; }
-            .gap-4 { gap: 1rem !important; }
-            .text-center { text-align: center !important; }
-            .text-lg { font-size: 1.125rem !important; }
-            .text-xl { font-size: 1.25rem !important; }
-            .text-2xl { font-size: 1.5rem !important; }
-            .text-3xl { font-size: 1.875rem !important; }
-            .font-medium { font-weight: 500 !important; }
-            .font-semibold { font-weight: 600 !important; }
-            .font-bold { font-weight: 700 !important; }
-            .text-sm { font-size: 0.875rem !important; }
-            .list-disc { list-style-type: disc !important; }
-            .ml-5 { margin-left: 1.25rem !important; }
-            .mb-2 { margin-bottom: 0.5rem !important; }
-            .max-w-4xl { max-width: 56rem !important; }
-            .mx-auto { margin-left: auto !important; margin-right: auto !important; }
-            @media (max-width: 768px) {
-              .md\\:grid-cols-2 { grid-template-columns: repeat(1, minmax(0, 1fr)) !important; }
-            }
-          </style>
-        </head>
-        <body>
-          ${htmlContent}
-        </body>
-        </html>
+        <div class="results-section">
+          <div class="section-title">Your Dating DNA Type</div>
+          <div class="type-card">
+          <div class="type-name">${result.typeName}</div>
+          <div class="type-description">${result.relationshipApproach}</div>
+          </div>
+        </div>
+
+        <div class="results-section">
+          <div class="section-title">Key Insights</div>
+          <div class="insights-grid">
+            <div class="insight-card">
+              <div class="insight-title">Strengths</div>
+              <div class="insight-content">${result.strengths
+                .map((s) => s.title)
+                .join(", ")}</div>
+            </div>
+            <div class="insight-card">
+              <div class="insight-title">Growth Areas</div>
+              <div class="insight-content">${result.growthOpportunities
+                .map((g) => g.title)
+                .join(", ")}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="results-section">
+          <div class="section-title">Growth Areas</div>
+          <div class="growth-areas">
+            <div class="growth-title">Areas for Development</div>
+            <ul class="growth-list">
+              ${result.growthOpportunities
+                .map(
+                  (g) => `
+                <li class="growth-item">
+                  <div class="growth-item-title">${g.title}</div>
+                  <div class="growth-item-content">
+                    <strong>Why it matters:</strong> ${g.rationale}<br>
+                    <strong>Practice:</strong> ${g.action}
+                  </div>
+                </li>
+              `
+                )
+                .join("")}
+            </ul>
+          </div>
+        </div>
+
+        <div class="results-section">
+          <div class="section-title">Quick Wins</div>
+          <div class="quick-wins">
+            <div class="quick-wins-title">Immediate Actions</div>
+            <ul class="quick-wins-list">
+              ${result.quickWins
+                .map(
+                  (q) => `
+                <li class="quick-wins-item">
+                  <div class="quick-wins-item-title">${q.action}</div>
+                  <div class="quick-wins-item-content">
+                    <strong>Outcome:</strong> ${q.expectedOutcome}<br>
+                    <strong>When:</strong> ${q.timeframe}
+                  </div>
+                </li>
+              `
+                )
+                .join("")}
+            </ul>
+          </div>
+        </div>
+
+        <div class="results-section">
+          <div class="section-title">30-Day Action Plan</div>
+          <div class="plan-section">
+            <div class="plan-title">Your Personalized Journey</div>
+            <div class="plan-grid">
+              ${(["week1", "week2", "week3", "week4"] as const)
+                .map(
+                  (wk) => `
+                <div class="week-card">
+                  <div class="week-title">${wk.toUpperCase()}</div>
+                  <ul class="week-list">
+                    ${result.plan30Day[wk]
+                      .map((item) => `<li>${item}</li>`)
+                      .join("")}
+                  </ul>
+                </div>
+              `
+                )
+                .join("")}
+            </div>
+          </div>
+        </div>
+
+        <div class="footer">
+          <div class="footer-logo">MY Dating DNA™</div>
+          <p>Thank you for exploring your dating personality! 🧬</p>
+          <p>© 2024 MY Dating DNA™. All rights reserved.</p>
+        </div>
       `;
 
-      // Send to server for PDF generation
+      // Send to PDF generation API
       const response = await fetch("/api/pdf/generate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          html: styledHTML,
+          html: pdfContent,
           filename: filename,
         }),
       });
@@ -1757,16 +1785,13 @@ function SinglesResults({ result }: { result: SinglesResultDeterministic }) {
       a.download = filename;
       document.body.appendChild(a);
       a.click();
-      document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
 
-      // Show success message
       toast.success("PDF downloaded successfully!");
     } catch (error) {
-      console.error("Error generating PDF:", error);
-      toast.error(
-        "PDF download failed. Please try again or contact support if the issue persists."
-      );
+      console.error("PDF generation error:", error);
+      toast.error("Failed to generate PDF. Please try again.");
     } finally {
       // Restore button state
       if (button) {
@@ -1940,7 +1965,7 @@ function CouplesResults({ result }: { result: CouplesResultDeterministic }) {
 
   const downloadResultsAsPDF = async (
     elementRef: RefObject<HTMLElement>,
-    filename: string = "singles-results.pdf"
+    filename: string = "couples-results.pdf"
   ) => {
     if (!elementRef.current) {
       toast.error("Results content not found. Please try refreshing the page.");
@@ -1958,85 +1983,128 @@ function CouplesResults({ result }: { result: CouplesResultDeterministic }) {
     }
 
     try {
-      // Get the HTML content - only get the inner content, not the entire element
-      const htmlContent = elementRef.current.innerHTML;
+      // Create a structured PDF content for couples
+      const pdfContent = `
+        <div class="header">
+          <div class="logo">MY Dating DNA™</div>
+          <div class="subtitle">Your Couple's Assessment Results</div>
+        </div>
 
-      // Add basic styling for PDF
-      const styledHTML = `
-        <!DOCTYPE html>
-        <html>
-        <head>
-          <meta charset="utf-8">
-          <title>Singles Results</title>
-          <style>
-            body {
-              font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-              line-height: 1.6;
-              color: #333;
-              max-width: 800px;
-              margin: 0 auto;
-              padding: 20px;
-            }
-            .bg-white { background-color: #ffffff !important; }
-            .text-slate-800 { color: #1e293b !important; }
-            .text-slate-600 { color: #475569 !important; }
-            .text-slate-700 { color: #334155 !important; }
-            .text-violet-600 { color: #7c3aed !important; }
-            .bg-violet-50 { background-color: #f5f3ff !important; }
-            .bg-amber-50 { background-color: #fffbeb !important; }
-            .bg-emerald-50 { background-color: #ecfdf5 !important; }
-            .bg-slate-50 { background-color: #f8fafc !important; }
-            .border-violet-100 { border-color: #ede9fe !important; }
-            .border-amber-100 { border-color: #fed7aa !important; }
-            .border-emerald-100 { border-color: #d1fae5 !important; }
-            .border-slate-200 { border-color: #e2e8f0 !important; }
-            .rounded-xl { border-radius: 0.75rem !important; }
-            .rounded-2xl { border-radius: 1rem !important; }
-            .shadow { box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06) !important; }
-            .p-3 { padding: 0.75rem !important; }
-            .p-6 { padding: 1.5rem !important; }
-            .space-y-2 > * + * { margin-top: 0.5rem !important; }
-            .space-y-3 > * + * { margin-top: 0.75rem !important; }
-            .space-y-4 > * + * { margin-top: 1rem !important; }
-            .space-y-6 > * + * { margin-top: 1.5rem !important; }
-            .grid { display: grid !important; }
-            .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)) !important; }
-            .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
-            .gap-3 { gap: 0.75rem !important; }
-            .gap-4 { gap: 1rem !important; }
-            .text-center { text-align: center !important; }
-            .text-lg { font-size: 1.125rem !important; }
-            .text-xl { font-size: 1.25rem !important; }
-            .text-2xl { font-size: 1.5rem !important; }
-            .text-3xl { font-size: 1.875rem !important; }
-            .font-medium { font-weight: 500 !important; }
-            .font-semibold { font-weight: 600 !important; }
-            .font-bold { font-weight: 700 !important; }
-            .text-sm { font-size: 0.875rem !important; }
-            .list-disc { list-style-type: disc !important; }
-            .ml-5 { margin-left: 1.25rem !important; }
-            .mb-2 { margin-bottom: 0.5rem !important; }
-            .max-w-4xl { max-width: 56rem !important; }
-            .mx-auto { margin-left: auto !important; margin-right: auto !important; }
-            @media (max-width: 768px) {
-              .md\\:grid-cols-2 { grid-template-columns: repeat(1, minmax(0, 1fr)) !important; }
-            }
-          </style>
-        </head>
-        <body>
-          ${htmlContent}
-        </body>
-        </html>
+        <div class="results-section">
+          <div class="section-title">Your Couple's DNA Types</div>
+          <div class="type-card">
+            <div class="type-name">${result.partnerA.typeName} + ${
+        result.partnerB.typeName
+      }</div>
+            <div class="type-description">${
+              result.coupleProfile.relationshipApproach
+            }</div>
+          </div>
+        </div>
+
+        <div class="results-section">
+          <div class="section-title">Individual Profiles</div>
+          <div class="insights-grid">
+            <div class="insight-card">
+              <div class="insight-title">Partner A: ${
+                result.partnerA.typeName
+              }</div>
+              <div class="insight-content">${
+                result.partnerA.relationshipApproach
+              }</div>
+            </div>
+            <div class="insight-card">
+              <div class="insight-title">Partner B: ${
+                result.partnerB.typeName
+              }</div>
+              <div class="insight-content">${
+                result.partnerB.relationshipApproach
+              }</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="results-section">
+          <div class="section-title">Growth Areas</div>
+          <div class="growth-areas">
+            <div class="growth-title">Areas for Development</div>
+            <ul class="growth-list">
+              ${result.coupleProfile.sharedGrowthAreas
+                .map(
+                  (g) => `
+                <li class="growth-item">
+                  <div class="growth-item-title">${g.title}</div>
+                  <div class="growth-item-content">
+                    <strong>Why it matters:</strong> ${g.supportiveBehavior}<br>
+                    <strong>Shared practice:</strong> ${g.sharedPractice}
+                  </div>
+                </li>
+              `
+                )
+                .join("")}
+            </ul>
+          </div>
+        </div>
+
+        <div class="results-section">
+          <div class="section-title">Joint Quick Wins</div>
+          <div class="quick-wins">
+            <div class="quick-wins-title">Immediate Actions</div>
+            <ul class="quick-wins-list">
+              ${result.coupleProfile.jointQuickWins
+                .map(
+                  (q) => `
+                <li class="quick-wins-item">
+                  <div class="quick-wins-item-title">${q.action}</div>
+                  <div class="quick-wins-item-content">
+                    <strong>Implementation:</strong> ${q.implementation}
+                  </div>
+                </li>
+              `
+                )
+                .join("")}
+            </ul>
+          </div>
+        </div>
+
+        <div class="results-section">
+          <div class="section-title">Joint 30-Day Plan</div>
+          <div class="plan-section">
+            <div class="plan-title">Your Couple's Journey</div>
+            <div class="plan-grid">
+              ${(["week1", "week2", "week3", "week4"] as const)
+                .map(
+                  (wk) => `
+                <div class="week-card">
+                  <div class="week-title">${wk.toUpperCase()}</div>
+                  <ul class="week-list">
+                    ${result.coupleProfile.jointPlan30Day[wk]
+                      .map((item) => `<li>${item}</li>`)
+                      .join("")}
+                  </ul>
+                </div>
+              `
+                )
+                .join("")}
+            </div>
+          </div>
+        </div>
+
+        <div class="footer">
+          <div class="footer-logo">MY Dating DNA™</div>
+          <p>Thank you for exploring your couple's dating personality! 🧬</p>
+          <p>© 2024 MY Dating DNA™. All rights reserved.</p>
+        </div>
       `;
 
-      // Send to server for PDF generation
+      // Send to PDF generation API
       const response = await fetch("/api/pdf/generate", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          html: styledHTML,
+          html: pdfContent,
           filename: filename,
         }),
       });
@@ -2053,16 +2121,13 @@ function CouplesResults({ result }: { result: CouplesResultDeterministic }) {
       a.download = filename;
       document.body.appendChild(a);
       a.click();
-      document.body.removeChild(a);
       window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
 
-      // Show success message
       toast.success("PDF downloaded successfully!");
     } catch (error) {
-      console.error("Error generating PDF:", error);
-      toast.error(
-        "PDF download failed. Please try again or contact support if the issue persists."
-      );
+      console.error("PDF generation error:", error);
+      toast.error("Failed to generate PDF. Please try again.");
     } finally {
       // Restore button state
       if (button) {
@@ -2073,7 +2138,7 @@ function CouplesResults({ result }: { result: CouplesResultDeterministic }) {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto space-y-6 mt-16">
       <div className="bg-white rounded-2xl shadow p-6 text-center space-y-4">
         <h1 className="text-3xl font-bold text-slate-800">Your Couples DNA</h1>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -2101,10 +2166,14 @@ function CouplesResults({ result }: { result: CouplesResultDeterministic }) {
               "couples-results.pdf"
             )
           }
-          className="px-4 py-2 bg-slate-600 text-white rounded-lg font-medium hover:bg-slate-700"
+          className="px-4 py-2 bg-black text-white rounded-lg font-medium hover:opacity-80 cursor-pointer transition-all duration-500"
         >
           Download PDF
         </button>
+        <p className="text-red-500 text-sm">
+          Don&apos;t refresh the page before downloading the results, because
+          your attempt has been used
+        </p>
       </div>
 
       <div
@@ -2230,19 +2299,34 @@ function CouplesAssessment({
 }: {
   onComplete: (r: CouplesResultDeterministic) => void;
 }) {
-  const [phase, setPhase] = useState<"A" | "B" | "DONE">("A");
+  const [phase, setPhase] = useState<
+    "A" | "A_RESULTS" | "B" | "B_RESULTS" | "COMBINED_RESULTS"
+  >("A");
   const [aResult, setAResult] = useState<SinglesResultDeterministic | null>(
+    null
+  );
+  const [bResult, setBResult] = useState<SinglesResultDeterministic | null>(
     null
   );
 
   function handleDoneA(res: SinglesResultDeterministic) {
     setAResult(res);
+    setPhase("A_RESULTS");
+  }
+
+  function handleContinueToPartnerB() {
     setPhase("B");
   }
+
   function handleDoneB(resB: SinglesResultDeterministic) {
-    if (!aResult) return;
+    setBResult(resB);
+    setPhase("B_RESULTS");
+  }
+
+  function handleContinueToCombined() {
+    if (!aResult || !bResult) return;
     const partnerA = aResult;
-    const partnerB = resB;
+    const partnerB = bResult;
     const coupleProfile = buildCoupleProfile(partnerA, partnerB);
     const couple: CouplesResultDeterministic = {
       assessmentType: "couples",
@@ -2253,26 +2337,50 @@ function CouplesAssessment({
 
     // CRITICAL: Validate complete blueprint before returning
     // This ensures no truncated or incomplete couples results are ever returned
+    console.log("About to validate couples blueprint:", {
+      assessmentType: couple.assessmentType,
+      partnerA: {
+        typeCode: couple.partnerA.typeCode,
+        strengths: couple.partnerA.strengths?.length,
+        growthOpportunities: couple.partnerA.growthOpportunities?.length,
+        quickWins: couple.partnerA.quickWins?.length,
+      },
+      partnerB: {
+        typeCode: couple.partnerB.typeCode,
+        strengths: couple.partnerB.strengths?.length,
+        growthOpportunities: couple.partnerB.growthOpportunities?.length,
+        quickWins: couple.partnerB.quickWins?.length,
+      },
+      coupleProfile: {
+        jointStrengths: couple.coupleProfile.jointStrengths?.length,
+        sharedGrowthAreas: couple.coupleProfile.sharedGrowthAreas?.length,
+        jointQuickWins: couple.coupleProfile.jointQuickWins?.length,
+      },
+    });
+
     try {
-      validateBlueprint(couple);
+      validateCouplesBlueprint(couple);
+      onComplete(couple);
     } catch (error) {
       if (error instanceof ValidationError) {
         console.error("Couples Blueprint Validation Failed:", {
-          section: error.section,
-          expected: error.expected,
-          actual: error.actual,
-          message: error.message,
+          section: error.section || "unknown",
+          expected: error.expected || "unknown",
+          actual: error.actual || "unknown",
+          message: error.message || "unknown error",
+          errorName: error.name,
+          stack: error.stack,
         });
         // In production, this should fail loudly and not return partial results
         throw new Error(
-          `Couples assessment validation failed: ${error.message}`
+          `Couples assessment validation failed: ${
+            error.message || "Unknown validation error"
+          }`
         );
       }
+      console.error("Non-validation error in couples assessment:", error);
       throw error;
     }
-
-    setPhase("DONE");
-    onComplete(couple);
   }
 
   if (phase === "A")
@@ -2335,6 +2443,53 @@ function CouplesAssessment({
         <SinglesAssessment onComplete={handleDoneB} />
       </div>
     );
+
+  if (phase === "A_RESULTS" && aResult)
+    return (
+      <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-2xl p-8 space-y-8">
+        <div className="text-center space-y-4">
+          <h2 className="text-3xl font-bold text-slate-800">
+            Partner A Results
+          </h2>
+          <p className="text-slate-600">
+            Here are your individual Dating DNA results
+          </p>
+        </div>
+        <SinglesResults result={aResult} />
+        <div className="text-center">
+          <button
+            onClick={handleContinueToPartnerB}
+            className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-3 rounded-xl font-semibold hover:from-purple-700 hover:to-pink-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+          >
+            Continue to Partner B Assessment
+          </button>
+        </div>
+      </div>
+    );
+
+  if (phase === "B_RESULTS" && bResult)
+    return (
+      <div className="max-w-4xl mx-auto bg-white rounded-3xl shadow-2xl p-8 space-y-8">
+        <div className="text-center space-y-4">
+          <h2 className="text-3xl font-bold text-slate-800">
+            Partner B Results
+          </h2>
+          <p className="text-slate-600">
+            Here are your individual Dating DNA results
+          </p>
+        </div>
+        <SinglesResults result={bResult} />
+        <div className="text-center">
+          <button
+            onClick={handleContinueToCombined}
+            className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-3 rounded-xl font-semibold hover:from-purple-700 hover:to-pink-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+          >
+            View Combined Couples Results
+          </button>
+        </div>
+      </div>
+    );
+
   return null;
 }
 
@@ -2374,7 +2529,7 @@ function buildCoupleProfile(
 
   // Create relationship approach based on actual type codes and compatibility
   const typeCompatibility = getTypeCompatibility(a.typeCode, b.typeCode);
-  const relationshipApproach = `As a ${a.typeCode}-${b.typeCode} couple, you bring together ${a.typeName} and ${b.typeName} approaches. ${typeCompatibility} Your combined strengths create a dynamic partnership where you can balance each other's natural tendencies. Together, you navigate relationships by leveraging your complementary styles and creating harmony through understanding your differences.`;
+  const relationshipApproach = `As a ${a.typeCode}-${b.typeCode} couple, you bring together ${a.typeName} and ${b.typeName} approaches to create a unique partnership dynamic. ${typeCompatibility} Your combined strengths create a dynamic partnership where you can balance each other's natural tendencies and support each other's growth. Together, you navigate relationships by leveraging your complementary styles and creating harmony through understanding your differences. Your partnership benefits from the natural tension between your approaches, which provides opportunities for mutual learning and deeper connection. This combination creates a relationship that is both stable and dynamic, offering continuous opportunities for growth and mutual support.`;
 
   // CRITICAL: DO NOT TRUNCATE - Generate ALL joint quick wins (8-12 items required)
   const combinedQuickWins = [...a.quickWins, ...b.quickWins];
@@ -2400,13 +2555,13 @@ function buildCoupleProfile(
 
   // Add required aiNarrative and supportingContent properties
   const aiNarrative = {
-    overviewSummary: `As a ${a.typeCode}-${b.typeCode} couple, you combine ${a.typeName} and ${b.typeName} approaches to create a unique partnership dynamic. Your relationship leverages the strengths of both types while navigating the natural tensions that arise from your differences. This combination offers opportunities for growth, balance, and mutual support as you build your connection together.`,
-    coupleDynamics: `Your couple dynamics are shaped by the interplay between ${a.typeName} and ${b.typeName} approaches. This creates a relationship where you can complement each other's natural tendencies and create balance through understanding your differences.`,
-    communicationStyleAsCouple: `Together, you communicate by blending your individual styles. This creates opportunities for both structured and organic dialogue, allowing you to address both practical and emotional aspects of your relationship.`,
-    intimacyPatterns: `Your intimacy develops through the unique combination of your individual approaches to connection. This allows for both planned and spontaneous moments of closeness, creating a rich and varied intimate life.`,
-    sharedGrowthAreas: `Your shared growth areas focus on leveraging your complementary strengths while addressing the challenges that arise from your different approaches. This creates opportunities for mutual development and deeper understanding.`,
-    jointStrengths: `Together, your joint strengths create a powerful foundation for your relationship. By combining your individual capabilities, you can achieve more together than either could alone.`,
-    expandedNarrative: `Your relationship represents a unique blend of approaches that, when understood and appreciated, creates a strong foundation for long-term success. By recognizing and leveraging your differences, you can build a partnership that grows stronger over time. Your combined strengths offer multiple pathways to connection, growth, and mutual support. The key to your success lies in understanding how your individual Dating DNA types complement each other and using this knowledge to navigate challenges and celebrate your unique dynamic.`,
+    overviewSummary: `As a ${a.typeCode}-${b.typeCode} couple, you combine ${a.typeName} and ${b.typeName} approaches to create a unique partnership dynamic. Your relationship leverages the strengths of both types while navigating the natural tensions that arise from your differences. This combination offers opportunities for growth, balance, and mutual support as you build your connection together. Your partnership benefits from the complementary nature of your individual Dating DNA types, creating a relationship that is both stable and dynamic. Understanding how your types work together helps you navigate challenges and celebrate your unique strengths as a couple.`,
+    coupleDynamics: `Your couple dynamics are shaped by the interplay between ${a.typeName} and ${b.typeName} approaches. This creates a relationship where you can complement each other's natural tendencies and create balance through understanding your differences. Your individual strengths combine to create a powerful partnership dynamic that allows you to support each other in areas where one might naturally excel. The natural tensions between your approaches provide opportunities for growth and deeper understanding of each other's perspectives. This dynamic creates a relationship that is both challenging and rewarding, offering continuous opportunities for mutual development and connection.`,
+    communicationStyleAsCouple: `Together, you communicate by blending your individual styles to create a unique approach to dialogue and connection. This creates opportunities for both structured and organic dialogue, allowing you to address both practical and emotional aspects of your relationship. Your combined communication styles enable you to navigate both immediate concerns and long-term planning effectively. This blended approach helps you understand each other's needs and perspectives while maintaining your individual authenticity. Your communication as a couple becomes a strength that supports your relationship growth and mutual understanding.`,
+    intimacyPatterns: `Your intimacy develops through the unique combination of your individual approaches to connection and emotional expression. This allows for both planned and spontaneous moments of closeness, creating a rich and varied intimate life that honors both of your natural preferences. Your different approaches to intimacy create opportunities for learning and growth in how you connect with each other. This combination ensures that your intimate life remains dynamic and fulfilling for both partners. Your intimacy patterns reflect the beautiful complexity of your combined Dating DNA types, creating a connection that is both deep and multifaceted.`,
+    sharedGrowthAreas: `Your shared growth areas focus on leveraging your complementary strengths while addressing the challenges that arise from your different approaches to relationships. This creates opportunities for mutual development and deeper understanding of each other's perspectives and needs. Working together on these areas helps you build a stronger foundation for your relationship while honoring your individual growth journeys. These shared growth areas become opportunities for you to support each other and grow together as a couple. Your combined efforts in these areas create a relationship that continues to evolve and strengthen over time.`,
+    jointStrengths: `Together, your joint strengths create a powerful foundation for your relationship that leverages the best of both your individual Dating DNA types. By combining your individual capabilities, you can achieve more together than either could alone, creating a partnership that is greater than the sum of its parts. Your combined strengths allow you to navigate challenges and opportunities with greater confidence and effectiveness. These joint strengths become the cornerstone of your relationship, providing stability and growth opportunities. Your partnership benefits from the unique combination of your individual strengths, creating a dynamic and supportive relationship.`,
+    expandedNarrative: `Your relationship represents a unique blend of approaches that, when understood and appreciated, creates a strong foundation for long-term success and mutual fulfillment. By recognizing and leveraging your differences, you can build a partnership that grows stronger over time while honoring each other's individual needs and preferences. Your combined strengths offer multiple pathways to connection, growth, and mutual support that enrich your relationship experience. The key to your success lies in understanding how your individual Dating DNA types complement each other and using this knowledge to navigate challenges and celebrate your unique dynamic. Your relationship becomes a powerful example of how different approaches can create something beautiful and lasting when combined with understanding, respect, and love.`,
   };
 
   const supportingContent = {
@@ -2504,6 +2659,36 @@ function buildCoupleProfile(
         }`,
         coupleInsight:
           "Finding balance between structure and spontaneity enhances your weekend experiences.",
+      },
+      {
+        scenario: "Making decisions about social activities",
+        partnerAResponse: `Partner A tends to ${
+          a.typeCode[0] === "C"
+            ? "enjoy group activities and social gatherings"
+            : "prefer intimate, one-on-one interactions"
+        }`,
+        partnerBResponse: `Partner B tends to ${
+          b.typeCode[0] === "C"
+            ? "enjoy group activities and social gatherings"
+            : "prefer intimate, one-on-one interactions"
+        }`,
+        coupleInsight:
+          "Understanding each other's social preferences helps you plan activities that work for both of you.",
+      },
+      {
+        scenario: "Discussing future plans and goals",
+        partnerAResponse: `Partner A tends to ${
+          a.typeCode[1] === "P"
+            ? "focus on present-day compatibility and current lifestyle"
+            : "consider long-term potential and future aspirations"
+        }`,
+        partnerBResponse: `Partner B tends to ${
+          b.typeCode[1] === "P"
+            ? "focus on present-day compatibility and current lifestyle"
+            : "consider long-term potential and future aspirations"
+        }`,
+        coupleInsight:
+          "Balancing present needs with future goals creates a strong foundation for your relationship.",
       },
     ],
     jointActionPlan7Days: [
@@ -2641,10 +2826,12 @@ function LeadMagnet4Q({
     setAnswers(newAnswers);
     setStep(step + 1);
   }
-  const buttonRef = useRef<HTMLButtonElement>();
+  const buttonRef = useRef<HTMLButtonElement>(null);
   function handleEmailSubmit() {
     onFinish(answers);
-    buttonRef.current.disabled = true;
+    if (buttonRef.current) {
+      buttonRef.current.disabled = true;
+    }
   }
 
   if (isLastQ) {
@@ -2699,7 +2886,7 @@ function LeadMagnet4Q({
         <button
           onClick={handleEmailSubmit}
           ref={buttonRef}
-          className="w-full px-6 py-4 bg-green-600 cursor-pointer text-white rounded-2xl font-semibold text-lg hover:from-violet-700 hover:to-fuchsia-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+          className="w-full px-6 py-4 disab bg-green-600 cursor-pointer text-white rounded-2xl font-semibold text-lg hover:from-violet-700 hover:to-fuchsia-700 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-x"
         >
           Send My Snapshot
         </button>

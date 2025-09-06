@@ -121,6 +121,7 @@ export default function UserProfile() {
                     {isSubscriptionActive ? "Active" : "Inactive"}
                   </span>
                 </div>
+                
               </div>
               {(session?.user as any)?.subscription?.status === "active" && (
                 <p className="text-xs text-gray-500 mt-1">
@@ -161,7 +162,7 @@ export default function UserProfile() {
 
           {/* Menu Items */}
           <div className="py-2">
-            {/* {(session?.user as any)?.role === "admin" && (
+            {(session?.user as any)?.role === "admin" && (
               <Link
                 href="/admin/affiliates"
                 className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
@@ -170,8 +171,8 @@ export default function UserProfile() {
                 <LucideLayoutDashboard className="w-4 h-4 mr-3" />
                 Affiliate Dashboard
               </Link>
-            )} */}
-            {/* {(session?.user as any)?.role === "user" && (
+            )}
+            {(session?.user as any)?.role === "user" && (
               <Link
                 href="/affiliates"
                 className="flex items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
@@ -180,7 +181,7 @@ export default function UserProfile() {
                 <Users className="w-4 h-4 mr-3" />
                 Referrals
               </Link>
-            )} */}
+            )}
 
             <Link
               href="/subscriptions"

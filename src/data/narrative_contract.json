@@ -1,0 +1,108 @@
+{
+    "spec_version": "narrative-v1.3-combined-min5-unbounded",
+    "description": "Unified contract for Singles and Couples narratives. Enforces ≥5 sentences per long section, no maximum.",
+    "generation_prompt": "You are producing a personalized narrative for a dating assessment. Minimum 5 sentences per long section with at least 8 words per sentence. No maximum length. For Singles, tie every recommendation to the user’s type_code and all four strand scores. For Couples, tie recommendations to both partners’ type codes and all strands, highlighting alignment, friction, and tradeoffs. Use because → therefore → do reasoning, include examples and actions every ~180 words, and always deliver an A–D action plan.",
+    "quality_control": {
+      "min_sentences": 5,
+      "min_words_per_sentence": 8,
+      "min_response_length": 1600,
+      "soft_min_paragraphs": 4
+    },
+    "sections": {
+      "singles": {
+        "long_sections": {
+          "relationship_approach": {
+            "min_sentences": 5,
+            "min_chars": 800
+          },
+          "dating_strategy": {
+            "min_sentences": 5,
+            "min_chars": 800
+          },
+          "communication_style": {
+            "min_sentences": 5,
+            "min_chars": 700
+          }
+        },
+        "lists": {
+          "strengths": {
+            "items": 4
+          },
+          "growth_areas": {
+            "items": 4
+          },
+          "affirmations": {
+            "items": 3
+          },
+          "actions_30_60_90": {
+            "day_30": 3,
+            "day_60": 3,
+            "day_90": 3
+          }
+        }
+      },
+      "couples": {
+        "long_sections": {
+          "compatibility_overview": {
+            "min_sentences": 5,
+            "min_chars": 900
+          },
+          "conflict_resolution": {
+            "min_sentences": 5,
+            "min_chars": 800
+          },
+          "growth_path": {
+            "min_sentences": 5,
+            "min_chars": 800
+          }
+        },
+        "lists": {
+          "shared_strengths": {
+            "items": 4
+          },
+          "growth_opportunities": {
+            "items": 4
+          },
+          "joint_affirmations": {
+            "items": 3
+          },
+          "actions_30_60_90": {
+            "day_30": 3,
+            "day_60": 3,
+            "day_90": 3
+          }
+        }
+      }
+    },
+    "action_plan": {
+      "label": "A_B_C_D",
+      "order": [
+        "A",
+        "B",
+        "C",
+        "D"
+      ],
+      "definitions": {
+        "A": "Immediate action within 48h (singles or joint for couples).",
+        "B": "7-day repeatable routine with frequency and trigger.",
+        "C": "14-day measurable behavior change.",
+        "D": "30-day leverage change with KPI threshold."
+      }
+    },
+    "acceptance_checklist": {
+      "structure": {
+        "sentence_min_per_long_section": 5,
+        "words_min_per_sentence": 8
+      },
+      "actionability": {
+        "example_every_n_words": 180,
+        "action_every_n_words": 180
+      }
+    },
+    "metadata": {
+      "created_at_utc": "2025-09-05T19:55:33.088111Z",
+      "owner": "MyDatingDNA",
+      "license": "All rights reserved",
+      "notes": "This combined contract covers singles and couples assessments with no hard max sentence count."
+    }
+  }
