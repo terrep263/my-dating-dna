@@ -6,6 +6,7 @@ declare module "next-auth" {
       name: string;
       email: string;
       image?: string;
+      role?: string;
       subscription: {
         plan: "free" | "singles" | "couples" | "premium";
         status: "active" | "inactive" | "cancelled";
@@ -23,6 +24,7 @@ declare module "next-auth" {
     name: string;
     email: string;
     image?: string;
+    role?: string;
     subscription: {
       plan: "free" | "singles" | "couples" | "premium";
       status: "active" | "inactive" | "cancelled";

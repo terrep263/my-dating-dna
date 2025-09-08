@@ -5,31 +5,39 @@ import Commission from "@/lib/models/Commission";
 import Order from "@/lib/models/Order";
 import Payout from "@/lib/models/Payout";
 import PayoutItem from "@/lib/models/PayoutItem";
+import User from "@/lib/models/User";
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "@/lib/auth";
+
+// Helper function to check if user is admin
+async function isUserAdmin(userId: string): Promise<boolean> {
+  await connectToDatabase();
+  const user = await User.findById(userId);
+  return user?.role === 'admin';
+}
 
 // Admin-only endpoint for managing payouts
 export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
-    console.log(session)
 
-    if (!session?.user?.email) {
+    if (!session?.user?.id) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
       );
     }
 
-    // TODO: Add admin role check here
-    // For now, we'll allow any authenticated user to access admin features
-    // In production, you should implement proper admin role checking
+    // Check if user is admin
+    const isAdmin = await isUserAdmin(session.user.id);
+    if (!isAdmin) {
+      return NextResponse.json({ error: "Admin access required" }, { status: 403 });
+    }
 
     await connectToDatabase();
     
     const { searchParams } = new URL(request.url);
     const action = searchParams.get("action");
-    console.log(action)
     if (action === "payouts") {
       // Get all payouts
       const payouts = await Payout.find()
@@ -43,11 +51,8 @@ export async function GET(request: NextRequest) {
 
     if (action === "commissions") {
       // Get all commissions (without populating orderId to avoid object rendering issues)
-      console.log("Fetching commissions...");
       const commissions = await Commission.find()
         .sort({ createdAt: -1 });
-      console.log(`Found ${commissions.length} commissions`);
-
       return NextResponse.json({
         success: true,
         commissions,
@@ -56,10 +61,8 @@ export async function GET(request: NextRequest) {
 
     if (action === "affiliates") {
       // Get all affiliates
-      console.log("Fetching affiliates...");
       const affiliates = await Affiliate.find()
         .sort({ createdAt: -1 });
-      console.log(`Found ${affiliates.length} affiliates`);
 
       return NextResponse.json({
         success: true,
@@ -69,10 +72,8 @@ export async function GET(request: NextRequest) {
 
     if (action === "orders") {
       // Get all orders
-      console.log("Fetching orders...");
       const orders = await Order.find()
         .sort({ createdAt: -1 });
-      console.log(`Found ${orders.length} orders`);
 
       return NextResponse.json({
         success: true,
@@ -115,14 +116,18 @@ export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions);
     
-    if (!session?.user?.email) {
+    if (!session?.user?.id) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
       );
     }
 
-    // TODO: Add admin role check
+    // Check if user is admin
+    const isAdmin = await isUserAdmin(session.user.id);
+    if (!isAdmin) {
+      return NextResponse.json({ error: "Admin access required" }, { status: 403 });
+    }
 
     await connectToDatabase();
     

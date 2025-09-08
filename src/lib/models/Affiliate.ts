@@ -10,6 +10,7 @@ export interface IAffiliate {
     details: string;
   };
   isActive: boolean;
+  invitationCode?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -48,6 +49,11 @@ const affiliateSchema = new mongoose.Schema(
     isActive: {
       type: Boolean,
       default: true,
+    },
+    invitationCode: {
+      type: String,
+      uppercase: true,
+      default: null,
     },
   },
   {

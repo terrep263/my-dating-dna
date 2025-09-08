@@ -114,6 +114,7 @@ export default function AffiliateDashboard() {
   const [registerForm, setRegisterForm] = useState({
     name: "",
     code: "",
+    invitationCode: "",
     payoutMethod: {
       type: "paypal",
       details: "",
@@ -181,7 +182,6 @@ export default function AffiliateDashboard() {
 
   const copyAffiliateLink = () => {
     if (!affiliate) return;
-    console.log("affiliate", affiliate);
     const link = `${window.location.origin}/auth?ref=${affiliate.code}`;
     navigator.clipboard.writeText(link);
     toast.success("Affiliate link copied to clipboard!");
@@ -345,6 +345,43 @@ export default function AffiliateDashboard() {
                       setRegisterForm({ ...registerForm, name: e.target.value })
                     }
                     required
+                    sx={{
+                      mb: 3,
+                      "& .MuiOutlinedInput-root": {
+                        color: "#1f2937",
+                        "& fieldset": {
+                          borderColor: "#d1d5db",
+                          borderRadius: "14px",
+                        },
+                        "&:hover fieldset": {
+                          borderColor: "#9ca3af",
+                        },
+                        "&.Mui-focused fieldset": {
+                          borderColor: "#2c5530",
+                        },
+                      },
+                      "& .MuiInputLabel-root": {
+                        color: "#6b7280",
+                        "&.Mui-focused": {
+                          color: "#1f2937",
+                        },
+                      },
+                    }}
+                  />
+
+                  <TextField
+                    fullWidth
+                    label="Invitation Code"
+                    value={registerForm.invitationCode}
+                    onChange={(e) =>
+                      setRegisterForm({
+                        ...registerForm,
+                        invitationCode: e.target.value.toUpperCase(),
+                      })
+                    }
+                    placeholder="e.g., ABC123XYZ456"
+                    required
+                    helperText="Enter the invitation code provided to you"
                     sx={{
                       mb: 3,
                       "& .MuiOutlinedInput-root": {

@@ -6,6 +6,7 @@ export interface IUser {
   password?: string;
   image?: string;
   account?: string;
+  role?: string;
   subscription: {
     id?: string;
     plan: "free" | "premium";

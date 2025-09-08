@@ -199,7 +199,7 @@ export async function POST(request: NextRequest) {
 export async function PUT(req: NextRequest) {
   try {
     const { id } = await req.json();
-    console.log(id);
+  
     if (!id) {
       return NextResponse.json({ error: "ID is required" }, { status: 400 });
     }
@@ -302,8 +302,7 @@ export async function PUT(req: NextRequest) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
     user.attempts -= 1;
-    user.type = null;
-
+    
     await user.save();
 
     // Send email

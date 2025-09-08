@@ -82,6 +82,19 @@ interface Affiliate {
   createdAt: string;
 }
 
+interface AffiliateInvitation {
+  _id: string;
+  invitationCode: string;
+  invitedBy: string;
+  expiresAt: string;
+  maxUses: number;
+  usedCount: number;
+  isActive: boolean;
+  inviteeEmail?: string;
+  inviteeName?: string;
+  createdAt: string;
+}
+
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -110,6 +123,7 @@ export default function AdminAffiliatePanel() {
   const [payouts, setPayouts] = useState<Payout[]>([]);
   const [commissions, setCommissions] = useState<Commission[]>([]);
   const [affiliates, setAffiliates] = useState<Affiliate[]>([]);
+  const [invitations, setInvitations] = useState<AffiliateInvitation[]>([]);
   const [loading, setLoading] = useState(true);
   const [creatingPayout, setCreatingPayout] = useState(false);
   const [tabValue, setTabValue] = useState(0);
@@ -121,6 +135,14 @@ export default function AdminAffiliatePanel() {
   const [selectedPayoutItems, setSelectedPayoutItems] = useState<any[]>([]);
   const [showPayoutDialog, setShowPayoutDialog] = useState(false);
   const [showCreateDialog, setShowCreateDialog] = useState(false);
+  const [showInvitationDialog, setShowInvitationDialog] = useState(false);
+  const [creatingInvitation, setCreatingInvitation] = useState(false);
+  const [invitationForm, setInvitationForm] = useState({
+    maxUses: 1,
+    expiresInDays: 30,
+    inviteeEmail: "",
+    inviteeName: "",
+  });
 
   useEffect(() => {
     if (status === "loading") return;
@@ -128,45 +150,48 @@ export default function AdminAffiliatePanel() {
       router.push("/auth");
       return;
     }
-    // TODO: Add admin role check here
+    
+    // Check if user has admin role
+    if ((session.user as any)?.role !== 'admin') {
+      router.push("/");
+      return;
+    }
+    
     fetchData();
   }, [session, status]);
 
   const fetchData = async () => {
     try {
-      const [payoutsRes, commissionsRes, affiliatesRes] = await Promise.all([
+      const [payoutsRes, commissionsRes, affiliatesRes, invitationsRes] = await Promise.all([
         fetch("/api/affiliate/admin?action=payouts"),
         fetch("/api/affiliate/admin?action=commissions"),
         fetch("/api/affiliate/admin?action=affiliates"),
+        fetch("/api/affiliate/invitations"),
       ]);
 
-      const [payoutsData, commissionsData, affiliatesData] = await Promise.all([
+      const [payoutsData, commissionsData, affiliatesData, invitationsData] = await Promise.all([
         payoutsRes.json(),
         commissionsRes.json(),
         affiliatesRes.json(),
+        invitationsRes.json(),
       ]);
 
-      console.log("API Responses:", {
-        payoutsData,
-        commissionsData,
-        affiliatesData,
-      });
-
       if (payoutsData.success) {
-        console.log("Setting payouts:", payoutsData.payouts);
         setPayouts(payoutsData.payouts);
       }
       if (commissionsData.success) {
-        console.log("Setting commissions:", commissionsData.commissions);
         setCommissions(commissionsData.commissions);
       }
       if (affiliatesData.success) {
-        console.log("Setting affiliates:", affiliatesData.affiliates);
         setAffiliates(affiliatesData.affiliates);
       }
+      if (invitationsData.success) {
+        setInvitations(invitationsData.invitations);
+      }
     } catch (error) {
-      console.error("Error fetching admin data:", error);
-      toast.error("Failed to load admin data");
+      toast.error(
+        error instanceof Error ? error.message : "Unknown error occurred"
+      );
     } finally {
       setLoading(false);
     }
@@ -182,8 +207,10 @@ export default function AdminAffiliatePanel() {
         setSelectedPayoutItems(data.payoutItems);
       }
     } catch (error) {
-      console.error("Error fetching payout items:", error);
-      setSelectedPayoutItems([]);
+      toast.error(
+        error instanceof Error ? error.message : "Unknown error occurred"
+      );
+      setSelectedPayoutItems([]); 
     }
   };
 
@@ -214,8 +241,9 @@ export default function AdminAffiliatePanel() {
         toast.error(data.error || "Failed to create payout");
       }
     } catch (error) {
-      console.error("Error creating payout:", error);
-      toast.error("Failed to create payout");
+      toast.error(
+        error instanceof Error ? error.message : "Unknown error occurred"
+      );
     } finally {
       setCreatingPayout(false);
     }
@@ -278,8 +306,9 @@ export default function AdminAffiliatePanel() {
         toast.error(data.error || "Failed to export payout");
       }
     } catch (error) {
-      console.error("Error exporting payout:", error);
-      toast.error("Failed to export payout");
+      toast.error(
+        error instanceof Error ? error.message : "Unknown error occurred"
+      );
     }
   };
 
@@ -305,8 +334,66 @@ export default function AdminAffiliatePanel() {
         toast.error(data.error || "Failed to mark payout as paid");
       }
     } catch (error) {
-      console.error("Error marking payout as paid:", error);
-      toast.error("Failed to mark payout as paid");
+      toast.error(
+        error instanceof Error ? error.message : "Unknown error occurred"
+      );
+    }
+  };
+
+  const handleCreateInvitation = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setCreatingInvitation(true);
+
+    try {
+      const response = await fetch("/api/affiliate/invitations", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(invitationForm),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        toast.success(`Invitation created! Code: ${data.invitation.invitationCode}`);
+        setInvitationForm({ maxUses: 1, expiresInDays: 30, inviteeEmail: "", inviteeName: "" });
+        setShowInvitationDialog(false);
+        fetchData();
+      } else {
+        toast.error(data.error || "Failed to create invitation");
+      }
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Unknown error occurred"
+      );
+    } finally {
+      setCreatingInvitation(false);
+    }
+  };
+
+  const handleToggleInvitation = async (invitationId: string, isActive: boolean) => {
+    try {
+      const response = await fetch("/api/affiliate/invitations", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ invitationId, isActive }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        toast.success(`Invitation ${isActive ? 'activated' : 'deactivated'}!`);
+        fetchData();
+      } else {
+        toast.error(data.error || "Failed to update invitation");
+      }
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Unknown error occurred"
+      );
     }
   };
 
@@ -440,6 +527,7 @@ export default function AdminAffiliatePanel() {
                   <Tab label="Payouts" />
                   <Tab label="Commissions" />
                   <Tab label="Affiliates" />
+                  <Tab label="Invitations" />
                 </Tabs>
 
                 {tabValue === 0 && (
@@ -456,6 +544,23 @@ export default function AdminAffiliatePanel() {
                     }}
                   >
                     Create Payout
+                  </Button>
+                )}
+                
+                {tabValue === 3 && (
+                  <Button
+                    variant="contained"
+                    startIcon={<Add />}
+                    onClick={() => setShowInvitationDialog(true)}
+                    className="!bg-[#2c5530] hover:!bg-green-600 "
+                    sx={{
+                      borderRadius: "50px",
+                      px: 2,
+                      py: 1,
+                      fontWeight: 600,
+                    }}
+                  >
+                    Create Invitation
                   </Button>
                 )}
               </Box>
@@ -697,6 +802,105 @@ export default function AdminAffiliatePanel() {
                 </Table>
               </TableContainer>
             </TabPanel>
+
+            <TabPanel value={tabValue} index={3}>
+              <Typography
+                variant="h6"
+                sx={{ fontWeight: 600, color: "#1f2937", mb: 3 }}
+              >
+                Affiliate Invitations ({affiliates.length}/50)
+              </Typography>
+              <TableContainer
+                component={Paper}
+                elevation={0}
+                sx={{ border: "1px solid #e5e7eb" }}
+              >
+                <Table>
+                  <TableHead>
+                    <TableRow sx={{ backgroundColor: "#f9fafb" }}>
+                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>
+                        Code
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>
+                        Usage
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>
+                        Expires
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>
+                        For
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>
+                        Status
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>
+                        Created
+                      </TableCell>
+                      <TableCell sx={{ fontWeight: 600, color: "#374151" }}>
+                        Actions
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {invitations.map((invitation) => (
+                      <TableRow key={invitation._id}>
+                        <TableCell>
+                          <Chip
+                            label={invitation.invitationCode}
+                            variant="outlined"
+                            size="small"
+                            sx={{ borderColor: "#2c5530", color: "#2c5530", fontFamily: "monospace" }}
+                          />
+                        </TableCell>
+                        <TableCell>
+                          {invitation.usedCount}/{invitation.maxUses}
+                        </TableCell>
+                        <TableCell>{formatDate(invitation.expiresAt)}</TableCell>
+                        <TableCell>
+                          <Box>
+                            {invitation.inviteeName && (
+                              <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                                {invitation.inviteeName}
+                              </Typography>
+                            )}
+                            {invitation.inviteeEmail && (
+                              <Typography variant="caption" sx={{ color: "#6b7280" }}>
+                                {invitation.inviteeEmail}
+                              </Typography>
+                            )}
+                            {!invitation.inviteeName && !invitation.inviteeEmail && (
+                              <Typography variant="caption" sx={{ color: "#9ca3af" }}>
+                                General
+                              </Typography>
+                            )}
+                          </Box>
+                        </TableCell>
+                        <TableCell>
+                          <Chip
+                            label={invitation.isActive ? "Active" : "Inactive"}
+                            color={invitation.isActive ? "success" : "default"}
+                            size="small"
+                          />
+                        </TableCell>
+                        <TableCell>{formatDate(invitation.createdAt)}</TableCell>
+                        <TableCell>
+                          <Button
+                            size="small"
+                            onClick={() => handleToggleInvitation(invitation._id, !invitation.isActive)}
+                            sx={{ 
+                              color: invitation.isActive ? "#ef4444" : "#10b981",
+                              fontSize: "0.75rem"
+                            }}
+                          >
+                            {invitation.isActive ? "Deactivate" : "Activate"}
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </TabPanel>
           </Card>
         </motion.div>
       </Container>
@@ -892,6 +1096,145 @@ export default function AdminAffiliatePanel() {
             Close
           </Button>
         </DialogActions>
+      </Dialog>
+
+      {/* Create Invitation Dialog */}
+      <Dialog
+        open={showInvitationDialog}
+        onClose={() => setShowInvitationDialog(false)}
+        maxWidth="sm"
+        fullWidth
+      >
+        <DialogTitle>Create Affiliate Invitation</DialogTitle>
+        <form onSubmit={handleCreateInvitation}>
+          <DialogContent>
+            <Typography variant="body2" sx={{ color: "#6b7280", mb: 3 }}>
+              Create an invitation code for new affiliates. Current affiliates: {affiliates.length}/50
+            </Typography>
+            
+            <TextField
+              fullWidth
+              label="Invitee Name (Optional)"
+              value={invitationForm.inviteeName}
+              onChange={(e) =>
+                setInvitationForm({ ...invitationForm, inviteeName: e.target.value })
+              }
+              placeholder="John Doe"
+              sx={{
+                mb: 3,
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: "#d1d5db",
+                    borderRadius: "14px",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "#9ca3af",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#2c5530",
+                  },
+                },
+              }}
+            />
+
+            <TextField
+              fullWidth
+              label="Invitee Email (Optional)"
+              type="email"
+              value={invitationForm.inviteeEmail}
+              onChange={(e) =>
+                setInvitationForm({ ...invitationForm, inviteeEmail: e.target.value })
+              }
+              placeholder="john@example.com"
+              helperText="If specified, only this email can use the invitation"
+              sx={{
+                mb: 3,
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: "#d1d5db",
+                    borderRadius: "14px",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "#9ca3af",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#2c5530",
+                  },
+                },
+              }}
+            />
+
+            <TextField
+              fullWidth
+              label="Maximum Uses"
+              type="number"
+              value={invitationForm.maxUses}
+              onChange={(e) =>
+                setInvitationForm({ ...invitationForm, maxUses: parseInt(e.target.value) || 1 })
+              }
+              inputProps={{ min: 1, max: 10 }}
+              helperText="How many times this invitation can be used (1-10)"
+              sx={{
+                mb: 3,
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: "#d1d5db",
+                    borderRadius: "14px",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "#9ca3af",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#2c5530",
+                  },
+                },
+              }}
+            />
+
+            <TextField
+              fullWidth
+              label="Expires in Days"
+              type="number"
+              value={invitationForm.expiresInDays}
+              onChange={(e) =>
+                setInvitationForm({ ...invitationForm, expiresInDays: parseInt(e.target.value) || 30 })
+              }
+              inputProps={{ min: 1, max: 365 }}
+              helperText="How many days until the invitation expires (1-365)"
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  "& fieldset": {
+                    borderColor: "#d1d5db",
+                    borderRadius: "14px",
+                  },
+                  "&:hover fieldset": {
+                    borderColor: "#9ca3af",
+                  },
+                  "&.Mui-focused fieldset": {
+                    borderColor: "#2c5530",
+                  },
+                },
+              }}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => setShowInvitationDialog(false)}
+              sx={{ color: "#6b7280" }}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              variant="contained"
+              disabled={creatingInvitation}
+              className="!bg-[#2c5530] hover:!bg-green-600"
+              sx={{ borderRadius: "50px", px: 3 }}
+            >
+              {creatingInvitation ? "Creating..." : "Create Invitation"}
+            </Button>
+          </DialogActions>
+        </form>
       </Dialog>
     </div>
   );

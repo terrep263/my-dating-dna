@@ -1,80 +1,103 @@
 import { NextRequest, NextResponse } from "next/server";
 import { connectToDatabase } from "@/lib/db";
 import Affiliate from "@/lib/models/Affiliate";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/lib/auth";
+import AffiliateInvitation from "@/lib/models/AffiliateInvitation";
 
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
-    
-    if (!session?.user?.email) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+    const { code, name, email, payoutMethod, invitationCode } = await request.json();
+
+    if (!code || !name || !email || !payoutMethod || !invitationCode) {
+      return NextResponse.json({ 
+        error: "Missing required fields: code, name, email, payoutMethod, invitationCode" 
+      }, { status: 400 });
     }
 
+    // Connect to database
     await connectToDatabase();
-    
-    const body = await request.json();
-    const { name, code, payoutMethod } = body;
 
-    if (!name || !code || !payoutMethod) {
-      return NextResponse.json(
-        { error: "Name, code, and payout method are required" },
-        { status: 400 }
-      );
+    // Check current affiliate count
+    const currentAffiliateCount = await Affiliate.countDocuments();
+    if (currentAffiliateCount >= 50) {
+      return NextResponse.json({ 
+        error: "Sorry! We've reached our maximum of 50 affiliates. Please contact support if you believe this is an error." 
+      }, { status: 400 });
     }
 
-    // Check if affiliate code already exists
-    const existingAffiliate = await Affiliate.findOne({ 
-      code: code.toUpperCase() 
+    // Validate invitation code
+    const invitation = await AffiliateInvitation.findOne({
+      invitationCode: invitationCode.toUpperCase(),
+      isActive: true,
+      expiresAt: { $gt: new Date() }
     });
 
+    if (!invitation) {
+      return NextResponse.json({ 
+        error: "Invalid or expired invitation code. Please contact support for a valid invitation." 
+      }, { status: 400 });
+    }
+
+    // Check if invitation has remaining uses
+    if (invitation.usedCount >= invitation.maxUses) {
+      return NextResponse.json({ 
+        error: "This invitation code has already been used the maximum number of times." 
+      }, { status: 400 });
+    }
+
+    // If invitation is email-specific, validate email
+    if (invitation.inviteeEmail && invitation.inviteeEmail !== email.toLowerCase()) {
+      return NextResponse.json({ 
+        error: "This invitation code is reserved for a different email address." 
+      }, { status: 400 });
+    }
+
+    // Check if affiliate already exists
+    const existingAffiliate = await Affiliate.findOne({ code: code.toUpperCase() });
     if (existingAffiliate) {
-      return NextResponse.json(
-        { error: "Affiliate code already exists" },
-        { status: 400 }
-      );
+      return NextResponse.json({ 
+        error: "Affiliate with this code already exists" 
+      }, { status: 409 });
     }
 
     // Check if email already has an affiliate account
-    const existingEmail = await Affiliate.findOne({ 
-      email: session.user.email 
-    });
-
-    if (existingEmail) {
-      return NextResponse.json(
-        { error: "You already have an affiliate account" },
-        { status: 400 }
-      );
+    const existingEmailAffiliate = await Affiliate.findOne({ email: email.toLowerCase() });
+    if (existingEmailAffiliate) {
+      return NextResponse.json({ 
+        error: "An affiliate account with this email already exists" 
+      }, { status: 409 });
     }
 
     // Create new affiliate
-    const affiliate = await Affiliate.create({
+    const affiliate = new Affiliate({
       code: code.toUpperCase(),
       name,
-      email: session.user.email,
+      email: email.toLowerCase(),
       payoutMethod,
       isActive: true,
+      invitationCode: invitation.invitationCode // Track which invitation was used
     });
 
-    return NextResponse.json({
-      success: true,
+    await affiliate.save();
+
+    // Update invitation usage count
+    invitation.usedCount += 1;
+    await invitation.save();
+
+    return NextResponse.json({ 
+      success: true, 
+      message: "Affiliate account created successfully! Welcome to our program.",
       affiliate: {
         id: affiliate._id,
         code: affiliate.code,
         name: affiliate.name,
-        email: affiliate.email,
-        payoutMethod: affiliate.payoutMethod,
-        isActive: affiliate.isActive,
-      },
+        email: affiliate.email
+      }
     });
+
   } catch (error) {
-    console.error("Affiliate registration error:", error);
+    console.error("[API] Error creating affiliate:", error);
     return NextResponse.json(
-      { error: "Failed to register affiliate" },
+      { error: "Failed to create affiliate account. Please try again." }, 
       { status: 500 }
     );
   }

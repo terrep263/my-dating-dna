@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
-import puppeteer from "puppeteer";
+import puppeteer from "puppeteer-core";
+import chromium from "@sparticuz/chromium";
+
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,19 +15,95 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Launch browser with optimized settings
-    const browser = await puppeteer.launch({
-      args: [
-        "--no-sandbox", 
-        "--disable-setuid-sandbox",
-        "--disable-dev-shm-usage",
-        "--disable-accelerated-2d-canvas",
-        "--no-first-run",
-        "--no-zygote",
-        "--disable-gpu"
-      ],
-      headless: true,
-    });
+    // // Launch browser with optimized settings
+    // const browser = await puppeteer.launch({
+    //   args: [
+    //     "--no-sandbox",
+    //     "--disable-setuid-sandbox",
+    //     "--disable-dev-shm-usage",
+    //     "--disable-accelerated-2d-canvas",
+    //     "--no-first-run",
+    //     "--no-zygote",
+    //     "--disable-gpu"
+    //   ],
+    //   headless: true,
+    // });
+
+    const isProd = !!process.env.AWS_REGION || !!process.env.VERCEL;
+
+    let browser;
+    
+    if (isProd) {
+      // Production environment (Vercel/AWS Lambda)
+      browser = await puppeteer.launch({
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        executablePath: await chromium.executablePath(),
+        headless: chromium.headless,
+      });
+    } else {
+      // Local development environment
+      try {
+        // Try to use puppeteer (full version) first
+        const puppeteerFull = await import('puppeteer');
+        browser = await puppeteerFull.default.launch({
+          headless: true,
+          args: [
+            "--no-sandbox",
+            "--disable-setuid-sandbox",
+            "--disable-dev-shm-usage",
+            "--disable-accelerated-2d-canvas",
+            "--no-first-run",
+            "--no-zygote",
+            "--disable-gpu"
+          ]
+        });
+      } catch (error) {
+        console.log("Full puppeteer not available, falling back to system Chrome");
+        // Fallback to system Chrome
+        const possiblePaths = [
+          '/usr/bin/google-chrome',
+          '/usr/bin/google-chrome-stable',
+          '/usr/bin/chromium-browser',
+          '/usr/bin/chromium',
+          '/snap/bin/chromium',
+          '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+          'C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe',
+          'C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe',
+        ];
+        
+        let executablePath = null;
+        for (const path of possiblePaths) {
+          try {
+            const fs = await import('fs');
+            if (fs.existsSync(path)) {
+              executablePath = path;
+              break;
+            }
+          } catch (e) {
+            // Continue to next path
+          }
+        }
+        
+        if (!executablePath) {
+          throw new Error('No Chrome installation found. Please install Google Chrome or Chromium.');
+        }
+        
+        browser = await puppeteer.launch({
+          executablePath,
+          headless: true,
+          args: [
+            "--no-sandbox",
+            "--disable-setuid-sandbox",
+            "--disable-dev-shm-usage",
+            "--disable-accelerated-2d-canvas",
+            "--no-first-run",
+            "--no-zygote",
+            "--disable-gpu"
+          ]
+        });
+      }
+    }
 
     const page = await browser.newPage();
 
@@ -322,7 +400,7 @@ export async function POST(request: NextRequest) {
     });
 
     // Wait for fonts and images to load
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     // Generate PDF with optimized settings
     const pdf = await page.pdf({

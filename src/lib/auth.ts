@@ -53,6 +53,7 @@ export const authOptions = {
             id: user._id.toString(),
             email: user.email,
             name: user.name,
+            role: user.role || "user",
             subscription: {
               plan: user.subscription.plan,
               status: user.subscription.status,

@@ -11,9 +11,6 @@ export async function POST(request: NextRequest) {
         error: "Missing required fields: code, name, email, payoutMethod" 
       }, { status: 400 });
     }
-
-    console.log(`[API] Creating affiliate with code: ${code}`);
-
     // Connect to database
     await connectToDatabase();
 
@@ -35,9 +32,6 @@ export async function POST(request: NextRequest) {
     });
 
     await affiliate.save();
-
-    console.log(`[API] Affiliate created successfully:`, affiliate._id);
-
     return NextResponse.json({ 
       success: true, 
       message: "Affiliate created successfully",
