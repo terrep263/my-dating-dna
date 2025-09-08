@@ -71,7 +71,7 @@ function createPasswordResetEmail(newPassword: string): string {
           If you didn't request this password reset, please contact our support team immediately.
         </p>
         <p style="color: #6b7280; font-size: 12px;">
-          © 2024 MY Dating DNA™. All rights reserved.
+          ©${new Date().getFullYear()} MY Dating DNA™. All rights reserved.
         </p>
       </div>
     </div>

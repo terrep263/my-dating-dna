@@ -1081,7 +1081,7 @@ const GraceAI: React.FC<
               <span>Private & Secure</span>
             </div>
             <p className="text-xs text-gray-500">
-              © 2024 Grace AI. Made with 💜 to help hearts connect. All our
+              © ${new Date().getFullYear()} Grace AI. Made with 💜 to help hearts connect. All our
               conversations stay private between us.
             </p>
           </div>

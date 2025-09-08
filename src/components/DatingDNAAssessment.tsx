@@ -583,34 +583,57 @@ function typeNameFromCode(code: string) {
   }–${POLE_WORD[d as Orientation]}`;
 }
 
-// Programmatic, deterministic copy generators (replace with authored content later)
+// Enhanced relationship approach generator following narrative contract requirements
 function makeRelationshipApproach(code: string) {
-  // Minimum 5 sentences per narrative contract, ~800+ characters target
+  // Generate 5-7 detailed sentences with specific examples and actionable insights
   const parts: string[] = [];
+  
+  // Sentence 1: Overall approach statement with specific behavioral example
   const c1 =
     code[0] === "C"
-      ? "You naturally expand your social circle, creating multiple points of connection and easing interactions with new people."
-      : "You focus your energy on a smaller circle, building deeper connections once genuine interest is established.";
+      ? "You naturally expand your social circle by actively engaging with diverse groups of people, whether through dating apps, social events, or mutual friend introductions, creating multiple pathways to meaningful romantic connections."
+      : "You focus your energy on cultivating deeper connections within a smaller, carefully selected circle of potential partners, preferring quality conversations and intimate settings that allow genuine compatibility to emerge naturally.";
 
+  // Sentence 2: Attraction driver with practical dating context
   const c2 =
     code[1] === "P"
-      ? "You value present-day compatibility—habits, lifestyle, and routines must feel aligned from the start."
-      : "You value potential—ambition, future plans, and growth paths carry more weight in your evaluation.";
+      ? "Your attraction system prioritizes present-day compatibility, meaning you evaluate potential partners based on current lifestyle alignment, shared daily routines, and immediate chemistry that feels comfortable and sustainable right now."
+      : "Your attraction system is drawn to potential and future possibilities, meaning you're willing to invest in relationships where you see long-term growth potential, shared aspirations, and the exciting prospect of building something meaningful together over time.";
 
+  // Sentence 3: Decision-making style with specific examples
   const c3 =
     code[2] === "L"
-      ? "Your choices lean analytical, guided by principles and a focus on long-term stability."
-      : "Your choices lean intuitive, guided by emotional safety and the feeling of genuine connection.";
+      ? "When making relationship decisions, you rely on logical analysis and practical considerations, carefully weighing factors like compatibility, shared values, financial stability, and long-term viability before committing emotionally or physically."
+      : "When making relationship decisions, you trust your intuitive feelings and emotional responses, prioritizing how someone makes you feel, the natural flow of connection, and your gut instincts about whether this person feels right for your heart.";
 
+  // Sentence 4: Relationship rhythm with timeline examples
   const c4 =
     code[3] === "S"
-      ? "You appreciate a structured pace with clear milestones that show progress and commitment."
-      : "You prefer a natural pace, leaving room for spontaneity and an evolving sense of timing.";
+      ? "Your preferred relationship rhythm involves clear milestones and defined progression, such as exclusive dating by month two, meeting families by month four, and having concrete discussions about future plans within six months of dating."
+      : "Your preferred relationship rhythm flows organically without rigid timelines, allowing the connection to develop naturally through spontaneous experiences, unplanned moments, and letting major relationship decisions emerge when they feel authentically right.";
 
-  // Add a fifth sentence to meet narrative contract requirements
-  const c5 = `This ${code} approach shapes how you navigate dating, from initial attraction to building lasting relationships.`;
+  // Sentence 5: Integration and practical application
+  const c5 = `This ${code} approach creates a distinctive dating style where you ${
+    code[0] === "C" ? "cast a wide net while" : "selectively focus while"
+  } ${code[1] === "P" ? "prioritizing immediate compatibility" : "investing in long-term potential"}, making decisions through ${
+    code[2] === "L" ? "careful analysis" : "emotional intuition"
+  } and following ${code[3] === "S" ? "structured timelines" : "natural rhythms"}.`;
 
-  parts.push(c1, c2, c3, c4, c5);
+  // Sentence 6: Success strategies specific to their type
+  const c6 = `To maximize your dating success, focus on ${
+    code[0] === "C" ? "leveraging your social connections and networking abilities" : "creating meaningful one-on-one experiences that showcase your depth"
+  } while ${code[1] === "P" ? "seeking partners whose current lifestyle aligns with yours" : "looking for shared visions and growth-minded individuals"}, and remember that your ${
+    code[2] === "L" ? "analytical approach helps you avoid incompatible matches" : "intuitive nature guides you toward emotionally fulfilling connections"
+  }.`;
+
+  // Sentence 7: Long-term relationship vision
+  const c7 = `In long-term relationships, your ${code} type thrives when you can ${
+    code[0] === "C" ? "maintain social connections while building intimacy" : "create a secure foundation that supports deeper bonding"
+  }, ${code[1] === "P" ? "enjoy present moments together while maintaining stability" : "work toward shared goals while celebrating growth milestones"}, and navigate challenges through ${
+    code[2] === "L" ? "open communication and problem-solving" : "emotional support and understanding"
+  } at a pace that feels ${code[3] === "S" ? "intentional and progress-oriented" : "natural and pressure-free"}.`;
+
+  parts.push(c1, c2, c3, c4, c5, c6, c7);
   return parts.join(" ");
 }
 
@@ -622,91 +645,136 @@ const STRENGTHS_BY_POLE: Record<
     {
       title: "Network Momentum",
       detail:
-        "You create opportunities by engaging diverse circles, increasing serendipitous matches.",
+        "You create abundant dating opportunities by actively engaging with diverse social circles, attending networking events, joining interest-based groups, and maintaining connections across different communities, which naturally increases your chances of meeting compatible partners through both direct introductions and serendipitous encounters. Your ability to remember details about people and follow up on conversations makes others want to introduce you to their single friends, creating a positive feedback loop of dating opportunities. For example, you might meet someone at a professional mixer, connect with their friend at a book club, and end up being introduced to your future partner at a mutual friend's birthday party six months later.",
     },
     {
       title: "Social Adaptability",
       detail:
-        "You read rooms quickly and pivot tone or topic to keep conversations alive.",
+        "You excel at reading social dynamics and adjusting your communication style to match different dating contexts, whether that's being more playful on a casual coffee date, more sophisticated at a wine tasting, or more intimate during a quiet dinner conversation. This flexibility allows you to connect authentically with a wide variety of personality types and dating preferences, making you naturally attractive to many different kinds of potential partners. Your skill at pivoting topics when conversations stagnate and finding common ground with diverse individuals means you rarely experience awkward silences or incompatibility on first dates, giving you more opportunities to explore deeper connections.",
+    },
+    {
+      title: "Energy Multiplication",
+      detail:
+        "You gain energy from social interactions rather than losing it, which means you can maintain an active dating life without feeling drained, attend multiple social events per week, and still have enthusiasm for meaningful conversations with new potential partners. This natural social stamina allows you to date consistently and explore multiple connections simultaneously without burning out, giving you a significant advantage in today's dating landscape. Your positive energy is contagious and draws people toward you, making you the kind of person others want to spend time with and introduce to their networks.",
     },
   ],
   F: [
     {
       title: "Depth of Presence",
       detail:
-        "You give focused attention that makes people feel fully seen and valued.",
+        "You create profound connections by giving your complete attention to potential partners, asking thoughtful follow-up questions, remembering important details from previous conversations, and making people feel truly heard and understood in a world where distracted, surface-level interactions are the norm. This quality makes you stand out dramatically in the dating world because so few people offer this level of genuine engagement and emotional presence. When you're with someone, they feel like they're the only person in the room, which creates powerful romantic chemistry and makes people eager to see you again because of how special you make them feel.",
     },
     {
       title: "Signal-to-Noise Discipline",
       detail:
-        "You filter distractions and invest in connections with genuine promise.",
+        "You have an exceptional ability to filter through dating noise and focus your energy only on connections that show genuine romantic potential, avoiding the time-wasting casual interactions that drain other people's dating energy and resources. Your selective approach means you invest deeply in fewer people, which leads to more meaningful relationships and reduces the emotional exhaustion that comes from juggling multiple superficial connections. This focused strategy allows you to build stronger foundations with compatible partners while maintaining your emotional availability and enthusiasm for the relationships that truly matter.",
+    },
+    {
+      title: "Authentic Intimacy",
+      detail:
+        "You excel at creating safe spaces for vulnerable conversations and emotional intimacy, which allows relationships to develop genuine depth much faster than typical dating patterns where people stay on the surface for months before opening up. Your comfort with meaningful dialogue and emotional expression helps potential partners feel secure enough to share their true selves, creating the foundation for lasting romantic connections. This strength is particularly valuable in today's dating climate where many people struggle with emotional availability and authentic self-expression, making your natural intimacy skills a rare and attractive quality.",
     },
   ],
   P: [
     {
       title: "Reality Anchoring",
       detail:
-        "You evaluate partners by current lifestyle fit, reducing future friction.",
+        "You evaluate potential partners based on current lifestyle compatibility, shared daily routines, and present-moment alignment, which helps you avoid the common dating trap of falling for someone's potential rather than who they actually are right now. This practical approach leads to more stable, sustainable relationships because you're attracted to people whose current life circumstances, values, and behaviors already mesh well with yours. For example, you naturally gravitate toward partners who share your sleep schedule, exercise habits, social preferences, and financial responsibility level, creating a solid foundation for day-to-day relationship harmony without requiring major life changes from either person.",
     },
     {
       title: "Decisive Screening",
-      detail: "You act on tangible evidence, minimizing sunk-cost dating.",
+      detail:
+        "You make dating decisions based on tangible evidence and observable behaviors rather than getting caught up in fantasy or potential, which saves you from investing months in relationships that aren't actually working in practical terms. Your ability to recognize incompatibility early and act on that information prevents you from falling into the sunk-cost fallacy that keeps many people stuck in unfulfilling relationships. This strength helps you maintain high standards while dating efficiently, moving on from mismatched connections quickly so you can focus your energy on partners who demonstrate real compatibility through their actions, not just their words or promises.",
+    },
+    {
+      title: "Lifestyle Harmony",
+      detail:
+        "You naturally seek partners whose current lifestyle, daily rhythms, and practical preferences align with yours, creating relationships that feel comfortable and sustainable from the beginning rather than requiring significant adjustments or compromises that might breed resentment later. Your focus on present-day compatibility means you're likely to build relationships where you genuinely enjoy spending time together in ordinary circumstances, not just during special occasions or romantic getaways. This approach leads to partnerships where both people can be themselves authentically without feeling pressure to change fundamental aspects of their personality or lifestyle to make the relationship work.",
     },
   ],
   T: [
     {
       title: "Growth Orientation",
       detail:
-        "You spot potential and encourage development that benefits the relationship.",
+        "You have a unique ability to recognize potential in partners and relationships, seeing not just who someone is today but who they could become with the right support and encouragement, which allows you to build deeply fulfilling partnerships with people who share your vision for mutual development and improvement. Your growth mindset attracts ambitious, self-aware partners who appreciate having someone who believes in their potential and actively supports their personal evolution. This strength enables you to create relationships that continuously evolve and improve over time, with both partners inspiring each other to reach new levels of personal and professional achievement while maintaining strong romantic connection.",
     },
     {
       title: "Vision Cohesion",
       detail:
-        "You align on aims and pathways, creating motivational pull for both partners.",
+        "You excel at aligning with partners around shared long-term goals, future aspirations, and life visions, creating powerful romantic partnerships that feel like meaningful collaborations toward common objectives rather than just emotional connections without direction. Your ability to discuss and plan for the future helps create relationships with clear purpose and momentum, where both people are working together toward shared dreams and supporting each other's individual growth within the context of their partnership. This forward-thinking approach attracts partners who are serious about building something significant together, leading to relationships with strong foundations and exciting trajectories.",
+    },
+    {
+      title: "Potential Catalyst",
+      detail:
+        "You inspire partners to pursue their highest potential by seeing their strengths, encouraging their growth, and creating supportive environments where they can develop new skills, explore new interests, and become the best versions of themselves. Your belief in people's capacity for positive change and development makes you an incredibly attractive partner because you offer something rare in relationships: genuine support for personal evolution and achievement. This quality creates deep loyalty and appreciation from partners who recognize how much they grow and improve when they're with you, leading to relationships where both people feel energized and inspired by their connection.",
     },
   ],
   L: [
     {
       title: "Clear-headed Decisions",
-      detail: "You weigh trade-offs calmly and protect long-term stability.",
+      detail:
+        "You approach dating and relationship decisions with rational analysis and careful consideration of practical factors, which helps you avoid impulsive choices that might lead to incompatible partnerships or emotional drama down the road. Your logical approach to relationship evaluation means you can objectively assess whether someone is truly a good match for you, considering factors like shared values, life goals, communication styles, and lifestyle compatibility rather than being swayed purely by chemistry or emotional intensity. This strength protects you from getting involved with people who might seem exciting in the moment but lack the fundamental compatibility needed for long-term relationship success.",
     },
     {
       title: "Boundaries by Design",
-      detail: "You define standards that safeguard time, energy, and values.",
+      detail:
+        "You naturally establish and maintain healthy boundaries in relationships, clearly communicating your needs, expectations, and limits in ways that create mutual respect and understanding with potential partners. Your ability to define standards for how you want to be treated and what you're willing to accept helps you attract partners who appreciate directness and emotional maturity while filtering out people who might try to manipulate or take advantage of unclear boundaries. This skill creates relationships built on mutual respect and clear communication, where both people understand what's expected and feel secure in the partnership because the rules of engagement are transparent and consistently applied.",
+    },
+    {
+      title: "Stability Foundation",
+      detail:
+        "You prioritize building relationships on solid foundations of trust, consistency, and practical compatibility, which creates partnerships that can weather challenges and grow stronger over time rather than being derailed by unexpected obstacles or changing circumstances. Your logical approach to relationship building means you invest time in getting to know partners thoroughly, understanding their character, values, and long-term goals before making major emotional investments. This methodical approach to relationship development attracts partners who value security, reliability, and steady progress toward shared goals, creating partnerships that offer both emotional fulfillment and practical stability.",
     },
   ],
   H: [
     {
       title: "Empathic Bonding",
-      detail: "You tune into feelings and create a sense of emotional safety.",
+      detail:
+        "You create deep emotional connections by naturally tuning into partners' feelings, needs, and emotional states, making them feel truly understood and emotionally safe in ways that many people rarely experience in their relationships. Your empathetic nature allows you to respond appropriately to your partner's emotional needs, offering comfort during difficult times, celebrating their successes with genuine enthusiasm, and creating an atmosphere of emotional support that strengthens romantic bonds. This emotional intelligence makes you an incredibly attractive partner because you offer something that everyone craves but few people provide: the feeling of being truly seen, understood, and accepted at an emotional level.",
     },
     {
       title: "Repair Readiness",
       detail:
-        "You move toward understanding in conflict, reducing lingering resentment.",
+        "You approach relationship conflicts with a focus on understanding and healing rather than winning or being right, which allows you to resolve disagreements in ways that actually strengthen your connection with partners rather than creating lasting resentment or emotional distance. Your natural inclination toward emotional repair means you're willing to have difficult conversations, acknowledge your mistakes, and work collaboratively to find solutions that address both people's underlying needs and concerns. This conflict resolution skill is incredibly valuable in long-term relationships where the ability to navigate disagreements constructively determines whether partnerships thrive or deteriorate over time.",
+    },
+    {
+      title: "Emotional Intelligence",
+      detail:
+        "You excel at reading emotional undercurrents in relationships, understanding what partners need even when they can't articulate it clearly, and responding in ways that create deeper intimacy and connection rather than misunderstanding or conflict. Your emotional awareness helps you navigate the complex feelings that arise in romantic relationships, from early dating anxiety to long-term partnership challenges, with sensitivity and wisdom that makes partners feel secure and valued. This strength allows you to create relationships where both people feel emotionally fulfilled and supported, leading to partnerships that provide genuine happiness and emotional satisfaction for both individuals involved.",
     },
   ],
   S: [
     {
       title: "Predictable Progress",
       detail:
-        "You turn intention into milestones that reduce ambiguity and anxiety.",
+        "You create relationship security by establishing clear milestones and expectations that help both you and your partners understand where the relationship is heading and what steps need to be taken to reach shared goals. Your structured approach to relationship development reduces anxiety and uncertainty by providing a roadmap for how the partnership will evolve over time, from early dating through potential long-term commitment. This clarity helps partners feel secure and confident about investing in the relationship because they understand the trajectory and can see concrete evidence of progress toward shared objectives, creating a sense of stability and forward momentum that many people find deeply attractive and reassuring.",
     },
     {
       title: "Reliability",
-      detail: "You follow through, building trust through consistent actions.",
+      detail:
+        "You build trust and security in relationships through consistent follow-through on commitments, reliable communication patterns, and dependable behavior that allows partners to count on you in both small daily interactions and major life decisions. Your natural inclination toward consistency means partners know what to expect from you, which creates a foundation of trust that enables deeper intimacy and vulnerability to develop over time. This reliability is particularly valuable in today's dating landscape where many people struggle with commitment and consistency, making your dependable nature a rare and highly attractive quality that helps you stand out from other potential partners.",
+    },
+    {
+      title: "Intentional Development",
+      detail:
+        "You approach relationship growth with purposeful planning and structured improvement, actively working to strengthen your connection through regular check-ins, planned relationship activities, and intentional skill development in areas like communication, intimacy, and conflict resolution. Your systematic approach to relationship enhancement means you don't leave important aspects of your partnership to chance, instead taking proactive steps to ensure the relationship continues to grow and improve over time. This intentionality creates partnerships that consistently evolve in positive directions because you're actively investing in the relationship's development rather than hoping things will improve naturally without effort or attention.",
     },
   ],
   O: [
     {
       title: "Authentic Flow",
       detail:
-        "You allow connection to unfold naturally, honoring chemistry and timing.",
+        "You allow relationships to develop naturally according to their own organic timeline and rhythm, honoring the natural chemistry and connection between you and your partners rather than forcing predetermined expectations or artificial milestones onto the relationship's evolution. Your comfort with uncertainty and natural development creates space for genuine intimacy and connection to emerge without pressure, which often leads to deeper, more authentic relationships because both people feel free to be themselves without conforming to external expectations. This organic approach attracts partners who value authenticity and natural connection over conventional relationship scripts or social expectations.",
     },
     {
       title: "Flex Capacity",
       detail:
-        "You adapt plans gracefully, keeping the relationship responsive to reality.",
+        "You adapt gracefully to changing circumstances in relationships, adjusting plans, expectations, and approaches based on what's actually happening rather than rigidly sticking to predetermined ideas about how things should unfold. Your flexibility allows you to navigate the inevitable surprises and changes that occur in any relationship, from scheduling conflicts to major life transitions, without creating unnecessary stress or conflict. This adaptability makes you an easy partner to be with because you can roll with life's unpredictability while maintaining your connection and commitment to the relationship, creating a sense of ease and flow that many people find deeply attractive and refreshing.",
+    },
+    {
+      title: "Natural Timing",
+      detail:
+        "You have an intuitive sense of when to move forward in relationships and when to give things space to develop, allowing major decisions and milestones to emerge when they feel authentically right rather than according to artificial timelines or external pressure. Your ability to read the natural rhythm of relationship development means you rarely push too hard or hold back too much, instead finding the perfect balance between initiative and patience that allows connections to flourish at their optimal pace. This natural timing creates relationships that feel effortless and organic, where both people feel comfortable with the pace of development and major transitions happen when both partners are genuinely ready.",
     },
   ],
 };
@@ -718,110 +786,161 @@ const GROWTH_BY_POLE: Record<
   C: [
     {
       title: "Depth Practice",
-      rationale: "Breadth can dilute signal.",
+      rationale: "While your natural breadth in social connections creates many opportunities, focusing too widely can sometimes dilute the quality of individual connections and prevent you from building the deeper intimacy that leads to lasting romantic partnerships. Your strength in meeting many people needs to be balanced with the ability to go deeper with the most promising connections to avoid staying on the surface level indefinitely.",
       action:
-        "Choose one conversation to take deeper each week; ask follow-ups and pause to reflect.",
+        "Each week, choose one conversation from your dating life to intentionally deepen by asking three thoughtful follow-up questions, sharing something more vulnerable about yourself, and creating space for 10 minutes of uninterrupted listening where you focus entirely on understanding their perspective. Practice this skill by setting aside your phone, maintaining eye contact, and asking questions like 'What was that experience really like for you?' or 'How did that change the way you see things?' Track your progress by noting whether these deeper conversations lead to stronger emotional connections and more meaningful second dates.",
     },
     {
       title: "Pacing Awareness",
-      rationale: "High energy can overwhelm some partners.",
+      rationale: "Your high social energy and enthusiasm, while generally attractive, can sometimes overwhelm partners who need more time to process emotions, make decisions, or open up at their own pace. Learning to calibrate your energy to match your partner's comfort level will help you create more balanced interactions where both people feel comfortable and heard throughout the dating process.",
       action:
-        "Name your pace out loud and invite the other person&apos;s tempo.",
+        "At the beginning of each date or meaningful conversation, verbally acknowledge your natural pace by saying something like 'I tend to be pretty energetic and excited when I'm getting to know someone I like - please let me know if you'd prefer to slow down or take breaks.' Then practice reading their body language and verbal cues for signs they need more processing time, and deliberately slow your speaking pace, leave longer pauses for them to respond, and ask 'How are you feeling about this conversation?' every 20-30 minutes to ensure they're comfortable with the flow.",
+    },
+    {
+      title: "Quality Over Quantity",
+      rationale: "Your networking abilities can sometimes lead to dating multiple people simultaneously without giving any single connection the focused attention needed to determine true compatibility and build meaningful emotional bonds. Developing the discipline to limit your active dating pool will help you invest more deeply in the connections with the highest potential for long-term success.",
+      action:
+        "Limit yourself to actively dating no more than three people at any given time, and commit to having at least three substantial dates with each person before deciding whether to continue or move on. Create a simple tracking system where you write down what you learned about their values, life goals, and compatibility factors after each interaction, and use this information to make thoughtful decisions about which connections deserve more of your time and emotional investment rather than defaulting to your natural tendency to keep meeting new people.",
     },
   ],
   F: [
     {
       title: "Expand Surface Area",
-      rationale: "Over-selectivity can hide good matches.",
+      rationale: "Your natural selectivity and preference for deep connections, while valuable for creating meaningful relationships, can sometimes limit your exposure to potentially compatible partners who might not immediately catch your attention but could develop into strong matches over time. Expanding your social reach will give you more opportunities to find the right person while still maintaining your standards for quality connections.",
       action:
-        "Attend one new-to-you event monthly and start three low-stakes conversations.",
+        "Commit to attending one new social event each month where you don't know anyone, and challenge yourself to have at least three casual conversations with strangers without any pressure to create romantic connections. Practice your conversation skills by asking open-ended questions about their interests, experiences, or opinions, and focus on finding one genuinely interesting thing about each person you meet. Keep a log of these interactions and note any surprising connections or people who grew more interesting as you talked, helping you recognize that compatibility sometimes develops gradually rather than being immediately obvious.",
     },
     {
       title: "Warm Starts",
-      rationale: "Depth can read as distance early on.",
-      action: "Open with light curiosity before shifting into deeper topics.",
+      rationale: "Your preference for depth and meaningful conversation, while ultimately attractive, can sometimes come across as too intense or serious during initial interactions when people are still getting comfortable with you. Learning to create emotional warmth and approachability in early conversations will help you connect with more people while still honoring your authentic communication style.",
+      action:
+        "Begin every first date or initial conversation with 10-15 minutes of lighter topics like recent travel experiences, favorite local restaurants, or interesting projects they're working on, before gradually transitioning into more meaningful subjects. Practice using humor, sharing amusing stories about yourself, and asking playful questions to create a relaxed atmosphere where the other person feels comfortable opening up naturally. Develop a mental list of 5-7 engaging but low-pressure conversation starters that feel authentic to you, and use these to build rapport before diving into the deeper topics that you naturally gravitate toward.",
+    },
+    {
+      title: "Initiative Taking",
+      rationale: "Your thoughtful, selective approach to dating can sometimes result in missed opportunities because you wait for perfect conditions or clear signals before making moves, while other potential partners interpret your caution as lack of interest. Developing comfort with taking appropriate initiative will help you pursue connections that align with your values without waiting for the other person to make all the first moves.",
+      action:
+        "Practice taking one small initiative each week in your dating life, whether that's suggesting a specific date activity, sending the first follow-up text after a good interaction, or directly expressing interest in someone you find attractive. Start with low-risk actions like 'I really enjoyed our conversation about [topic] - would you like to continue it over coffee this weekend?' and gradually work up to more direct expressions of interest. Keep track of how people respond to your initiatives and notice that most people appreciate clarity and directness rather than being put off by it.",
     },
   ],
   P: [
     {
       title: "Future Scan",
-      rationale: "Present fit can miss trajectory.",
+      rationale: "Your focus on present-day compatibility, while practical and often successful, can sometimes cause you to overlook important information about a partner's long-term goals, values, and life direction that will become crucial for relationship success over time. Developing skills to evaluate future potential alongside current compatibility will help you make more informed relationship decisions.",
       action:
-        "Ask one question about future aims on the first two dates; listen for consistency.",
+        "During your first two dates with any new person, ask at least one thoughtful question about their future aspirations, such as 'What are you most excited about in your life right now?' or 'Where do you see yourself in five years, both personally and professionally?' Listen carefully for consistency between their stated goals and their current actions, and pay attention to whether their vision for the future aligns with yours in important areas like family, career, lifestyle, and values. Create a simple mental or written checklist of future compatibility factors that matter to you, and use this to evaluate whether someone is a good long-term match beyond just present-day chemistry and lifestyle alignment.",
     },
     {
       title: "Flex Buffer",
-      rationale: "Strict alignment can feel rigid.",
+      rationale: "Your preference for present-day lifestyle alignment can sometimes create overly rigid expectations that eliminate potentially great partners who might differ from you in areas that aren't actually fundamental to relationship success. Learning to distinguish between non-negotiable compatibility factors and areas where you can be flexible will expand your dating options without compromising your core values.",
       action:
-        "Pick one area where you can flex 10–15% without cost to your values.",
+        "Identify one area of lifestyle preference where you can be 10-15% more flexible without compromising your core values - this might be social activity preferences, daily routines, entertainment choices, or communication styles. For example, if you prefer quiet evenings at home, consider whether you could enjoy occasional social events with a more outgoing partner, or if you're very structured, explore whether some spontaneity might actually add positive energy to your life. Experiment with this flexibility during dating by saying yes to activities or approaches that are slightly outside your comfort zone, and evaluate whether these differences create genuine incompatibility or just require minor adjustments that don't affect your overall happiness.",
+    },
+    {
+      title: "Growth Mindset",
+      rationale: "Your practical approach to compatibility assessment can sometimes undervalue the potential for positive change and development in both yourself and potential partners, causing you to dismiss connections that could become stronger over time with mutual effort and commitment. Developing appreciation for growth potential will help you recognize when minor current incompatibilities could be resolved through communication and compromise.",
+      action:
+        "When evaluating potential partners, spend time considering not just who they are today but who they're actively working to become, looking for evidence of self-awareness, willingness to learn, and commitment to personal growth. Ask questions like 'What's something you've been working to improve about yourself lately?' or 'How have you grown or changed in the past few years?' and pay attention to whether they take responsibility for their mistakes, show curiosity about your perspective, and demonstrate flexibility in their thinking. Give promising connections at least 4-6 dates to show their full personality and potential for positive change before making final compatibility decisions based solely on present-moment factors.",
     },
   ],
   T: [
     {
       title: "Reality Checks",
-      rationale: "Potential can mask patterns.",
+      rationale: "Your ability to see potential in partners and relationships, while valuable for creating growth-oriented partnerships, can sometimes cause you to overlook current behavioral patterns or compatibility issues that won't change regardless of someone's potential for growth. Learning to balance your vision for what could be with clear-eyed assessment of what actually is will help you make more realistic relationship decisions.",
       action:
-        "List three current behaviors you need to see consistently before investing further.",
+        "Before getting emotionally invested in any new romantic connection, create a list of three specific current behaviors or qualities you need to see consistently demonstrated within the first month of dating - these might include reliability in communication, respect for your boundaries, emotional availability, or shared values in action rather than just words. Pay attention to patterns rather than isolated incidents, and resist the temptation to excuse concerning behaviors because you can see someone's potential for improvement. Set a timeline for evaluating whether these essential qualities are present, and be willing to end connections with people who don't demonstrate them consistently, regardless of how much potential you see for future growth.",
     },
     {
       title: "Milestone Evidence",
-      rationale: "Vision without proof creates drift.",
+      rationale: "Your focus on long-term potential can sometimes create relationships that exist more in the realm of possibility than reality, with lots of discussion about future plans and growth but insufficient concrete evidence that progress is actually being made toward shared goals. Establishing clear, measurable milestones will help ensure that your vision-oriented relationships also have practical substance and forward momentum.",
       action:
-        "Set a small, verifiable step you expect within two weeks; reassess if missed.",
+        "For any relationship that progresses beyond casual dating, establish specific, time-bound milestones that demonstrate real progress toward shared goals rather than just ongoing conversations about potential. These might include completing a project together, making concrete plans for the next 3-6 months, demonstrating consistent behavior change in areas you've discussed, or taking specific steps toward shared aspirations like travel, education, or lifestyle changes. Set expectations that these milestones should be achieved within reasonable timeframes (usually 2-4 weeks for small goals, 2-3 months for larger ones), and be willing to reassess the relationship if someone consistently talks about growth and change but doesn't follow through with measurable actions.",
+    },
+    {
+      title: "Present Moment Appreciation",
+      rationale: "Your natural focus on future potential and long-term vision can sometimes prevent you from fully enjoying and appreciating the current stage of your relationship, causing you to always be thinking about what comes next rather than savoring what you have right now. Developing skills for present-moment appreciation will help you build stronger emotional connections and relationship satisfaction.",
+      action:
+        "Practice spending at least 20 minutes of each date or quality time with your partner focused entirely on the present moment without discussing future plans, goals, or potential improvements. During this time, focus on appreciating their current qualities, enjoying your immediate connection, and being fully present for the experience you're sharing together. Develop a habit of expressing gratitude for specific things you appreciate about them right now, such as 'I really enjoy how you listen to me' or 'I love your sense of humor in this moment,' rather than always framing your appreciation in terms of potential or future possibilities. This practice will help you build stronger emotional bonds and ensure your relationships feel fulfilling in the present, not just promising for the future.",
     },
   ],
   L: [
     {
       title: "Feeling Literacy",
-      rationale: "Logic can miss emotional data.",
+      rationale: "Your logical approach to relationships, while valuable for making sound decisions, can sometimes cause you to overlook or undervalue important emotional information that affects relationship satisfaction and compatibility. Developing better emotional awareness and expression skills will help you create deeper intimacy and better understand both your own needs and your partner's emotional experience.",
       action:
-        "Name your feeling before your solution in hard talks; ask the other to do the same.",
+        "Practice identifying and naming your emotions before proposing solutions or making decisions in relationship conversations by taking a 30-second pause to ask yourself 'What am I feeling right now?' and sharing that with your partner before moving into problem-solving mode. Develop a more extensive emotional vocabulary by learning to distinguish between similar emotions (frustrated vs. disappointed, anxious vs. excited, hurt vs. angry) and practice expressing these feelings using 'I' statements. During conflicts or important discussions, make it a rule to name your emotions first, ask your partner to share theirs, and spend time understanding the emotional landscape before trying to find logical solutions to whatever issue you're discussing.",
     },
     {
       title: "Repair Warmth",
-      rationale: "Efficiency can feel cold.",
-      action: "Add one validating statement before proposing options.",
+      rationale: "Your efficiency-focused approach to problem-solving can sometimes feel cold or dismissive to partners who need emotional validation and understanding before they're ready to work on solutions. Learning to add emotional warmth to your repair attempts will help you resolve conflicts more effectively and strengthen your emotional connection in the process.",
+      action:
+        "Before offering any suggestions, solutions, or logical analysis during relationship conflicts, start with one genuine statement that validates your partner's emotional experience, such as 'I can see that this really hurt you' or 'It makes sense that you'd feel frustrated about this situation.' Practice sitting with their emotions for 2-3 minutes, asking follow-up questions about their feelings, and demonstrating that you understand their emotional experience before shifting into problem-solving mode. Develop a habit of checking in with your partner's emotional state throughout difficult conversations by asking 'How are you feeling about what we've discussed so far?' and adjusting your approach based on their emotional needs rather than just focusing on reaching a logical resolution.",
+    },
+    {
+      title: "Vulnerability Practice",
+      rationale: "Your logical approach to relationships can sometimes create emotional distance because you focus on practical aspects of compatibility and problem-solving without sharing your deeper feelings, fears, and desires, which prevents partners from feeling emotionally close to you. Developing comfort with appropriate vulnerability will help you build the intimate emotional connections that sustain long-term relationships.",
+      action:
+        "Once per week, practice sharing something emotionally vulnerable with your partner or dating prospect - this might be a fear you have about the relationship, something you're insecure about, a hope you have for your connection, or an emotion you've been experiencing but haven't expressed. Start with smaller vulnerabilities and gradually work up to deeper emotional sharing as trust develops. Create a safe container for these conversations by choosing quiet, private moments when you won't be interrupted, and follow up your vulnerable sharing by asking your partner to share something similar, creating mutual emotional intimacy rather than one-sided disclosure. Notice how these moments of vulnerability affect your emotional connection and relationship satisfaction.",
     },
   ],
   H: [
     {
       title: "Decision Anchors",
-      rationale: "Emotion can swing choices.",
+      rationale: "Your heart-centered approach to relationships, while valuable for creating emotional connection, can sometimes lead to decisions based on temporary feelings or emotional intensity rather than long-term compatibility factors that will determine relationship success over time. Developing some logical anchors for important relationship decisions will help you make choices that satisfy both your heart and your practical needs.",
       action:
-        "Write two non‑negotiables and check them before saying yes to exclusivity.",
+        "Before making any major relationship decision (like becoming exclusive, moving in together, or ending a relationship), write down two non-negotiable practical requirements that must be met regardless of how you feel emotionally, such as shared values around finances, compatible life goals, mutual respect during conflicts, or alignment on major lifestyle choices. Use these anchors as a checking mechanism by asking yourself 'Even though I feel strongly about this person, do they meet these essential practical requirements?' and be willing to slow down your decision-making process if the answer is unclear. Practice separating emotional intensity from long-term compatibility by giving yourself 48 hours to consider important relationship decisions rather than acting on immediate feelings.",
     },
     {
       title: "Boundaries Script",
-      rationale: "Over-accommodating backfires.",
+      rationale: "Your empathetic nature and desire to maintain harmony can sometimes lead you to over-accommodate partners' needs at the expense of your own well-being, creating relationships where you give more than you receive and eventually become resentful or emotionally depleted. Learning to set and maintain healthy boundaries will help you create more balanced, sustainable relationships.",
       action:
-        "Prepare one sentence that protects your time/energy kindly but firmly.",
+        "Develop and practice one clear, kind but firm script for protecting your time, energy, and emotional well-being, such as 'I care about you and I need to take care of myself too, so I can't [specific request] right now, but I'd be happy to [alternative that works for you].' Practice this script in low-stakes situations first, then gradually use it in more challenging relationship moments when you feel pressured to say yes to things that don't align with your needs or values. Create a list of your most important boundaries (around time, physical affection, communication frequency, or emotional support) and practice communicating these clearly and consistently rather than hoping your partner will intuitively understand your limits.",
+    },
+    {
+      title: "Logical Integration",
+      rationale: "Your intuitive approach to relationships can sometimes cause you to dismiss practical red flags or compatibility issues because you're focused on emotional connection and the potential for love to overcome obstacles. Learning to integrate logical evaluation with your emotional intelligence will help you make relationship decisions that satisfy both your heart and your practical needs for long-term happiness.",
+      action:
+        "Create a simple compatibility checklist that includes both emotional factors (how they make you feel, emotional safety, communication style) and practical factors (lifestyle compatibility, shared values, life goals, conflict resolution skills) and use this to evaluate potential partners after you've had 4-5 substantial interactions with them. Practice asking yourself both 'Does this feel right emotionally?' and 'Does this make sense practically?' before making important relationship decisions. When you notice yourself dismissing logical concerns because of strong emotional feelings, take time to discuss these concerns with a trusted friend or write about them in a journal to get perspective on whether your emotional connection is causing you to overlook important compatibility issues.",
     },
   ],
   S: [
     {
       title: "Play Blocks",
-      rationale: "Structure can feel pressuring.",
+      rationale: "Your structured approach to relationships, while valuable for creating security and progress, can sometimes feel rigid or pressuring to partners who need more spontaneity and organic development in their romantic connections. Learning to incorporate unstructured time and playful spontaneity will help you create relationships that feel both secure and joyful.",
       action:
-        "Schedule a weekly unstructured date; commit only to a time window, not an agenda.",
+        "Schedule one completely unstructured date or quality time session each week where you commit only to a time window (like 'Saturday afternoon from 2-6pm') but make no specific plans about activities, topics of conversation, or outcomes. During these times, practice following your partner's lead, saying yes to spontaneous suggestions, and letting the experience unfold naturally without trying to direct or optimize it. Challenge yourself to embrace uncertainty by suggesting activities like 'Let's walk around downtown and see what catches our interest' or 'What do you feel like doing right now?' and resist the urge to plan or control the experience, instead focusing on being present and responsive to whatever emerges.",
     },
     {
       title: "Update Cadence",
-      rationale: "Plans need maintenance.",
+      rationale: "Your preference for structure and planning can sometimes lead to rigid relationship expectations that don't adapt to changing circumstances, personal growth, or evolving needs, causing you to stick with plans or agreements that no longer serve the relationship well. Developing skills for regular relationship maintenance and adjustment will help you maintain structure while staying responsive to change.",
       action:
-        "Hold a 15‑minute weekly state‑of‑us check with one appreciation and one tweak.",
+        "Establish a weekly 15-minute 'relationship check-in' ritual where you and your partner share one thing you appreciate about your connection and one small adjustment you'd like to make for the following week - this might be spending more time together, trying a new activity, adjusting communication patterns, or addressing a minor concern before it becomes bigger. Keep these conversations light and solution-focused rather than turning them into heavy relationship processing sessions. Use this regular touchpoint to stay connected to each other's evolving needs and make small course corrections that keep your relationship feeling fresh and responsive rather than stuck in patterns that no longer work.",
+    },
+    {
+      title: "Flexibility Practice",
+      rationale: "Your structured approach to relationships can sometimes create resistance to the natural changes and unexpected developments that occur in any healthy partnership, causing you to feel anxious or frustrated when things don't go according to plan. Developing comfort with flexibility and adaptation will help you navigate relationship challenges and changes with greater ease and resilience.",
+      action:
+        "Practice deliberately introducing small changes to your relationship routines and plans, such as trying new date activities, adjusting communication patterns, or being open to your partner's suggestions for how to spend time together, even when these suggestions differ from your preferences. When plans change unexpectedly (canceled dates, different outcomes than expected, surprise developments), practice responding with curiosity and adaptability rather than frustration or attempts to control the situation. Develop a mindset that views relationship changes as opportunities for growth and discovery rather than threats to stability, and celebrate moments when flexibility leads to positive experiences you wouldn't have had otherwise.",
     },
   ],
   O: [
     {
       title: "Clarity Moments",
-      rationale: "Flow can read as drift.",
+      rationale: "Your preference for organic relationship development, while valuable for creating authentic connections, can sometimes leave partners feeling uncertain about your intentions, the relationship's direction, or your level of commitment, which can create anxiety and prevent deeper intimacy from developing. Learning to provide periodic clarity will help you maintain your natural flow while giving partners the security they need.",
       action:
-        "Set light checkpoints (e.g., two‑week touchpoints) to align expectations.",
+        "Establish light checkpoint conversations every 2-3 weeks where you share your current feelings about the relationship and ask your partner about theirs, using gentle language like 'I'm really enjoying getting to know you and I'm curious how you're feeling about our connection' or 'I wanted to check in and see how this is feeling for you so far.' These conversations don't need to be heavy or definitive, but they should provide enough clarity about mutual interest and direction to help both people feel secure in the connection. Practice expressing your feelings and intentions clearly while still leaving room for organic development, such as 'I'm excited to see where this goes' or 'I'm feeling more and more interested in exploring a deeper connection with you.'",
     },
     {
       title: "Signal Strength",
-      rationale: "Flexibility can hide intent.",
-      action: "Name one concrete next step at the end of each good date.",
+      rationale: "Your flexible, go-with-the-flow approach can sometimes send mixed signals to partners who need clearer indications of your interest, commitment, and intentions, causing them to feel uncertain about where they stand with you or whether you're serious about the relationship. Learning to communicate your interest more directly will help prevent misunderstandings and relationship anxiety.",
+      action:
+        "At the end of each meaningful interaction or good date, practice naming one concrete next step or expression of interest, such as 'I'd love to see you again next week - are you free for dinner on Friday?' or 'I really enjoyed tonight and I'm looking forward to continuing this conversation soon.' Make your interest and intentions more visible through specific actions like planning thoughtful dates, remembering important details from previous conversations, introducing them to friends, or making plans more than a few days in advance. Practice being more direct about your feelings by saying things like 'I'm really attracted to you' or 'I'm excited about where this is heading' rather than assuming your interest is obvious through your presence and attention.",
+    },
+    {
+      title: "Commitment Readiness",
+      rationale: "Your preference for natural timing and organic development can sometimes prevent you from making clear commitments or taking definitive relationship steps even when you're ready for them, causing promising connections to stagnate or partners to feel like you're not serious about building something lasting together. Developing comfort with appropriate commitment will help you move relationships forward when the timing is right.",
+      action:
+        "Practice recognizing when you're actually ready to make relationship commitments (like exclusivity, meeting family, or future planning) and communicate these intentions clearly rather than waiting for the perfect moment or hoping your partner will bring it up first. When you notice yourself feeling ready for a deeper level of commitment, take initiative by having direct conversations about what you want, such as 'I've been thinking that I'd like to be exclusive with you - how do you feel about that?' or 'I'm at the point where I'd love to introduce you to my friends and family.' Set internal timelines for making important relationship decisions so you don't let good connections drift indefinitely, and practice viewing commitment as a natural evolution of strong connections rather than a loss of freedom or spontaneity.",
     },
   ],
 };
@@ -942,8 +1061,34 @@ function buildSinglesResult(
     completedAt: "2024-01-01T00:00:00.000Z",
     ...content,
     aiNarrative: {
-      overviewSummary: `As a ${typeName} (${typeCode}), you bring a unique approach to dating and relationships that reflects your natural tendencies and preferences. Your Dating DNA reveals specific patterns in how you connect, communicate, and build meaningful partnerships throughout your romantic journey. This comprehensive analysis provides deep insights into your natural strengths and areas for growth in romantic relationships and dating scenarios. Understanding your Dating DNA type helps you make more informed decisions about dating and relationships while staying true to your authentic self. Your ${typeCode} profile indicates particular ways you naturally engage with potential partners and what you value most in romantic connections. This knowledge empowers you to create more meaningful and lasting relationships. Your personality type influences every aspect of your dating approach from initial attraction to long-term commitment. By understanding these patterns, you can optimize your dating strategy and improve your relationship outcomes significantly. Your Dating DNA represents a comprehensive framework for understanding your romantic preferences and behaviors. This assessment provides you with actionable insights that can transform your dating experience and relationship success.`,
-      personalityInsights: `Your ${typeCode} type indicates specific preferences in social energy, attraction drivers, decision-making, and relationship rhythm that fundamentally shape your dating approach and romantic interactions. These core dimensions influence how you prefer to meet people, what qualities you find most attractive, how you make relationship decisions, and what pace feels comfortable for relationship development and long-term commitment. Your personality type reveals whether you thrive in social settings or prefer intimate one-on-one interactions, whether you're drawn to immediate chemistry or long-term potential, whether you rely on logic or intuition in relationship choices, and whether you prefer structured or organic relationship progression. Understanding these dimensions helps you navigate dating with greater confidence and authenticity. Each aspect of your type contributes to your overall romantic strategy and partnership preferences.`,
+      overviewSummary: `As a ${typeName} (${typeCode}), you possess a distinctive romantic personality that combines ${
+        typeCode[0] === "C" ? "expansive social energy" : "focused depth"
+      } with ${
+        typeCode[1] === "P" ? "present-moment awareness" : "future-oriented vision"
+      }, making decisions through ${
+        typeCode[2] === "L" ? "logical analysis" : "emotional intuition"
+      } while preferring ${
+        typeCode[3] === "S" ? "structured relationship progression" : "organic relationship development"
+      }. Your unique Dating DNA profile reveals specific patterns in how you naturally connect with potential partners, build romantic attraction, navigate relationship challenges, and create lasting emotional bonds that define your approach to love and partnership. This comprehensive personality analysis demonstrates that your ${typeCode} type brings particular strengths to dating situations, including your natural ability to ${
+        typeCode[0] === "C" ? "create abundant social opportunities and connect with diverse potential partners" : "build deep, meaningful connections through focused attention and authentic intimacy"
+      }. Understanding these core patterns empowers you to make more intentional dating choices, communicate more effectively with potential partners, and build relationships that truly align with your authentic self and long-term happiness goals. Your Dating DNA serves as both a roadmap for understanding your natural romantic tendencies and a practical guide for optimizing your dating strategy to attract compatible partners who appreciate and complement your unique approach to love and relationships. By embracing your ${typeCode} profile while working on targeted growth areas, you can transform your dating experience and create the meaningful, lasting partnership you desire.`,
+      personalityInsights: `Your ${typeCode} Dating DNA reveals four fundamental dimensions that shape every aspect of your romantic life and relationship approach. Your ${
+        typeCode[0] === "C" ? "Connector" : "Focuser"
+      } social energy means you ${
+        typeCode[0] === "C" ? "naturally thrive in diverse social settings, gain energy from meeting new people, and create romantic opportunities through your extensive network of connections and social activities" : "prefer deeper, more intimate interactions, invest your energy selectively in promising connections, and build stronger relationships through focused attention and meaningful one-on-one time"
+      }. Your ${
+        typeCode[1] === "P" ? "Present-focused" : "Potential-focused"
+      } attraction driver indicates that you're ${
+        typeCode[1] === "P" ? "drawn to partners whose current lifestyle, habits, and personality align well with yours right now, valuing practical compatibility and immediate chemistry over future possibilities" : "attracted to partners' potential for growth and development, willing to invest in relationships based on shared visions and long-term possibilities rather than just present-moment compatibility"
+      }. Your ${
+        typeCode[2] === "L" ? "Logic-based" : "Heart-based"
+      } decision filter shows that you ${
+        typeCode[2] === "L" ? "evaluate romantic choices through careful analysis of practical factors, compatibility metrics, and long-term viability, making relationship decisions based on objective assessment rather than emotional impulses" : "trust your emotional intuition and feelings when making relationship choices, prioritizing how someone makes you feel and whether the connection feels emotionally right over logical analysis of compatibility factors"
+      }. Finally, your ${
+        typeCode[3] === "S" ? "Structured" : "Organic"
+      } relationship rhythm reveals that you ${
+        typeCode[3] === "S" ? "prefer clear milestones, defined expectations, and predictable progression in your romantic relationships, feeling most secure when you understand where the relationship is heading and what steps come next" : "value natural development and organic timing in relationships, preferring to let connections evolve authentically without rigid timelines or predetermined expectations about how things should unfold"
+      }. These four dimensions work together to create your unique romantic personality, influencing everything from how you meet potential partners to how you build long-term relationship satisfaction and emotional fulfillment.`,
       communicationStyle: `Your communication style reflects your natural approach to expressing needs, sharing emotions, and building connection with potential partners in meaningful ways. Understanding this helps you communicate more effectively and authentically in dating situations while maintaining your genuine personality. Your Dating DNA type influences how you prefer to express yourself, what communication patterns feel most natural to you, and how you best receive and process information from others during romantic interactions. This knowledge enables you to adapt your communication approach while staying true to your authentic self and building stronger connections. Effective communication forms the foundation of all successful relationships and partnerships.`,
       compatibilityFactors: `Your compatibility with others depends on how well your Dating DNA aligns or complements theirs. Certain type combinations create natural harmony while others require more intentional effort to bridge differences. Understanding your compatibility factors helps you identify potential partners who will naturally understand your approach to relationships and those who might challenge you to grow in positive ways. Your Dating DNA type reveals which other types you might naturally connect with and which combinations might require more communication and understanding to thrive. This knowledge helps you make more informed decisions about potential partners and relationships.`,
       growthAreas: `Your growth areas represent opportunities to expand your dating effectiveness and relationship satisfaction. By focusing on these areas, you can overcome common challenges and build stronger connections. These growth opportunities are not weaknesses but rather areas where you can develop additional skills and perspectives that complement your natural strengths. Working on these areas helps you become more well-rounded in your approach to dating and relationships. This development process enhances your overall relationship success and personal fulfillment.`,
@@ -987,62 +1132,128 @@ function buildSinglesResult(
       },
       contextualExamples: [
         {
-          scenario: "Planning a first date",
-          response: `Based on your ${typeCode} type, you likely prefer ${
+          scenario: "Planning a first date with someone you're excited about",
+          response: `Based on your ${typeCode} type, you naturally gravitate toward ${
             typeCode[3] === "S"
-              ? "structured, planned activities"
-              : "spontaneous, flexible options"
-          }`,
+              ? "structured, planned activities where you can create a clear agenda and timeline, such as dinner reservations at 7pm followed by a specific cultural event, because you feel most comfortable when both people know what to expect and can prepare accordingly"
+              : "flexible, spontaneous options that allow the experience to unfold naturally, such as suggesting 'let's meet at the farmers market Saturday morning and see what catches our interest,' because you prefer authentic moments over predetermined scripts"
+          }. Your ${
+            typeCode[0] === "C" ? "Connector energy" : "Focuser depth"
+          } means you'll ${
+            typeCode[0] === "C"
+              ? "choose activities that allow for social interaction and meeting other people, like group events or bustling venues where conversation flows easily"
+              : "prefer intimate settings where you can have meaningful one-on-one conversation without distractions, like quiet cafes or nature walks"
+          }.`,
           insight:
-            "Understanding your natural preferences helps you choose dates that feel authentic and comfortable.",
+            "Understanding your natural date preferences helps you create experiences where you feel authentic and comfortable, which allows your personality to shine and creates better romantic connections.",
         },
         {
-          scenario: "Meeting someone new at a social event",
+          scenario: "Meeting someone attractive at a social gathering",
           response: `Your ${
             typeCode[0] === "C" ? "Connector" : "Focuser"
-          } approach means you ${
+          } social approach means you ${
             typeCode[0] === "C"
-              ? "engage broadly and create multiple connections"
-              : "focus on deeper conversations with select individuals"
-          }`,
+              ? "naturally engage with multiple people throughout the event, building rapport through light conversation and social energy, then circle back to the person who interests you most with a confident invitation to continue the conversation elsewhere"
+              : "observe the social dynamics first, then approach the person who catches your attention for a deeper, more focused conversation, asking thoughtful questions that reveal genuine personality and values rather than staying on surface topics"
+          }. Your ${
+            typeCode[2] === "L" ? "logical evaluation process" : "intuitive feeling assessment"
+          } leads you to ${
+            typeCode[2] === "L"
+              ? "gather practical information about their lifestyle, goals, and compatibility factors through strategic conversation topics"
+              : "pay attention to how they make you feel, the energy between you, and whether the emotional connection feels natural and comfortable"
+          }.`,
           insight:
-            "Leveraging your natural social energy style increases your comfort and authenticity in new situations.",
+            "Leveraging your natural social energy style and decision-making approach helps you make authentic connections while staying true to your personality, increasing your success in meeting compatible partners.",
         },
         {
-          scenario: "Deciding whether to pursue a relationship",
+          scenario: "Deciding whether to become exclusive with someone you've been dating",
           response: `As a ${
             typeCode[2] === "L" ? "Logic" : "Heart"
-          }-oriented person, you ${
+          }-oriented person, you approach this decision by ${
             typeCode[2] === "L"
-              ? "weigh practical compatibility factors"
-              : "trust your emotional connection and intuition"
-          }`,
+              ? "systematically evaluating practical compatibility factors like shared values, life goals, communication patterns, and lifestyle alignment, creating a mental checklist of relationship requirements and assessing whether this person meets your standards for long-term partnership potential"
+              : "tuning into your emotional experience with this person, asking yourself how they make you feel, whether you feel emotionally safe and understood, and whether your heart feels excited about the possibility of deeper commitment and exclusivity"
+          }. Your ${
+            typeCode[1] === "P" ? "present-focused" : "future-oriented"
+          } attraction system means you ${
+            typeCode[1] === "P"
+              ? "evaluate how well your current lifestyles mesh together and whether you enjoy spending day-to-day time with this person in ordinary circumstances"
+              : "consider your shared vision for the future and whether you're both committed to growing together toward compatible long-term goals"
+          }.`,
           insight:
-            "Understanding your decision-making style helps you make choices that align with your values and needs.",
+            "Understanding your natural decision-making style helps you make relationship choices that satisfy both your practical needs and emotional desires, leading to more fulfilling partnerships.",
         },
         {
-          scenario: "Navigating relationship milestones",
+          scenario: "Navigating the transition from casual to serious dating",
           response: `Your ${
             typeCode[3] === "S" ? "Structured" : "Organic"
-          } rhythm means you prefer ${
+          } relationship rhythm means you handle this transition by ${
             typeCode[3] === "S"
-              ? "clear timelines and defined expectations"
-              : "natural progression without rigid schedules"
-          }`,
+              ? "having direct conversations about relationship status, setting clear expectations about exclusivity and future plans, and creating specific milestones that show progress toward commitment, such as meeting families or making plans more than a month in advance"
+              : "allowing the relationship to deepen naturally through increased emotional intimacy and time spent together, trusting that commitment will emerge when it feels authentically right for both people without forcing predetermined timelines or artificial pressure"
+          }. Your ${
+            typeCode[0] === "C" ? "social connectivity" : "intimate focus"
+          } influences how you ${
+            typeCode[0] === "C"
+              ? "integrate this person into your broader social circle, introducing them to friends and including them in group activities as a way of deepening the relationship"
+              : "create more private, intimate experiences together that allow for vulnerable conversations and deeper emotional bonding away from external social pressures"
+          }.`,
           insight:
-            "Communicating your preferred relationship pace helps create mutual understanding and reduces pressure.",
+            "Communicating your preferred relationship pace and development style helps create mutual understanding and reduces anxiety for both partners during important relationship transitions.",
         },
         {
-          scenario: "Evaluating long-term compatibility",
+          scenario: "Evaluating long-term compatibility after several months of dating",
           response: `Your ${
             typeCode[1] === "P" ? "Present" : "Potential"
-          } focus draws you to ${
+          } focus draws your attention to ${
             typeCode[1] === "P"
-              ? "current lifestyle alignment and immediate chemistry"
-              : "growth potential and future possibilities"
-          }`,
+              ? "current lifestyle alignment factors such as how you spend weekends together, whether your daily routines complement each other, how you handle stress and conflict in real-time, and whether you genuinely enjoy each other's company in ordinary, non-romantic situations like grocery shopping or doing chores"
+              : "growth potential and future possibilities, such as whether you share similar aspirations for personal development, career advancement, family planning, and life adventures, and whether you both demonstrate commitment to supporting each other's evolution and dreams"
+          }. Your ${
+            typeCode[2] === "L" ? "analytical assessment" : "emotional intuition"
+          } guides you to ${
+            typeCode[2] === "L"
+              ? "create practical compatibility checklists covering areas like financial responsibility, communication styles, conflict resolution skills, and alignment on major life decisions"
+              : "trust your gut feelings about whether this relationship brings out the best in both of you and whether you feel genuinely happy and fulfilled when you're together"
+          }.`,
           insight:
-            "Recognizing what attracts you helps you seek partners who align with your core values and relationship vision.",
+            "Recognizing what attracts you and how you naturally evaluate partnerships helps you make informed decisions about long-term compatibility that align with your values and relationship vision.",
+        },
+        {
+          scenario: "Handling conflict during the early stages of a relationship",
+          response: `Your ${
+            typeCode[2] === "L" ? "Logic-based" : "Heart-based"
+          } approach to conflict means you ${
+            typeCode[2] === "L"
+              ? "focus on identifying the root cause of the disagreement, proposing practical solutions that address both people's needs, and establishing clear communication protocols to prevent similar issues in the future"
+              : "prioritize understanding each other's feelings and emotional experiences, seeking to repair any hurt or misunderstanding before moving into problem-solving mode, and ensuring both people feel heard and emotionally safe"
+          }. Your ${
+            typeCode[3] === "S" ? "structured" : "organic"
+          } relationship style influences whether you ${
+            typeCode[3] === "S"
+              ? "prefer to address conflicts through scheduled conversations with clear agendas and follow-up plans for improvement"
+              : "allow resolution to happen naturally through ongoing dialogue and emotional processing as feelings arise"
+          }.`,
+          insight:
+            "Understanding your natural conflict resolution style helps you navigate disagreements in ways that strengthen rather than damage your romantic connections, building trust and emotional intimacy.",
+        },
+        {
+          scenario: "Deciding how much to invest emotionally in a new relationship",
+          response: `Your ${
+            typeCode[0] === "C" ? "Connector" : "Focuser"
+          } energy management approach means you ${
+            typeCode[0] === "C"
+              ? "can maintain emotional availability for multiple connections simultaneously while gradually increasing investment in the most promising relationships, using your social network to help evaluate potential partners"
+              : "prefer to invest deeply in fewer relationships at a time, giving your full emotional attention to connections that show genuine potential rather than spreading your energy too thinly"
+          }. Your ${
+            typeCode[1] === "P" ? "present-focused" : "future-focused"
+          } evaluation system guides you to ${
+            typeCode[1] === "P"
+              ? "base your emotional investment on current evidence of compatibility and mutual interest rather than potential or promises about the future"
+              : "invest based on shared vision and growth potential, willing to put emotional energy into relationships that may take time to develop but show promise for meaningful long-term partnership"
+          }.`,
+          insight:
+            "Understanding how you naturally manage emotional investment helps you protect your energy while remaining open to meaningful connections, leading to more balanced and sustainable dating experiences.",
         },
       ],
       actionPlan7Days: [
@@ -1757,7 +1968,7 @@ function SinglesResults({ result }: { result: SinglesResultDeterministic }) {
         <div class="footer">
           <div class="footer-logo">MY Dating DNA™</div>
           <p>Thank you for exploring your dating personality! 🧬</p>
-          <p>© 2024 MY Dating DNA™. All rights reserved.</p>
+          <p>© ${new Date().getFullYear()} MY Dating DNA™. All rights reserved.</p>
         </div>
       `;
 
@@ -2093,7 +2304,7 @@ function CouplesResults({ result }: { result: CouplesResultDeterministic }) {
         <div class="footer">
           <div class="footer-logo">MY Dating DNA™</div>
           <p>Thank you for exploring your couple's dating personality! 🧬</p>
-          <p>© 2024 MY Dating DNA™. All rights reserved.</p>
+          <p>© ${new Date().getFullYear()} MY Dating DNA™. All rights reserved.</p>
         </div>
       `;
 

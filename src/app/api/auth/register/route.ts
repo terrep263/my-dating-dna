@@ -118,7 +118,7 @@ export async function POST(request: NextRequest) {
             We're excited to be part of your relationship journey! 🧬💕
           </p>
           <p style="color: #9ca3af; font-size: 12px;">
-            © 2024 MY Dating DNA™. All rights reserved.
+            © ${new Date().getFullYear()} MY Dating DNA™. All rights reserved.
           </p>
         </div>
       </div>

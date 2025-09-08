@@ -167,7 +167,7 @@ export async function POST(request: NextRequest) {
               Thank you for exploring your Dating DNA! 🧬
             </p>
             <p style="color: #9ca3af; font-size: 12px; margin: 0;">
-              © 2024 MY Dating DNA™. All rights reserved.
+              © ${new Date().getFullYear()} MY Dating DNA™. All rights reserved.
             </p>
           </div>
         </div>
@@ -289,7 +289,7 @@ export async function PUT(req: NextRequest) {
               Thank you for using MY Dating DNA™! 🧬
             </p>
             <p style="color: #9ca3af; font-size: 12px; margin: 0;">
-              © 2024 MY Dating DNA™. All rights reserved.
+              © ${new Date().getFullYear()} MY Dating DNA™. All rights reserved.
             </p>
           </div>
         </div>
