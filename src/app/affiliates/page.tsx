@@ -30,6 +30,7 @@ import {
   IconButton,
   InputAdornment,
   Divider,
+  CircularProgress,
 } from "@mui/material";
 import {
   ContentCopy,
@@ -214,35 +215,46 @@ export default function AffiliateDashboard() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-100">
-        <Container
-          maxWidth="lg"
-          className="flex items-center justify-center min-h-screen"
-        >
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <Container maxWidth="sm" className="text-center">
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-center"
           >
-            <Typography variant="h6" sx={{ color: "#6b7280", mb: 2 }}>
-              Loading affiliate dashboard...
-            </Typography>
-            <Box
+            <Card
+              elevation={0}
               sx={{
-                width: 40,
-                height: 40,
-                border: "3px solid #e5e7eb",
-                borderTop: "3px solid #2c5530",
-                borderRadius: "50%",
-                animation: "spin 1s linear infinite",
-                mx: "auto",
-                "@keyframes spin": {
-                  "0%": { transform: "rotate(0deg)" },
-                  "100%": { transform: "rotate(360deg)" },
-                },
+                background: "#ffffff",
+                border: "1px solid #ffffff",
+                borderRadius: 4,
+                p: 6,
+                textAlign: "center",
               }}
-            />
+            >
+              <CardContent>
+                <CircularProgress size={60} sx={{ color: "white", mb: 3 }} />
+                <Typography
+                  variant="h4"
+                  component="h2"
+                  sx={{
+                    fontWeight: 600,
+                    color: "green",
+                    mb: 2,
+                  }}
+                >
+                  Checking Access...
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    color: "#ffffff8)",
+                  }}
+                >
+                  Verifying your assessment access
+                </Typography>
+              </CardContent>
+            </Card>
           </motion.div>
         </Container>
       </div>

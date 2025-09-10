@@ -104,7 +104,7 @@ export async function POST(request: NextRequest) {
 
     // Generate new password
     const newPassword = generateRandomPassword(6);
-
+    console.log(newPassword);
     // Hash the new password
     const saltRounds = 12;
     const hashedPassword = await bcrypt.hash(newPassword, saltRounds);

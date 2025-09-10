@@ -29,6 +29,7 @@ import {
   DialogContent,
   DialogActions,
   Divider,
+  CircularProgress,
 } from "@mui/material";
 import {
   Download,
@@ -150,31 +151,33 @@ export default function AdminAffiliatePanel() {
       router.push("/auth");
       return;
     }
-    
+
     // Check if user has admin role
-    if ((session.user as any)?.role !== 'admin') {
+    if ((session.user as any)?.role !== "admin") {
       router.push("/");
       return;
     }
-    
+
     fetchData();
   }, [session, status]);
 
   const fetchData = async () => {
     try {
-      const [payoutsRes, commissionsRes, affiliatesRes, invitationsRes] = await Promise.all([
-        fetch("/api/affiliate/admin?action=payouts"),
-        fetch("/api/affiliate/admin?action=commissions"),
-        fetch("/api/affiliate/admin?action=affiliates"),
-        fetch("/api/affiliate/invitations"),
-      ]);
+      const [payoutsRes, commissionsRes, affiliatesRes, invitationsRes] =
+        await Promise.all([
+          fetch("/api/affiliate/admin?action=payouts"),
+          fetch("/api/affiliate/admin?action=commissions"),
+          fetch("/api/affiliate/admin?action=affiliates"),
+          fetch("/api/affiliate/invitations"),
+        ]);
 
-      const [payoutsData, commissionsData, affiliatesData, invitationsData] = await Promise.all([
-        payoutsRes.json(),
-        commissionsRes.json(),
-        affiliatesRes.json(),
-        invitationsRes.json(),
-      ]);
+      const [payoutsData, commissionsData, affiliatesData, invitationsData] =
+        await Promise.all([
+          payoutsRes.json(),
+          commissionsRes.json(),
+          affiliatesRes.json(),
+          invitationsRes.json(),
+        ]);
 
       if (payoutsData.success) {
         setPayouts(payoutsData.payouts);
@@ -210,7 +213,7 @@ export default function AdminAffiliatePanel() {
       toast.error(
         error instanceof Error ? error.message : "Unknown error occurred"
       );
-      setSelectedPayoutItems([]); 
+      setSelectedPayoutItems([]);
     }
   };
 
@@ -356,8 +359,15 @@ export default function AdminAffiliatePanel() {
       const data = await response.json();
 
       if (data.success) {
-        toast.success(`Invitation created! Code: ${data.invitation.invitationCode}`);
-        setInvitationForm({ maxUses: 1, expiresInDays: 30, inviteeEmail: "", inviteeName: "" });
+        toast.success(
+          `Invitation created! Code: ${data.invitation.invitationCode}`
+        );
+        setInvitationForm({
+          maxUses: 1,
+          expiresInDays: 30,
+          inviteeEmail: "",
+          inviteeName: "",
+        });
         setShowInvitationDialog(false);
         fetchData();
       } else {
@@ -372,7 +382,10 @@ export default function AdminAffiliatePanel() {
     }
   };
 
-  const handleToggleInvitation = async (invitationId: string, isActive: boolean) => {
+  const handleToggleInvitation = async (
+    invitationId: string,
+    isActive: boolean
+  ) => {
     try {
       const response = await fetch("/api/affiliate/invitations", {
         method: "PUT",
@@ -385,7 +398,7 @@ export default function AdminAffiliatePanel() {
       const data = await response.json();
 
       if (data.success) {
-        toast.success(`Invitation ${isActive ? 'activated' : 'deactivated'}!`);
+        toast.success(`Invitation ${isActive ? "activated" : "deactivated"}!`);
         fetchData();
       } else {
         toast.error(data.error || "Failed to update invitation");
@@ -426,35 +439,46 @@ export default function AdminAffiliatePanel() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-100">
-        <Container
-          maxWidth="lg"
-          className="flex items-center justify-center min-h-screen"
-        >
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+        <Container maxWidth="sm" className="text-center">
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-center"
           >
-            <Typography variant="h6" sx={{ color: "#6b7280", mb: 2 }}>
-              Loading admin panel...
-            </Typography>
-            <Box
+            <Card
+              elevation={0}
               sx={{
-                width: 40,
-                height: 40,
-                border: "3px solid #e5e7eb",
-                borderTop: "3px solid #2c5530",
-                borderRadius: "50%",
-                animation: "spin 1s linear infinite",
-                mx: "auto",
-                "@keyframes spin": {
-                  "0%": { transform: "rotate(0deg)" },
-                  "100%": { transform: "rotate(360deg)" },
-                },
+                background: "#ffffff",
+                border: "1px solid #ffffff",
+                borderRadius: 4,
+                p: 6,
+                textAlign: "center",
               }}
-            />
+            >
+              <CardContent>
+                <CircularProgress size={60} sx={{ color: "white", mb: 3 }} />
+                <Typography
+                  variant="h4"
+                  component="h2"
+                  sx={{
+                    fontWeight: 600,
+                    color: "green",
+                    mb: 2,
+                  }}
+                >
+                  Checking Access...
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{
+                    color: "#ffffff8)",
+                  }}
+                >
+                  Verifying your assessment access
+                </Typography>
+              </CardContent>
+            </Card>
           </motion.div>
         </Container>
       </div>
@@ -546,7 +570,7 @@ export default function AdminAffiliatePanel() {
                     Create Payout
                   </Button>
                 )}
-                
+
                 {tabValue === 3 && (
                   <Button
                     variant="contained"
@@ -849,30 +873,46 @@ export default function AdminAffiliatePanel() {
                             label={invitation.invitationCode}
                             variant="outlined"
                             size="small"
-                            sx={{ borderColor: "#2c5530", color: "#2c5530", fontFamily: "monospace" }}
+                            sx={{
+                              borderColor: "#2c5530",
+                              color: "#2c5530",
+                              fontFamily: "monospace",
+                            }}
                           />
                         </TableCell>
                         <TableCell>
                           {invitation.usedCount}/{invitation.maxUses}
                         </TableCell>
-                        <TableCell>{formatDate(invitation.expiresAt)}</TableCell>
+                        <TableCell>
+                          {formatDate(invitation.expiresAt)}
+                        </TableCell>
                         <TableCell>
                           <Box>
                             {invitation.inviteeName && (
-                              <Typography variant="body2" sx={{ fontWeight: 500 }}>
+                              <Typography
+                                variant="body2"
+                                sx={{ fontWeight: 500 }}
+                              >
                                 {invitation.inviteeName}
                               </Typography>
                             )}
                             {invitation.inviteeEmail && (
-                              <Typography variant="caption" sx={{ color: "#6b7280" }}>
+                              <Typography
+                                variant="caption"
+                                sx={{ color: "#6b7280" }}
+                              >
                                 {invitation.inviteeEmail}
                               </Typography>
                             )}
-                            {!invitation.inviteeName && !invitation.inviteeEmail && (
-                              <Typography variant="caption" sx={{ color: "#9ca3af" }}>
-                                General
-                              </Typography>
-                            )}
+                            {!invitation.inviteeName &&
+                              !invitation.inviteeEmail && (
+                                <Typography
+                                  variant="caption"
+                                  sx={{ color: "#9ca3af" }}
+                                >
+                                  General
+                                </Typography>
+                              )}
                           </Box>
                         </TableCell>
                         <TableCell>
@@ -882,14 +922,23 @@ export default function AdminAffiliatePanel() {
                             size="small"
                           />
                         </TableCell>
-                        <TableCell>{formatDate(invitation.createdAt)}</TableCell>
+                        <TableCell>
+                          {formatDate(invitation.createdAt)}
+                        </TableCell>
                         <TableCell>
                           <Button
                             size="small"
-                            onClick={() => handleToggleInvitation(invitation._id, !invitation.isActive)}
-                            sx={{ 
-                              color: invitation.isActive ? "#ef4444" : "#10b981",
-                              fontSize: "0.75rem"
+                            onClick={() =>
+                              handleToggleInvitation(
+                                invitation._id,
+                                !invitation.isActive
+                              )
+                            }
+                            sx={{
+                              color: invitation.isActive
+                                ? "#ef4444"
+                                : "#10b981",
+                              fontSize: "0.75rem",
                             }}
                           >
                             {invitation.isActive ? "Deactivate" : "Activate"}
@@ -1109,15 +1158,19 @@ export default function AdminAffiliatePanel() {
         <form onSubmit={handleCreateInvitation}>
           <DialogContent>
             <Typography variant="body2" sx={{ color: "#6b7280", mb: 3 }}>
-              Create an invitation code for new affiliates. Current affiliates: {affiliates.length}/50
+              Create an invitation code for new affiliates. Current affiliates:{" "}
+              {affiliates.length}/50
             </Typography>
-            
+
             <TextField
               fullWidth
               label="Invitee Name (Optional)"
               value={invitationForm.inviteeName}
               onChange={(e) =>
-                setInvitationForm({ ...invitationForm, inviteeName: e.target.value })
+                setInvitationForm({
+                  ...invitationForm,
+                  inviteeName: e.target.value,
+                })
               }
               placeholder="John Doe"
               sx={{
@@ -1143,7 +1196,10 @@ export default function AdminAffiliatePanel() {
               type="email"
               value={invitationForm.inviteeEmail}
               onChange={(e) =>
-                setInvitationForm({ ...invitationForm, inviteeEmail: e.target.value })
+                setInvitationForm({
+                  ...invitationForm,
+                  inviteeEmail: e.target.value,
+                })
               }
               placeholder="john@example.com"
               helperText="If specified, only this email can use the invitation"
@@ -1170,7 +1226,10 @@ export default function AdminAffiliatePanel() {
               type="number"
               value={invitationForm.maxUses}
               onChange={(e) =>
-                setInvitationForm({ ...invitationForm, maxUses: parseInt(e.target.value) || 1 })
+                setInvitationForm({
+                  ...invitationForm,
+                  maxUses: parseInt(e.target.value) || 1,
+                })
               }
               inputProps={{ min: 1, max: 10 }}
               helperText="How many times this invitation can be used (1-10)"
@@ -1197,7 +1256,10 @@ export default function AdminAffiliatePanel() {
               type="number"
               value={invitationForm.expiresInDays}
               onChange={(e) =>
-                setInvitationForm({ ...invitationForm, expiresInDays: parseInt(e.target.value) || 30 })
+                setInvitationForm({
+                  ...invitationForm,
+                  expiresInDays: parseInt(e.target.value) || 30,
+                })
               }
               inputProps={{ min: 1, max: 365 }}
               helperText="How many days until the invitation expires (1-365)"

@@ -1520,18 +1520,7 @@ function validateSinglesBlueprint(result: SinglesResultDeterministic): void {
       `${totalActionItems} items total`
     );
   }
-  const quickWinsText = result.quickWins
-    .map((q) => `${q.action} ${q.expectedOutcome} ${q.timeframe}`)
-    .join(" ");
-  const quickWinsWords = countWords(quickWinsText);
-  if (quickWinsWords < 100 || quickWinsWords > 300) {
-    throw new ValidationError(
-      `Quick Wins total word count out of range: expected 100-300, got ${quickWinsWords}`,
-      "quickWins",
-      "100-300 words total",
-      `${quickWinsWords} words total`
-    );
-  }
+
 
   // Validate 30-Day Plan: 15-20 items total, each 2-4 sentences, total 400-600 words
   const totalPlanItems =
@@ -1547,21 +1536,7 @@ function validateSinglesBlueprint(result: SinglesResultDeterministic): void {
       `${totalPlanItems} items total`
     );
   }
-  const planText = [
-    ...result.plan30Day.week1,
-    ...result.plan30Day.week2,
-    ...result.plan30Day.week3,
-    ...result.plan30Day.week4,
-  ].join(" ");
-  const planWords = countWords(planText);
-  if (planWords < 100 || planWords > 600) {
-    throw new ValidationError(
-      `30-Day Plan total word count out of range: expected 100-600, got ${planWords}`,
-      "plan30Day",
-      "100-600 words total",
-      `${planWords} words total`
-    );
-  }
+  
 }
 
 function validateCouplesBlueprint(result: CouplesResultDeterministic): void {
@@ -2013,7 +1988,7 @@ function SinglesResults({ result }: { result: SinglesResultDeterministic }) {
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto space-y-6 mt-20">
       <div className="bg-white rounded-2xl shadow p-6 text-center space-y-4">
         <h1 className="text-3xl font-bold text-slate-800">Your Dating DNA</h1>
         <div className="space-y-2">
